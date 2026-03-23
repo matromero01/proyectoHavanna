@@ -1,11 +1,12 @@
 
 def productoMenu():
+    opcion = 1
     while opcion != 0:
         print('Menu Producto\n' 
         '1 - Alta Producto\n' 
         '2 - Baja Producto\n' 
-        '3 - Modificacion Producto ...\n'
-        '4 - Mostrar Productos ...\n'
+        '3 - Modificacion Producto\n'
+        '4 - Mostrar Productos\n'
         '0 - Volver al menu principal\n')
 
         opcion = int(input("Ingresa un numero: "))
