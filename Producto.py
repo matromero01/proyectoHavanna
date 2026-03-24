@@ -38,21 +38,35 @@ def bajaProducto():
     if not matrizProductos:
         print("No hay productos para eliminar.")
     else:
-      mostrarListaProducto()
-      idProducto = int(input("Ingrese el ID del producto a dar de baja: "))
+        mostrarListaProducto()
+        idProducto = int(input("Ingrese el ID del producto a dar de baja: "))
+        encontrado = False
 
-      encontrado = False
+        for i in range(len(matrizProductos)): 
+            encontrado = True
+            if matrizProductos[i][0] == idProducto:
+                encontrado = True
+                nombre = matrizProductos[i][1] 
 
-      for i in range(len(matrizProductos)): 
-        if matrizProductos[i][0] == idProducto:
-            nombre = matrizProductos[i][1]     
-            matrizProductos[i][4] = False
-            print(f"Producto '{nombre}' (ID: {idProducto}) dado de baja exitosamente.")
-            encontrado = True      
-            break 
+                if matrizProductos[i][4] == True:
+                    matrizProductos[i][4] = False
+                    print(f"Producto '{nombre}' (ID: {idProducto}) dado de baja exitosamente.")
+                else:
+                    print(f"Producto '{nombre}' (ID: {idProducto}) ya fue dado de baja anteriormente")
+                    condicionAlta = input("¿Quiere dar de alta el producto ahora? (si/no): \n Producto '{nombre}' (ID: {idProducto})").strip().lower()
+                    
+                    while condicionAlta != "si" and condicionAlta != "no":
+                        print("Respuesta inválida. Por favor ingrese 'si' o 'no'.")
+                        condicionAlta = input("¿Quiere darlo de alta ahora? (si/no): ").strip().lower()
+                    
+                    if condicionAlta == "si":
+                        altaProducto()
+                break
 
     if not encontrado:
-        print("Opción inválida: El ID ingresado no existe.") 
+        print("Opción inválida: El ID ingresado no existe.")
+
+ 
 
 def modificacionProducto():
     idProducto = input("Ingrese el ID del producto: ")
