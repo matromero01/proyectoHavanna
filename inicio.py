@@ -5,11 +5,11 @@ import os
 
 opcion = 1
 while opcion != 0:
-    print('Menu principal\n' 
-    '1 - Menu Producto\n' 
-    '2 - Menu ...\n' 
-    '3 - Menu ...\n'
-    '0 - Salir\n')
+    print('''Menu principal 
+    '1 - Menu Producto
+    '2 - Menu ... 
+    '3 - Menu ...
+    '0 - Salir''')
 
     opcion = int(input("Ingresa un numero: "))
     if opcion == 1:
