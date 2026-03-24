@@ -35,7 +35,24 @@ def altaProducto():
     matrizProductos.append(producto)
 
 def bajaProducto():
-    idProducto = input("Ingrese el ID del producto: ")
+    if not matrizProductos:
+        print("No hay productos para eliminar.")
+    else:
+      mostrarListaProducto()
+      idProducto = int(input("Ingrese el ID del producto a dar de baja: "))
+
+      encontrado = False
+
+      for i in range(len(matrizProductos)): 
+        if matrizProductos[i][0] == idProducto:
+            nombre = matrizProductos[i][1]     
+            matrizProductos[i][4] = False
+            print(f"Producto '{nombre}' (ID: {idProducto}) dado de baja exitosamente.")
+            encontrado = True      
+            break 
+
+    if not encontrado:
+        print("Opción inválida: El ID ingresado no existe.") 
 
 def modificacionProducto():
     idProducto = input("Ingrese el ID del producto: ")
