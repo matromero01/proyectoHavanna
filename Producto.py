@@ -66,7 +66,36 @@ def bajaProducto():
     if not encontrado:
         print("Opción inválida: El ID ingresado no existe.")
 
- 
+def altaProducto():
+    if not matrizProductos:
+        print("No hay productos para dar de alta.")
+    else:
+        mostrarListaProducto() 
+        idProducto = int(input("Ingrese el ID del producto a dar de alta: "))
+        encontrado = False
+
+        for i in range(len(matrizProductos)): 
+            if matrizProductos[i][0] == idProducto:
+                encontrado = True
+                nombre = matrizProductos[i][1] 
+                
+                if matrizProductos[i][4] == False:
+                    matrizProductos[i][4] = True
+                    print(f"Producto '{nombre}' (ID: {idProducto}) dado de alta exitosamente.")
+                else:
+                    print(f"El producto '{nombre}' (ID: {idProducto}) ya está activo.")
+                    condicionBaja = input("¿Quiere darlo de baja ahora? (si/no): ").strip().lower()
+                    
+                    while condicionBaja != "si" and condicionBaja != "no":
+                        print("Respuesta inválida. Por favor ingrese 'si' o 'no'.")
+                        condicionBaja = input("¿Quiere darlo de baja ahora? (si/no): ").strip().lower()
+                    
+                    if condicionBaja == "si":
+                        bajaProducto() 
+                break 
+
+        if not encontrado:
+            print("Opción inválida: El ID ingresado no existe.") 
 
 def modificacionProducto():
     idProducto = input("Ingrese el ID del producto: ")
