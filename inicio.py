@@ -1,5 +1,4 @@
 import Producto
-import os
 
 #print("Inicio de Havanna")
 

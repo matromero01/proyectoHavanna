@@ -98,7 +98,40 @@ def altaProducto():
             print("Opción inválida: El ID ingresado no existe.") 
 
 def modificacionProducto():
-    idProducto = input("Ingrese el ID del producto: ")
+    if not matrizProductos:
+        print("No hay productos para modificar.")
+    else:
+        mostrarListaProducto() 
+        idProducto = int(input("Ingrese el ID del producto para modificar: "))
+
+        for i in range(len(matrizProductos)): 
+            if matrizProductos[i][0] == idProducto:
+                id, nombre, precio, stock, activo =matrizProductos[i]
+                #print("\t--Datos actuales--")
+                #print(f''' 
+                #    ID: {id}
+                #    NOMBRE: {nombre}
+                #    PRECIO: {precio}
+                #    STOCK: {stock}
+                #    ACTIVO: {activo}    
+                #''')
+
+                datoModificado = input("Ingrese un nombre: (Deje vacio si no quiere modificarlo) ")
+                if datoModificado.strip() != "":
+                    matrizProductos[i][1] = datoModificado
+                
+                datoModificado = input("Ingrese un precio: (Deje vacio si no quiere modificarlo) ")
+                if datoModificado.strip() != "":
+                    matrizProductos[i][2] = float(datoModificado)
+                
+                datoModificado = input("Ingrese un stock: (Deje vacio si no quiere modificarlo) ")
+                if datoModificado.strip() != "":
+                    matrizProductos[i][3] = int(datoModificado)
+
+                print(f"Producto '{nombre}' (ID: {idProducto}) fue modificado correctamente")
+                return
+        print("Opción inválida: El ID ingresado no existe.")            
+
 
 def mostrarListaProducto():
     for fila in matrizProductos:
