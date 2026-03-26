@@ -4,11 +4,13 @@ matrizProductos = [[1, "Cortado", 122.0, 5, True], [2, "Americano", 125.0, 10, T
 def productoMenu():
     opcion = 1
     while opcion != 0:
-        print('''Menu Producto
+        print('''
+        --Menu Producto--
         '1 - Alta Producto
         '2 - Baja Producto
         '3 - Modificacion Producto
         '4 - Mostrar Productos
+        '5 - Leer Producto
         '0 - Volver al menu principal''')
 
         opcion = int(input("Ingresa un numero: "))
@@ -20,6 +22,8 @@ def productoMenu():
             modificacionProducto()
         if opcion == 4:
             mostrarListaProducto()
+        if opcion == 5:
+            mostrarProducto()
         if opcion == 0:
             print("Adios!") 
         
@@ -107,14 +111,6 @@ def modificacionProducto():
         for i in range(len(matrizProductos)): 
             if matrizProductos[i][0] == idProducto:
                 id, nombre, precio, stock, activo =matrizProductos[i]
-                #print("\t--Datos actuales--")
-                #print(f''' 
-                #    ID: {id}
-                #    NOMBRE: {nombre}
-                #    PRECIO: {precio}
-                #    STOCK: {stock}
-                #    ACTIVO: {activo}    
-                #''')
 
                 datoModificado = input("Ingrese un nombre: (Deje vacio si no quiere modificarlo) ")
                 if datoModificado.strip() != "":
@@ -139,3 +135,27 @@ def mostrarListaProducto():
             print(elemento, end=" ")
         print()
 
+def mostrarProducto():
+    if not matrizProductos:
+        print("No se encuentra el Producto.")
+    else:
+        idProducto = int(input("Ingrese el ID del producto para buscar: "))
+
+        for i in range(len(matrizProductos)): 
+            if matrizProductos[i][0] == idProducto:
+                id, nombre, precio, stock, activo = matrizProductos[i]
+                if activo:
+                    estado = "Activo"
+                else:
+                    estado = "Inactivo"
+                
+                print(f'''
+                ----Producto encontrado----
+                    ID: {id}
+                    NOMBRE: {nombre}
+                    PRECIO: {precio}
+                    STOCK: {stock}
+                    ESTADO: {estado}
+                ---------------------------
+                ''')
+                return
