@@ -29,7 +29,7 @@ def productoMenu():
         
         
     
-def altaProducto():
+def altaProducto1():
     productoNombre = input("Ingrese el nombre del producto: ")
     productoPrecio = input("Ingrese el precio del producto: ")
     productoCantidad = input("Ingrese el stock del producto: ")
@@ -98,8 +98,38 @@ def altaProducto():
                         bajaProducto() 
                 break 
 
-        if not encontrado:
-            print("Opción inválida: El ID ingresado no existe.") 
+    if not encontrado:
+        print("Opción inválida: El ID {idProducto} ingresado no existe.") 
+        seguirIngresando = input("¿Desea ingresar un nuevo producto? (si/no)").strip().lower()
+        cont = 0
+        while seguirIngresando != "si" and seguirIngresando != "no":
+            print("ERROR DE TIPEO. Por favor ingrese "'si'" o "'no'"")
+            seguirIngresando = input("¿Desea ingresar un nuevo producto? (si/no)").strip().lower()
+        
+        if seguirIngresando == "si":
+            productoNombre = input("Ingrese el nombre del producto: ")
+            productoPrecio = float(input("Ingrese el precio del producto: "))
+            productoCantidad = int(input("Ingrese el stock del producto: "))
+            cont = cont +1
+
+            if matrizProductos:
+                nuevo_id = matrizProductos[-1][0] + 1
+            else:
+                nuevo_id = 1
+
+            producto = [matrizProductos[-1][0] + 1, productoNombre, productoPrecio, productoCantidad, True]
+            matrizProductos.append(producto)
+
+            print("Producto: "+productoNombre+" ¡Agregado correctamente!")
+        else:
+            print("Se ingresaron: "+ cont + "producto/s correctamente")
+        
+
+            
+
+
+
+
 
 def modificacionProducto():
     if not matrizProductos:
