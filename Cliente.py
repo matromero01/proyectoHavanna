@@ -1,3 +1,4 @@
+
 matrizCliente = [[1, "Facundo Mello", "facundomello34@mail.com", "1124084431", True],
                   [2, "Cristina Kirchner", "cristinareina@gmail.com", "114903441", True]]
 
@@ -35,34 +36,29 @@ def altaCliente():  #Definimos en el sistema la funcion de alta cliente, en dond
     
     matrizCliente.append(nuevoCliente)
     print(f"Cliente '{clienteNombre}' (ID: {nuevoId}) dado de alta exitosamente.\n")
-    
-def bajaCliente():
-    """Esto lo que hace es darle de baja a un cliente, cambia su estado a False,pero no lo elimina de la lista,para mantenenr un registro
-    de los clientes que se dieron de baja"""
+
+def bajaCliente(): #Definimos en el ssitema la funcion de baja cleinte, en donde vamos a incorporar el ID del cliente a eliminar. 
+    """ Dar de baja un cliente existente"""
+    print("\n--- Baja de cliente ---")
     if not matrizCliente:
-        print("No hay clientes registrados. \n")
-    else:
-        mostrarListaCliente()
-        idCliente=int(input("\nIngrese el ID del cliente a dar de baja: "))
+        print("No hay clientes para eliminar.")
+    else: 
+        bajaCliente()
+        idCliente = int(input("Ingrese el ID del cliente a dar de baja: "))
         encontrado = False
+
+        cliente = matrizCliente[i][1]
+
         for i in range(len(matrizCliente)):
             if matrizCliente[i] [0] == idCliente:
                 encontrado = True
-                nombre = matrizCliente[i] [1]
-    
-                if matrizCliente [i] [4] == True:
-                    matrizCliente [i] [4] = False
-                    print(f"Cliente '{nombre}' (ID: {idCliente}) dado de baja exitosamente. \n")
-                else:
-                    print(f"Cliente '{nombre}' (ID: {idCliente}) ya fue dado de baja anteriormente. \n")
-                    condicionAlta = input("¿Quiere dar de alta el cliente ahora? (si/no): \n Cliente '{nombre}' (ID: {idCliente})").strip().lower()
-                    
+                if matrizCliente[i][4] == True:
+                    matrizCliente[i] [4] = False
+                    print(f"Cliente '{cliente}' (ID: {idCliente}) dado de baja exitosamente.")
+                else: 
+                    print(f"Cliente '{cliente}' (ID: {idCliente}) ya fue dado de baja anteriormente.")
+                    condicionAlta = input("¿Queres dar de alta al cliente ahora? (si/no): \n Cliente '{cliente}' (ID: {idCliente})")
                     while condicionAlta != "si" and condicionAlta != "no":
-                        print("Respuesta inválida. Por favor ingrese 'si' o 'no'.")
-                        condicionAlta = input("¿Quiere darlo de alta ahora? (si/no): ").strip().lower()
-                    
-                    if condicionAlta == "si":
-                        altaCliente() 
-                        break #Agregamos el break para salir del ciclo una vez que se da de alta el cliente nuevamente, evitando asi que el sistema siga preguntando por el mismo cliente dado de baja anteriormente
-                        if not encontrado: 
-                            print(f"No se encontró ningún cliente con ID: {idCliente}. \n")
+                        print("Opción no válida. Por favor, ingresa 'si' o 'no'.")
+                        condicionAlta = input("¿Queres dar de alta al cliente ahora? (si/no): \n Cliente '{cliente}' (ID: {idCliente})")
+

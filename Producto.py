@@ -47,9 +47,9 @@ def bajaProducto():
         encontrado = False
 
         for i in range(len(matrizProductos)): 
-            encontrado = True
             if matrizProductos[i][0] == idProducto:
                 encontrado = True
+
                 nombre = matrizProductos[i][1] 
 
                 if matrizProductos[i][4] == True:
@@ -57,7 +57,7 @@ def bajaProducto():
                     print(f"Producto '{nombre}' (ID: {idProducto}) dado de baja exitosamente.")
                 else:
                     print(f"Producto '{nombre}' (ID: {idProducto}) ya fue dado de baja anteriormente")
-                    condicionAlta = input("¿Quiere dar de alta el producto ahora? (si/no): \n Producto '{nombre}' (ID: {idProducto})").strip().lower()
+                    condicionAlta = input("¿Quiere dar de alta el producto ahora? (si/no): \nProducto '{nombre}' (ID: {idProducto})").strip().lower()
                     
                     while condicionAlta != "si" and condicionAlta != "no":
                         print("Respuesta inválida. Por favor ingrese 'si' o 'no'.")
