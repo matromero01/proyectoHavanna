@@ -173,7 +173,6 @@ def modificacionProducto():
 
 
 def mostrarListaProducto():
-    print(encabezado)
     for fila in matrizProductos:
         for elemento in fila:
             print(elemento, end=" ")
