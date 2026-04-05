@@ -1,5 +1,18 @@
 
-matrizProductos = [[1, "Cortado", 122.0, 5, True], [2, "Americano", 125.0, 10, True]]
+# ID | Nombre | Precio | Stock | Estado
+encabezado = ["ID", "Nombre", "Precio", "Stock", "Activo"]
+matrizProductos = [
+    [1,  "Cortado",           122.0, 5,  True],
+    [2,  "Americano",         125.0, 10, True],
+    [3,  "Café con leche",    150.0, 8,  True],
+    [4,  "Capuccino",         170.0, 6,  True],
+    [5,  "Té con limón",      130.0, 12, True],
+    [6,  "Medialunas x3",     120.0, 20, True],
+    [7,  "Tostado de jamón",  180.0, 7,  True],
+    [8,  "Jugo de naranja",   110.0, 15, True],
+    [9,  "Cheesecake",        250.0, 4,  True],
+    [10, "Agua mineral",       80.0, 30, True],
+]
 
 def productoMenu():
     opcion = 1
@@ -160,6 +173,7 @@ def modificacionProducto():
 
 
 def mostrarListaProducto():
+    print(encabezado)
     for fila in matrizProductos:
         for elemento in fila:
             print(elemento, end=" ")

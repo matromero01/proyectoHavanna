@@ -43,7 +43,6 @@ def bajaCliente(): #Definimos en el ssitema la funcion de baja cleinte, en donde
     if not matrizCliente:
         print("No hay clientes para eliminar.")
     else: 
-        bajaCliente()
         idCliente = int(input("Ingrese el ID del cliente a dar de baja: "))
         encontrado = False
 
