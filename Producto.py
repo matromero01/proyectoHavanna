@@ -26,7 +26,7 @@ def productoMenu():
         '5 - Leer Producto
         '0 - Volver al menu principal''')
 
-        opcion = int(input("Ingresa un numero: "))
+        opcion = int(input("Ingresa una opción: "))
         if opcion == 1:
             altaProducto()
         if opcion == 2:

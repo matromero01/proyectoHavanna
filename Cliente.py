@@ -61,6 +61,5 @@ def bajaCliente(): #Definimos en el ssitema la funcion de baja cleinte, en donde
                         print("Opción no válida. Por favor, ingresa 'si' o 'no'.")
                         condicionAlta = input("¿Queres dar de alta al cliente ahora? (si/no): \n Cliente '{cliente}' (ID: {idCliente})")
 
-def modificacionCliente(): 
-
-def mostrarListaCliente(): 
+def modificacionCliente():
+    print("\n--- Modificación de cliente ---")
