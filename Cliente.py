@@ -22,6 +22,7 @@ def clienteMenu():
             mostrarListaCliente()
         if opcion == 0:
             print("Volviendo al menu principal...")
+
 def altaCliente():  #Definimos en el sistema la funcion de alta cliente, en donde vamos a incorporar Nombre,Email,Telefono 
     """ Dar de alta un nuevo cliente"""
     print("\n--- Alta de nuevo cliente ---")
@@ -66,3 +67,19 @@ def bajaCliente():
                         break #Agregamos el break para salir del ciclo una vez que se da de alta el cliente nuevamente, evitando asi que el sistema siga preguntando por el mismo cliente dado de baja anteriormente
                         if not encontrado: 
                             print(f"No se encontró ningún cliente con ID: {idCliente}. \n")
+
+def modificacionCliente():
+    return 
+
+def mostrarListaCliente(): 
+    return 
+
+def existeCliente(idCliente):
+    encontrado = False 
+    for i in range(len(matrizCliente)):
+        if matrizCliente[i] [0] == idCliente:
+            encontrado = True
+            break
+
+    if not encontrado:
+        print("El cliente no existe en la matriz.")
