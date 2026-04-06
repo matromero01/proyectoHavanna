@@ -23,12 +23,20 @@ def clienteMenu():
             mostrarListaCliente()
         if opcion == 0:
             print("Volviendo al menu principal...")
+
 def altaCliente():  #Definimos en el sistema la funcion de alta cliente, en donde vamos a incorporar Nombre,Email,Telefono 
     """ Dar de alta un nuevo cliente"""
     print("\n--- Alta de nuevo cliente ---")
     clienteNombre= input("Ingrese el nombre del nuevo cliente: ")
     clienteEmail= input("Ingrese su Email: ")
+    while "@" not in clienteEmail or "." not in clienteEmail: #Esto es para validar que el correo que ingrese el cliente contenga su formalo valido "@" y un punto, si no, le va a pedir que ingrese un correo valido."
+        print("Correo electrónico no válido. Por favor, ingrese un correo electrónico válido.")
+        clienteEmail = input("Ingrese su Email: ")
     clienteTelefono= input("Ingrese su número de contacto: ")
+    while not clienteTelefono.isdigit() or len(clienteTelefono) < 7:
+        print("Número de teléfono invalido, por favor, vuelve a ingresarlo nuevamente.")
+        clienteTelefono= input("Ingrese su número de contacto: ")
+
 
     #Creamos nuevo cliente con un ID autoincremental, el nombre, email,telefono y el estado activo (True) 
     nuevoId= matrizCliente[-1] [0] + 1 if matrizCliente else 1
@@ -63,3 +71,6 @@ def bajaCliente(): #Definimos en el ssitema la funcion de baja cleinte, en donde
 
 def modificacionCliente():
     print("\n--- Modificación de cliente ---")
+
+
+
