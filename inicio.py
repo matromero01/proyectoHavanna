@@ -11,7 +11,7 @@ while opcion != 0:
     '3 - Menu ...
     '0 - Salir''')
 
-    opcion = int(input("Ingresa un numero: "))
+    opcion = int(input("Ingresa una opción: "))
     if opcion == 1:
         Producto.productoMenu()     
     elif opcion == 2: #Este es el nuevo menu de clientes
