@@ -1,5 +1,18 @@
 
-matrizProductos = [[1, "Cortado", 122.0, 5, True], [2, "Americano", 125.0, 10, True]]
+# ID | Nombre | Precio | Stock | Estado
+encabezado = ["ID", "Nombre", "Precio", "Stock", "Activo"]
+matrizProductos = [
+    [1,  "Cortado",           122.0, 5,  True],
+    [2,  "Americano",         125.0, 10, True],
+    [3,  "Café con leche",    150.0, 8,  True],
+    [4,  "Capuccino",         170.0, 6,  True],
+    [5,  "Té con limón",      130.0, 12, True],
+    [6,  "Medialunas x3",     120.0, 20, True],
+    [7,  "Tostado de jamón",  180.0, 7,  True],
+    [8,  "Jugo de naranja",   110.0, 15, True],
+    [9,  "Cheesecake",        250.0, 4,  True],
+    [10, "Agua mineral",       80.0, 30, True],
+]
 
 def productoMenu():
     opcion = 1
@@ -47,9 +60,9 @@ def bajaProducto():
         encontrado = False
 
         for i in range(len(matrizProductos)): 
-            encontrado = True
             if matrizProductos[i][0] == idProducto:
                 encontrado = True
+
                 nombre = matrizProductos[i][1] 
 
                 if matrizProductos[i][4] == True:
@@ -57,7 +70,7 @@ def bajaProducto():
                     print(f"Producto '{nombre}' (ID: {idProducto}) dado de baja exitosamente.")
                 else:
                     print(f"Producto '{nombre}' (ID: {idProducto}) ya fue dado de baja anteriormente")
-                    condicionAlta = input("¿Quiere dar de alta el producto ahora? (si/no): \n Producto '{nombre}' (ID: {idProducto})").strip().lower()
+                    condicionAlta = input("¿Quiere dar de alta el producto ahora? (si/no): \nProducto '{nombre}' (ID: {idProducto})").strip().lower()
                     
                     while condicionAlta != "si" and condicionAlta != "no":
                         print("Respuesta inválida. Por favor ingrese 'si' o 'no'.")

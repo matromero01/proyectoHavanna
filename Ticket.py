@@ -20,7 +20,6 @@ def ticketMenu():
         if opcion == 1:
             altaTicket()
        # if opcion == 2:
-       #     bajaProducto()
        # if opcion == 3:
        #     modificacionProducto()
        # if opcion == 4:
@@ -28,15 +27,17 @@ def ticketMenu():
        # if opcion == 5:
        #     mostrarProducto()
         if opcion == 0:
-            print("Adios!") 
+            print("Adios!")
                 
     
 def altaTicket(matrizTicket, matrizProductos):
     ticket_auxiliar = []
     flag = True
-    numeroTicket = matrizTicket[-1][0] + 1
+    numeroTicket = int(matrizTicket[-1][0]) + 1
     while flag:
+        print()
         Producto.mostrarListaProducto()
+        print()
         idProducto = int(input("Ingrese el ID del producto que desea comprar: "))
         encontrado = False
         for i in range(len(matrizProductos)): 
@@ -46,32 +47,51 @@ def altaTicket(matrizTicket, matrizProductos):
                 
                 cantidad = int(input(f"Ingrese la cantidad de {nombre} que desea llevar: "))
 
-                ticket_auxiliar.append([numeroTicket, idProducto, cantidad, (matrizProductos[i][0] * cantidad), True])
+                ticket_auxiliar.append([numeroTicket, idProducto, cantidad, (matrizProductos[i][2] * cantidad), True])
                 print("Se agregó correctamente.")
                 break
 
         if not encontrado:
             print("Opción inválida: El ID ingresado no existe.")
-
-        continuar = input("Desea agregar otro producto? (s/n): ")
-        if continuar.strip().lower() != "s":
-            flag = False
+        
+        continuar = ""
+        while continuar.strip().lower() != "s" and continuar.strip().lower() != "n":
+            continuar = input("Desea agregar otro producto? (s/n): ")
+            if continuar.strip().lower() == "s":
+                flag = True
+            elif continuar.strip().lower() == "n":   
+                flag = False
+            else: 
+                print("Opción inválida.")
+    
+    continuar = ""
+    while continuar.strip().lower() != "s" and continuar.strip().lower() != "n":
+        continuar = input("Desea confirmar el pedido? (s/n): ")
+        if continuar.strip().lower() == "s":
+            return ticket_auxiliar
         elif continuar.strip().lower() == "n":   
-            flag = True
+            return 
         else: 
             print("Opción inválida.")
 
-    continuar = input("Desea confirmar el pedido? (s/n): ")
-    if continuar.strip().lower() != "s":
-        matrizTicket.append(ticket_auxiliar)
-        print("Pedido confirmado!")
-    elif continuar.strip().lower() == "n":   
-        return 
-    else: 
-        print("Opción inválida.")
-        
-                
+def imprimir_ticket(cliente, ticket_auxiliar):
+    total = 0
+    print(f"IdTicket --> {ticket_auxiliar[0][0]}")
+    print("|    Producto    |    Cantidad    |    Subtotal    |")
+    
+    for linea in ticket_auxiliar:
+      idTicket, idProducto, cantidad, subtotal, estadoTicket = linea
+      print(f"|       {idProducto}       |       {cantidad}       |       {subtotal}       |")
+      total+= subtotal
+    
+    print(f"Total --> {total}")
+    
+    idCliente, nombre, mail, telefono, estadoCliente = cliente
+    print(f"Cliente --> {nombre}")
 
-            
+    return total
 
-
+def agregarTicket(ticket_auxiliar):
+    matrizTicket.append(ticket_auxiliar)
+    
+    
