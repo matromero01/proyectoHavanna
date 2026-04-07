@@ -137,13 +137,6 @@ def altaProducto():
         else:
             print("Se ingresaron: "+ cont + "producto/s correctamente")
         
-
-            
-
-
-
-
-
 def modificacionProducto():
     if not matrizProductos:
         print("No hay productos para modificar.")
