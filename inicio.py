@@ -15,6 +15,6 @@ while opcion != 0:
     if opcion == 1:
         Producto.productoMenu()     
     elif opcion == 2: #Este es el nuevo menu de clientes
-        Cliente.clienteMenu()
+        Cliente.menuInicio()
     if opcion == 0:
         print("Adios!")     

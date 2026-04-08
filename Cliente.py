@@ -2,10 +2,52 @@
 matrizCliente = [[1, "Facundo Mello", "facundomello34@mail.com", "1124084431", True],
                   [2, "Cristina Kirchner", "cristinareina@gmail.com", "114903441", True]]
 
+def menuInicio():
+    opcion = 1
+    while opcion !=0:
+        print('''\nMenu de Inicio
+        1 - Login Administrador
+        2 - Login Cliente
+        3 - Salir del sistema''')
+
+        opcion =int(input("Ingresa una opción: "))
+        if opcion == 1:
+            loginAdmin()
+        if opcion == 2:
+            loginCliente()
+        if opcion == 3:
+            print("Saliendo del sistema... ")
+
+def loginAdmin():
+    print("\n--- Login Administrador ---")
+    usuario = input("Ingrese su nombre de usuario: ")
+    contraseña = input("Ingresa tu contraseña: ")
+
+    if usuario == "admin" and contraseña == "admin123":
+        print("Login completado exitosamente. Bienvenido, Administrador!")
+        clienteMenu()
+    else: 
+        print("Usuario o contraseña son incorrectos. Intente nuevamente.")
+def loginCliente():
+    print("\n--- Login Cliente ---")
+    email = input("Ingrese su correo electrónico: ")
+    telefono = input("Ingrese su número de contacto: ")
+    for cliente in matrizCliente:
+        if cliente[2] == email and cliente[3] == telefono and cliente[4] == True:
+            print(f"Login completado exitosamente. Bienvenido, {cliente[1]}!")
+            clienteMenu()
+            
+
+    print("Correo electrónico o número de contacto incorrectos, o el cliente está dado de baja. Intente nuevamente.")
+
+    return None 
+    '''Use el return None para indicar que la funcion no devuelva ningun valor util en caso de que el login falle, 
+    lo que permite al sistema manejar adecuadamente los casos de login fallidos sin causar errores o comportamientos inesperados.'''
+
 def clienteMenu():
     opcion = 1
     while opcion != 0:
-        print('''Menu Cliente
+        print('''Menu Principal
         '1 - Alta Cliente
         '2 - Baja Cliente
         '3 - Modificacion Cliente
