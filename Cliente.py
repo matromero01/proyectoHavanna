@@ -1,6 +1,14 @@
 
-matrizCliente = [[1, "Facundo Mello", "facundomello34@mail.com", "1124084431", True],
-                  [2, "Cristina Kirchner", "cristinareina@gmail.com", "114903441", True]]
+matrizCliente = [
+    [1,  "Facundo Mello",      "facundomello34@mail.com",   "1124084431", True],
+    [2,  "Cristina Kirchner",  "cristinareina@gmail.com",   "1149034410", True],
+    [3,  "Juan Perez",         "juanperez@gmail.com",       "1156781234", True],
+    [4,  "Maria Lopez",        "marialopez@hotmail.com",    "1167894321", True],
+    [5,  "Carlos Gomez",       "carlosgomez@yahoo.com",     "1178905678", False],
+    [6,  "Laura Fernandez",    "lauraf@gmail.com",          "1189016789", True],
+    [7,  "Diego Martinez",     "diegom@outlook.com",        "1190127890", True],
+    [8,  "Ana Rodriguez",      "anar@gmail.com",            "1101238901", False],
+]
 
 def menuInicio():
     opcion = 1
@@ -96,9 +104,9 @@ def bajaCliente(): #Definimos en el ssitema la funcion de baja cleinte, en donde
         idCliente = int(input("Ingrese el ID del cliente a dar de baja: "))
         encontrado = False
 
-        cliente = matrizCliente[i][1]
 
         for i in range(len(matrizCliente)):
+            cliente = matrizCliente[i][1]
             if matrizCliente[i] [0] == idCliente:
                 encontrado = True
                 if matrizCliente[i][4] == True:
@@ -106,7 +114,7 @@ def bajaCliente(): #Definimos en el ssitema la funcion de baja cleinte, en donde
                     print(f"Cliente '{cliente}' (ID: {idCliente}) dado de baja exitosamente.")
                 else: 
                     print(f"Cliente '{cliente}' (ID: {idCliente}) ya fue dado de baja anteriormente.")
-                    condicionAlta = input("¿Queres dar de alta al cliente ahora? (si/no): \n Cliente '{cliente}' (ID: {idCliente})")
+                    condicionAlta = input(f"¿Queres dar de alta al cliente ahora? (si/no): \n Cliente '{cliente}' (ID: {idCliente})")
                     while condicionAlta != "si" and condicionAlta != "no":
                         print("Respuesta inválida. Por favor ingrese 'si' o 'no'.")
                         condicionAlta = input("¿Quiere darlo de alta ahora? (si/no): ").strip().lower()
@@ -114,14 +122,41 @@ def bajaCliente(): #Definimos en el ssitema la funcion de baja cleinte, en donde
                     if condicionAlta == "si":
                         altaCliente() 
                         break #Agregamos el break para salir del ciclo una vez que se da de alta el cliente nuevamente, evitando asi que el sistema siga preguntando por el mismo cliente dado de baja anteriormente
-                    if not encontrado: 
-                        print(f"No se encontró ningún cliente con ID: {idCliente}. \n")
+        if not encontrado: 
+            print(f"No se encontró ningún cliente con ID: {idCliente}. \n")
 
 def modificacionCliente():
-    return 
+    if not matrizCliente:
+        print("No hay cliente para modificar.")
+    else:
+        mostrarListaCliente() 
+        idCliente = int(input("Ingrese el ID del cliente para modificar: "))
 
-def mostrarListaCliente(): 
-    return 
+        for i in range(len(matrizCliente)): 
+            if matrizCliente[i][0] == idCliente:
+                id, nombre, mail, numero, activo =matrizCliente[i]
+
+                datoModificado = input("Ingrese un nombre: (Deje vacio si no quiere modificarlo) ")
+                if datoModificado.strip() != "":
+                    matrizCliente[i][1] = datoModificado
+                
+                datoModificado = input("Ingrese un mail: (Deje vacio si no quiere modificarlo) ")
+                if datoModificado.strip() != "":
+                    matrizCliente[i][2] = datoModificado
+                
+                datoModificado = input("Ingrese un numero: (Deje vacio si no quiere modificarlo) ")
+                if datoModificado.strip() != "":
+                    matrizCliente[i][3] = datoModificado
+
+                print(f"Cliente '{nombre}' (ID: {idCliente}) fue modificado correctamente")
+                return
+        print("Opción inválida: El ID ingresado no existe.")      
+
+def mostrarListaCliente():
+    print(f"{'ID':<5} {'Nombre':<20} {'Email':<30} {'Telefono':<15} {'Activo':<8}")
+    print("-" * 80)
+    for fila in matrizCliente:
+        print(f"{fila[0]:<5} {fila[1]:<20} {fila[2]:<30} {fila[3]:<15} {str(fila[4]):<8}")
 
 def existeCliente(idCliente):
     encontrado = False 
