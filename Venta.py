@@ -1,7 +1,12 @@
 import Cliente, Ticket, Producto
 
-matrizVenta = [[1, 123, 1, 744.0, True]]
-
+listaVentas = [
+    {"id_venta": 1, "id_ticket": 123, "id_cliente": 1, "monto_total": 744.0, "metodo_pago": "efectivo", "fecha": "2025-06-01"},
+    {"id_venta": 2, "id_ticket": 124, "id_cliente": 3, "monto_total": 370.0, "metodo_pago": "tarjeta",  "fecha": "2025-06-02"},
+    {"id_venta": 3, "id_ticket": 125, "id_cliente": 2, "monto_total": 520.0, "metodo_pago": "efectivo", "fecha": "2025-06-02"},
+    {"id_venta": 4, "id_ticket": 126, "id_cliente": 1, "monto_total": 290.0, "metodo_pago": "transferencia", "fecha": "2025-06-03"},
+    {"id_venta": 5, "id_ticket": 127, "id_cliente": 4, "monto_total": 180.0, "metodo_pago": "tarjeta",  "fecha": "2025-06-03"},
+]
 
 def menuVenta():
     opcion = 1
@@ -44,6 +49,4 @@ def mostrarVentas():
             print(elemento, end=" ")
         print()   
     
-    
-
 menuVenta()
