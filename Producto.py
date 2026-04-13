@@ -166,10 +166,21 @@ def modificacionProducto():
 
 
 def mostrarListaProducto():
+    
+    print("-"*55)  
+    print(f'{"ID":<4}{"Nombre":<25}{"Precio":<10}{"Stock":<8}{"Activo":<6}')
+    print("-"*55)       
+
     for fila in matrizProductos:
-        for elemento in fila:
-            print(elemento, end=" ")
-        print()
+        id, nombre, precio, stock, activo = fila
+        
+        if activo:
+            activoString = "SI"
+        else:
+            activoString = "NO"
+
+        
+        print(f'{id:<4}{nombre:<25}{precio:<10}{stock:<8}{activoString:<6}')
 
 def mostrarProducto():
     if not matrizProductos:
