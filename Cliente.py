@@ -1,3 +1,4 @@
+import Producto
 
 matrizCliente = [
     [1,  "Facundo Mello",      "facundomello34@mail.com",   "1124084431", True],
@@ -10,21 +11,17 @@ matrizCliente = [
     [8,  "Ana Rodriguez",      "anar@gmail.com",            "1101238901", False],
 ]
 
-def menuInicio():
-    opcion = 1
-    while opcion !=0:
-        print('''\nMenu de Inicio
-        1 - Login Administrador
-        2 - Login Cliente
-        3 - Salir del sistema''')
+def menuAutenticacion():
+        print("\n¿Sos administrador? (si/no): ")
+        es_admin= input("Respuesta: ").strip().lower()
 
-        opcion =int(input("Ingresa una opción: "))
-        if opcion == 1:
+        if es_admin == "si":
             loginAdmin()
-        if opcion == 2:
-            loginCliente()
-        if opcion == 3:
-            print("Saliendo del sistema... ")
+        elif es_admin == "no":
+            altaCliente()
+            #Llamamos a la facunon de alta para que el registro sea inmediato
+            clienteMenu()
+            #Luego de darse de alta, se le permite ingresar al menu de clientes
 
 def loginAdmin():
     print("\n--- Login Administrador ---")
@@ -36,6 +33,7 @@ def loginAdmin():
         clienteMenu()
     else: 
         print("Usuario o contraseña son incorrectos. Intente nuevamente.")
+
 def loginCliente():
     print("\n--- Login Cliente ---")
     email = input("Ingrese su correo electrónico: ")
@@ -53,31 +51,71 @@ def loginCliente():
     lo que permite al sistema manejar adecuadamente los casos de login fallidos sin causar errores o comportamientos inesperados.'''
 
 def clienteMenu():
+    carrito = []
     opcion = 1
     while opcion != 0:
         print('''Menu Principal
-        '1 - Alta Cliente
-        '2 - Baja Cliente
-        '3 - Modificacion Cliente
-        '4 - Mostrar Clientes
-        '0 - Volver al menu principal''')
+        '1 - Ver Productos
+        '2 - Agregar al Carrito
+        '3 - Vaciar Carrito
+        '4 - Finalizar compra
+        '0 - Salir del sistema''')
 
-        opcion = int(input("Ingresa un numero: "))
+        opcion = int(input("Seleccione una opción: "))
         if opcion == 1:
-            altaCliente()
-        if opcion == 2:
-            bajaCliente()
-        if opcion == 3:
-            modificacionCliente()
-        if opcion == 4:
-            mostrarListaCliente()
+            Producto.mostrarListaProducto()
+
+        elif opcion == 2:
+            id_buscar = int(input("Ingrese el ID del producto que desea comprar: "))
+            encontrado = False
+            
+            for p in Producto.matrizProductos: 
+                if p[0] == id_buscar:
+                    encontrado = True
+                    cantidad = int(input(f"¿Cuántos {p[1]} desea agregar al carrito?: "))
+                    
+                    if cantidad <= p[3]: 
+                        carrito.append([p[0], p[1], p[2], cantidad]) 
+                        p[3] -= cantidad 
+                        print(f"{cantidad} unidades de {p[1]} agregadas al carrito.")
+                    else:
+                        print(f"No hay suficiente stock. Disponible: {p[3]} unidades.")
+                    break 
+            
+            if not encontrado:
+                print(f"No se encontró ningún producto con ID: {id_buscar}.")
+
+
+        elif opcion == 3:
+            print("Carrito vaciado.")
+            carrito.clear()  # Limpiamos la lista del carrito para vaciarlo completamente
+
+
+        elif opcion == 4:
+            if not carrito:
+                print("El carrito está vacío. No hay productos para comprar.")
+            else:
+                total_calculado = 0
+                print("\n--- Resumen de compra ---")
+                
+                for item in carrito:
+                    subtotal = item[2] * item[3]
+                    total_calculado += subtotal
+                    print(f"{item[1]} x {item[3]} = ${subtotal}")
+                print("-" * 25)
+                print(f"Total a pagar: ${total_calculado}")
+                print("Gracias por su compra. ¡Vuelva pronto!")
+
+            print("Finalizando compra... Total a pagar: ")
+
+
         if opcion == 0:
             print("Volviendo al menu principal...")
 
 def altaCliente():  #Definimos en el sistema la funcion de alta cliente, en donde vamos a incorporar Nombre,Email,Telefono 
     """ Dar de alta un nuevo cliente"""
-    print("\n--- Alta de nuevo cliente ---")
-    clienteNombre= input("Ingrese el nombre del nuevo cliente: ")
+    print("\n--- Registrarse ---")
+    clienteNombre= input("Ingrese su nombre nuevo cliente: ")
     clienteEmail= input("Ingrese su Email: ")
     while "@" not in clienteEmail or "." not in clienteEmail: #Esto es para validar que el correo que ingrese el cliente contenga su formalo valido "@" y un punto, si no, le va a pedir que ingrese un correo valido."
         print("Correo electrónico no válido. Por favor, ingrese un correo electrónico válido.")

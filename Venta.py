@@ -37,7 +37,7 @@ def menuVenta():
 def altaVenta():
     idCliente = int(input("Ingrese el ID del cliente: "))
     if Cliente.existeCliente(idCliente):
-        ticketAuxiliar = Ticket.altaTicket(Ticket.matrizTicket, Producto.matrizProductos)
+        ticketAuxiliar = Ticket.altaTicket(Ticket.matrizTicket, Producto.matrizProductoss)
         total = Ticket.imprimir_ticket(Cliente.obtenerCliente(idCliente), ticketAuxiliar)
         Ticket.agregarTicket(ticketAuxiliar)
     

@@ -166,24 +166,22 @@ def modificacionProducto():
 
 
 def mostrarListaProducto():
+    print("matrizProductos = [")
     for fila in matrizProductos:
-        for elemento in fila:
-            print(elemento, end=" ")
-        print()
+        print(f"    {fila},")
+    print("]")
 
 def mostrarProducto():
     if not matrizProductos:
-        print("No se encuentra el Producto.")
-    else:
-        idProducto = int(input("Ingrese el ID del producto para buscar: "))
+        print("No se encuentra el producto en el sistema.")
+    else: 
+        idProducto = int(input("Ingresa el ID del prodcuto para buscar: "))
+        encontrado = False
 
-        for i in range(len(matrizProductos)): 
-            if matrizProductos[i][0] == idProducto:
+        for i in range(len(matrizProductos)):
+            if matrizProdctuos[i] [0] == idProducto:
                 id, nombre, precio, stock, activo = matrizProductos[i]
-                if activo:
-                    estado = "Activo"
-                else:
-                    estado = "Inactivo"
+                estado = "Activo" if activo else "Inactivo"
                 
                 print(f'''
                 ----Producto encontrado----
@@ -194,4 +192,8 @@ def mostrarProducto():
                     ESTADO: {estado}
                 ---------------------------
                 ''')
+                encontrado = True
                 return
+        
+        if not encontrado:
+            print("No se encontró ningún producto con ese ID.")
