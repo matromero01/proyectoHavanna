@@ -1,5 +1,6 @@
 import Producto
 import Cliente
+import reporte
 
 #print("Inicio de Havanna")
 
@@ -19,5 +20,3 @@ def inicio():
             opcion = 0
 if __name__ == "__main__":
     inicio()
-
-

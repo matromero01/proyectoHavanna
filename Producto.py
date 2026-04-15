@@ -179,7 +179,7 @@ def mostrarProducto():
         encontrado = False
 
         for i in range(len(matrizProductos)):
-            if matrizProdctuos[i] [0] == idProducto:
+            if matrizProductos[i] [0] == idProducto:
                 id, nombre, precio, stock, activo = matrizProductos[i]
                 estado = "Activo" if activo else "Inactivo"
                 
@@ -197,3 +197,6 @@ def mostrarProducto():
         
         if not encontrado:
             print("No se encontró ningún producto con ese ID.")
+
+# Alias para compatibilidad con imports
+menuProducto = productoMenu

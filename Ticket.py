@@ -19,13 +19,6 @@ def ticketMenu():
         opcion = int(input("Ingresa un numero: "))
         if opcion == 1:
             altaTicket()
-       # if opcion == 2:
-       # if opcion == 3:
-       #     modificacionProducto()
-       # if opcion == 4:
-       #     mostrarListaProducto()
-       # if opcion == 5:
-       #     mostrarProducto()
         if opcion == 0:
             print("Adios!")
                 

@@ -37,16 +37,20 @@ def menuVenta():
 def altaVenta():
     idCliente = int(input("Ingrese el ID del cliente: "))
     if Cliente.existeCliente(idCliente):
-        ticketAuxiliar = Ticket.altaTicket(Ticket.matrizTicket, Producto.matrizProductoss)
-        total = Ticket.imprimir_ticket(Cliente.obtenerCliente(idCliente), ticketAuxiliar)
-        Ticket.agregarTicket(ticketAuxiliar)
-    
-        matrizVenta.append([matrizVenta[-1][0] + 1, ticketAuxiliar[0][0], idCliente, total, True])
+        ticketAuxiliar = Ticket.altaTicket(Ticket.matrizTicket, Producto.matrizProductos)
+        if ticketAuxiliar:  # Validar que el ticket se creó correctamente
+            total = Ticket.imprimir_ticket(Cliente.obtenerCliente(idCliente), ticketAuxiliar)
+            Ticket.agregarTicket(ticketAuxiliar)
+        
+            nuevo_id = listaVentas[-1]["id_venta"] + 1 if listaVentas else 1
+            listaVentas.append({"id_venta": nuevo_id, "id_ticket": ticketAuxiliar[0][0], "id_cliente": idCliente, "monto_total": total, "metodo_pago": "pendiente", "fecha": "2025-06-04"})
+            print("Venta registrada exitosamente.")
+    else:
+        print("El cliente no existe o está dado de baja.")
 
 def mostrarVentas():
-    for fila in matrizVenta:
-        for elemento in fila:
-            print(elemento, end=" ")
-        print()   
-    
-menuVenta()
+    if not listaVentas:
+        print("No hay ventas registradas.")
+    else:
+        for venta in listaVentas:
+            print(f"ID Venta: {venta['id_venta']}, Ticket: {venta['id_ticket']}, Cliente: {venta['id_cliente']}, Total: ${venta['monto_total']:.2f}")

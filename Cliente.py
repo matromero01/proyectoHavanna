@@ -1,4 +1,5 @@
 import Producto
+import Ticket
 
 matrizCliente = [
     [1,  "Facundo Mello",      "facundomello34@mail.com",   "1124084431", True],
@@ -12,16 +13,17 @@ matrizCliente = [
 ]
 
 def menuAutenticacion():
-        print("\n¿Sos administrador? (si/no): ")
-        es_admin= input("Respuesta: ").strip().lower()
+    print("\n¿Sos administrador? (si/no): ")
+    es_admin = input("Respuesta: ").strip().lower()
 
-        if es_admin == "si":
-            loginAdmin()
-        elif es_admin == "no":
-            altaCliente()
-            #Llamamos a la facunon de alta para que el registro sea inmediato
-            clienteMenu()
-            #Luego de darse de alta, se le permite ingresar al menu de clientes
+    if es_admin == "si":
+        loginAdmin()
+    elif es_admin == "no":
+        loginCliente()
+    else:
+        print("Respuesta inválida. Ingrese 'si' o 'no'.")
+        menuAutenticacion()
+
 
 def loginAdmin():
     print("\n--- Login Administrador ---")
@@ -30,9 +32,88 @@ def loginAdmin():
 
     if usuario == "admin" and contraseña == "admin123":
         print("Login completado exitosamente. Bienvenido, Administrador!")
-        clienteMenu()
+        adminMenu()
     else: 
         print("Usuario o contraseña son incorrectos. Intente nuevamente.")
+        menuAutenticacion()
+
+
+def altaCliente():
+    """Permite a nuevos usuarios registrarse en el sistema."""
+    nombre = input("Ingrese su nombre completo: ")
+    email = input("Ingrese su correo electrónico: ")
+    telefono = input("Ingrese su número de contacto: ")
+    
+    # Generar nuevo ID
+    nuevo_id = matrizCliente[-1][0] + 1 if matrizCliente else 1
+    
+    # Agregar nuevo cliente
+    nuevoCliente = [nuevo_id, nombre, email, telefono, True]
+    matrizCliente.append(nuevoCliente)
+    print(f"Cliente '{nombre}' registrado exitosamente con ID: {nuevo_id}")
+
+def existeCliente(idCliente):
+    """Verifica si un cliente existe en el sistema."""
+    for cliente in matrizCliente:
+        if cliente[0] == idCliente and cliente[4] == True:
+            return True
+    return False
+
+def obtenerCliente(idCliente):
+    """Obtiene los datos de un cliente por su ID."""
+    for cliente in matrizCliente:
+        if cliente[0] == idCliente and cliente[4] == True:
+            return cliente
+    return None
+
+
+def mostrarClientes():
+    print("\nListado de clientes:")
+    for cliente in matrizCliente:
+        estado = "Activo" if cliente[4] else "Inactivo"
+        print(f"ID: {cliente[0]}, Nombre: {cliente[1]}, Email: {cliente[2]}, Teléfono: {cliente[3]}, Estado: {estado}")
+
+
+def cambiarEstadoCliente():
+    mostrarClientes()
+    id_cliente = int(input("\nIngrese el ID del cliente a modificar: "))
+    for cliente in matrizCliente:
+        if cliente[0] == id_cliente:
+            if cliente[4]:
+                confirmar = input(f"El cliente {cliente[1]} está activo. Desea darlo de baja? (si/no): ").strip().lower()
+                if confirmar == "si":
+                    cliente[4] = False
+                    print(f"Cliente {cliente[1]} dado de baja.")
+                else:
+                    print("No se realizaron cambios.")
+            else:
+                confirmar = input(f"El cliente {cliente[1]} está inactivo. Desea darlo de alta? (si/no): ").strip().lower()
+                if confirmar == "si":
+                    cliente[4] = True
+                    print(f"Cliente {cliente[1]} dado de alta.")
+                else:
+                    print("No se realizaron cambios.")
+            return
+    print("No se encontró el cliente con ese ID.")
+
+
+def gestionarUsuarios():
+    opcion = 1
+    while opcion != 0:
+        print('''\n-- Menú de Usuarios --
+        1 - Ver Clientes
+        2 - Activar / Dar de baja cliente
+        0 - Volver al menú anterior''')
+        opcion = int(input("Seleccione una opción: "))
+        if opcion == 1:
+            mostrarClientes()
+        elif opcion == 2:
+            cambiarEstadoCliente()
+        elif opcion == 0:
+            print("Volviendo al menú anterior...")
+        else:
+            print("Opción inválida. Intente nuevamente.")
+
 
 def loginCliente():
     print("\n--- Login Cliente ---")
@@ -42,13 +123,32 @@ def loginCliente():
         if cliente[2] == email and cliente[3] == telefono and cliente[4] == True:
             print(f"Login completado exitosamente. Bienvenido, {cliente[1]}!")
             clienteMenu()
-            
+            return
 
     print("Correo electrónico o número de contacto incorrectos, o el cliente está dado de baja. Intente nuevamente.")
+    menuAutenticacion()
 
-    return None 
-    '''Use el return None para indicar que la funcion no devuelva ningun valor util en caso de que el login falle, 
-    lo que permite al sistema manejar adecuadamente los casos de login fallidos sin causar errores o comportamientos inesperados.'''
+def adminMenu():
+    opcion = 1
+    while opcion != 0:
+        print('''Menu Principal
+        '1 - Gestionar Productos/Stock
+        '2 - Administrar Usuarios/Clientes
+        '3 - Reportes
+        '4 - 
+        '0 - Salir del sistema''')
+        opcion = int(input("Seleccione una opción: "))
+        if opcion == 1:
+            Producto.menuProducto()
+        elif opcion == 2:
+            gestionarUsuarios()
+        elif opcion == 3:
+            print("Funcionalidad de reportes en desarrollo.")
+        elif opcion == 0:
+            print("Volviendo al menú anterior...")
+        else:
+            print("Opción inválida. Intente nuevamente.")
+
 
 def clienteMenu():
     carrito = []
@@ -105,9 +205,6 @@ def clienteMenu():
                 print("-" * 25)
                 print(f"Total a pagar: ${total_calculado}")
                 print("Gracias por su compra. ¡Vuelva pronto!")
-
-            print("Finalizando compra... Total a pagar: ")
-
 
         if opcion == 0:
             print("Volviendo al menu principal...")
