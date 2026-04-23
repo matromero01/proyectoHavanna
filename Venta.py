@@ -24,8 +24,8 @@ def menuVenta():
             altaVenta()
         if opcion == 2:
             bajaVenta()
-       # if opcion == 3:
-       #     modificacionProducto()
+        if opcion == 3:
+            modificacionProducto()
         if opcion == 4:
             mostrarVentas()
        # if opcion == 5:
@@ -51,13 +51,13 @@ def mostrarVentas():
     if not listaVentas:
         print("No hay ventas registradas.")
     else:
-        print("-"*55)  
-        print(f'{"ID_Venta":<15}{"Ticket":<15}{"Cliente":<16}{"Total $":<10}')
-        print("-"*55)  
+        print("-"*70)  
+        print(f'{"ID_Venta":<15}{"Ticket":<15}{"Cliente":<16}{"Metodo de Pago":<18}{"Total $":<10}')
+        print("-"*70)  
         for venta in listaVentas:
             if venta['estado']:
                   
-                print(f"{venta['id_venta']:<15} {venta['id_ticket']:<15} {venta['id_cliente']:<13} {venta['monto_total']:.2f}")
+                print(f"{venta['id_venta']:<15} {venta['id_ticket']:<15} {venta['id_cliente']:<13} {venta['metodo_pago']:<18} {venta['monto_total']:.2f}")
 
 
 def bajaVenta():
@@ -79,25 +79,46 @@ def bajaVenta():
                     else:
                         print("Error. Ingrese si o no.")
 
-def activarVenta():
-    print("| Baja de la Venta |")
+
+def modificacionProducto():
+    print("| Modificacion de la Venta |")
+    
     idVenta = int(input("Ingrese el ID de la venta: "))
+    encontrado = False
+
     for venta in listaVentas:
         if venta['id_venta'] == idVenta:
-            if venta['estado']:
-                while True:
-                    confirmacion = input(f"Desea confirmar la baja de la venta #{venta['id_venta']}? (si/no) ")
+            encontrado = True
+            print(f"Venta encontrada. Metodo de pago actual: {venta['metodo_pago']}")
+            
+            opcion = 0
 
-                    if confirmacion.upper().strip() == 'SI':
-                        venta['estado'] = False
-                        Ticket.bajaTicket(venta['id_ticket'])
-                        print(f"Confirmacion de la baja. Venta #{venta['id_venta']}!")
-                        return
-                    elif confirmacion.upper().strip() == 'NO': 
-                        print("Saliendo de la baja de venta...")
-                        return
-                    else:
-                        print("Error. Ingrese si o no.")
+            while opcion not in [1, 2, 3]:
+                print("\nSeleccione el nuevo metodo de pago:")
+                print("1. Efectivo")
+                print("2. Tarjeta")
+                print("3. Transferencia")
 
-                
+                entrada = input("Seleccione nuevo metodo de pago (1-3): ")
+                if entrada.isdigit():
+                    opcion = int(entrada)
+                    
+                    if opcion not in [1, 2, 3]:
+                        print("Error: El numero debe ser 1, 2, o 3")
+                else:
 
+                    print("Error: Por favor ingrese solo numeros (1-3)")
+            
+            metodos = {1: "efectivo", 2: "tarjeta", 3: "transferencia"}
+            venta['metodo_pago'] = metodos[opcion]
+            
+            print(f"\nCambio de metodo de pago exitoso a: {venta['metodo_pago']}")
+            break 
+            
+    if not encontrado:
+        print("ID incorrecto (No se encontro la venta)")
+            
+
+
+            
+     
