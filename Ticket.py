@@ -86,5 +86,11 @@ def imprimir_ticket(cliente, ticket_auxiliar):
 
 def agregarTicket(ticket_auxiliar):
     matrizTicket.append(ticket_auxiliar)
+
+def bajaTicket(id_ticket):
+    for ticket in matrizTicket:
+      if ticket[0] == id_ticket:
+          ticket[-1] = False
+    
     
     

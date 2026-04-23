@@ -1,5 +1,4 @@
-import Producto
-import Ticket
+import Producto, Venta, Ticket
 
 matrizCliente = [
     [1,  "Facundo Mello",      "facundomello34@mail.com",   "1124084431", True],
@@ -134,8 +133,9 @@ def adminMenu():
         print('''Menu Principal
         '1 - Gestionar Productos/Stock
         '2 - Administrar Usuarios/Clientes
-        '3 - Reportes
-        '4 - 
+        '3 - Gestion de ventas
+        '4 - Reportes
+        '5 - Gestionar Ticket
         '0 - Salir del sistema''')
         opcion = int(input("Seleccione una opción: "))
         if opcion == 1:
@@ -143,7 +143,11 @@ def adminMenu():
         elif opcion == 2:
             gestionarUsuarios()
         elif opcion == 3:
+            Venta.menuVenta()
+        elif opcion == 4:
             print("Funcionalidad de reportes en desarrollo.")
+        elif opcion == 5:
+            Ticket.ticketMenu()
         elif opcion == 0:
             print("Volviendo al menú anterior...")
         else:
