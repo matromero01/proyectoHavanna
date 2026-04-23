@@ -1,8 +1,17 @@
 import Producto
 
 # Id_ticket, id_producto, cantidad, subtotal, activo
-matrizTicket = [[123, 1, 2, 244.0, True],
-                [123, 2, 4, 500.0, True]] 
+matrizTicket = matrizTicket = [
+    [123, 1, 2, 244.0, True], 
+    [123, 2, 4, 500.0, True], 
+    [124, 9, 1, 250.0, True], 
+    [124, 6, 1, 120.0, True], 
+    [125, 3, 2, 300.0, True],  
+    [125, 8, 2, 220.0, True], 
+    [126, 7, 1, 180.0, True],  
+    [126, 8, 1, 110.0, True], 
+    [127, 7, 1, 180.0, True]   
+]
 
 def ticketMenu():
     opcion = 1
@@ -19,6 +28,8 @@ def ticketMenu():
         opcion = int(input("Ingresa un numero: "))
         if opcion == 1:
             altaTicket()
+        if opcion == 4:
+            mostrarTicket()
         if opcion == 0:
             print("Adios!")
                 
@@ -85,12 +96,22 @@ def imprimir_ticket(cliente, ticket_auxiliar):
     return total
 
 def agregarTicket(ticket_auxiliar):
-    matrizTicket.append(ticket_auxiliar)
+    matrizTicket.extend(ticket_auxiliar)
 
 def bajaTicket(id_ticket):
     for ticket in matrizTicket:
       if ticket[0] == id_ticket:
           ticket[-1] = False
+
     
-    
-    
+def mostrarTicket():
+    if not matrizTicket:
+        print("No hay ventas registradas.")
+    else:
+        print("-"*55)  
+        print(f'{"Id_Ticket":<15}{"Id_Producto":<15}{"Cantidad":<16}{"Subtotal $":<10}')
+        print("-"*55)  
+        for ticket in matrizTicket:
+            id_ticket, id_producto, cantidad, subtotal, estado = ticket
+            if estado: 
+                print(f"{id_ticket:<15} {id_producto:<15} {cantidad:<13} {subtotal:.2f}")
