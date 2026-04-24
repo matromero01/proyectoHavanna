@@ -79,6 +79,13 @@ def bajaVenta():
 
 def modificacionVenta():
     print("| Modificacion de la Venta |")
+    print("-"*90)  
+    print(f'{"ID_Venta":<15}{"Ticket":<15}{"Cliente":<16}{"Metodo de Pago":<18}{"Total $":<10}')
+    print("-"*90)  
+    for venta in listaVentas:
+        if venta['estado']:              
+            print(f"{venta['id_venta']:<15} {venta['id_ticket']:<15} {venta['id_cliente']:<13} {venta['metodo_pago']:<18} {venta['monto_total']:.2f}")
+
     
     idVenta = int(input("Ingrese el ID de la venta: "))
     encontrado = False

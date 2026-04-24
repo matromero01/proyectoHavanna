@@ -126,7 +126,7 @@ def adminMenu():
         '0 - Salir del sistema''')
         opcion = int(input("Seleccione una opción: "))
         if opcion == 1:
-            Producto.menuProducto()
+            Producto.productoMenu()
         elif opcion == 2:
             gestionarUsuarios()
         elif opcion == 3:
