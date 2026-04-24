@@ -79,25 +79,7 @@ def bajaVenta():
                     else:
                         print("Error. Ingrese si o no.")
 
-def activarVenta():
-    print("| Baja de la Venta |")
-    idVenta = int(input("Ingrese el ID de la venta: "))
-    for venta in listaVentas:
-        if venta['id_venta'] == idVenta:
-            if venta['estado']:
-                while True:
-                    confirmacion = input(f"Desea confirmar la baja de la venta #{venta['id_venta']}? (si/no) ")
 
-                    if confirmacion.upper().strip() == 'SI':
-                        venta['estado'] = False
-                        Ticket.bajaTicket(venta['id_ticket'])
-                        print(f"Confirmacion de la baja. Venta #{venta['id_venta']}!")
-                        return
-                    elif confirmacion.upper().strip() == 'NO': 
-                        print("Saliendo de la baja de venta...")
-                        return
-                    else:
-                        print("Error. Ingrese si o no.")
 
                 
 

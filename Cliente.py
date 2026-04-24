@@ -162,40 +162,21 @@ def clienteMenu():
         '1 - Ver Productos
         '2 - Agregar al Carrito
         '3 - Vaciar Carrito
-        '4 - Finalizar compra
+        '4 - Ver Carrito
+        '5 - Finalizar compra
         '0 - Salir del sistema''')
 
         opcion = int(input("Seleccione una opción: "))
         if opcion == 1:
             Producto.mostrarListaProducto()
-
         elif opcion == 2:
-            id_buscar = int(input("Ingrese el ID del producto que desea comprar: "))
-            encontrado = False
-            
-            for p in Producto.matrizProductos: 
-                if p[0] == id_buscar:
-                    encontrado = True
-                    cantidad = int(input(f"¿Cuántos {p[1]} desea agregar al carrito?: "))
-                    
-                    if cantidad <= p[3]: 
-                        carrito.append([p[0], p[1], p[2], cantidad]) 
-                        p[3] -= cantidad 
-                        print(f"{cantidad} unidades de {p[1]} agregadas al carrito.")
-                    else:
-                        print(f"No hay suficiente stock. Disponible: {p[3]} unidades.")
-                    break 
-            
-            if not encontrado:
-                print(f"No se encontró ningún producto con ID: {id_buscar}.")
-
-
+            carrito = agregarAlCarrito()
         elif opcion == 3:
             print("Carrito vaciado.")
-            carrito.clear()  # Limpiamos la lista del carrito para vaciarlo completamente
-
-
+            carrito.clear() 
         elif opcion == 4:
+            verCarrito(carrito)
+        elif opcion == 5:
             if not carrito:
                 print("El carrito está vacío. No hay productos para comprar.")
             else:
@@ -213,12 +194,12 @@ def clienteMenu():
         if opcion == 0:
             print("Volviendo al menu principal...")
 
-def altaCliente():  #Definimos en el sistema la funcion de alta cliente, en donde vamos a incorporar Nombre,Email,Telefono 
+def altaCliente():  
     """ Dar de alta un nuevo cliente"""
     print("\n--- Registrarse ---")
     clienteNombre= input("Ingrese su nombre nuevo cliente: ")
     clienteEmail= input("Ingrese su Email: ")
-    while "@" not in clienteEmail or "." not in clienteEmail: #Esto es para validar que el correo que ingrese el cliente contenga su formalo valido "@" y un punto, si no, le va a pedir que ingrese un correo valido."
+    while "@" not in clienteEmail or "." not in clienteEmail:
         print("Correo electrónico no válido. Por favor, ingrese un correo electrónico válido.")
         clienteEmail = input("Ingrese su Email: ")
     clienteTelefono= input("Ingrese su número de contacto: ")
@@ -227,14 +208,13 @@ def altaCliente():  #Definimos en el sistema la funcion de alta cliente, en dond
         clienteTelefono= input("Ingrese su número de contacto: ")
 
 
-    #Creamos nuevo cliente con un ID autoincremental, el nombre, email,telefono y el estado activo (True) 
     nuevoId= matrizCliente[-1] [0] + 1 if matrizCliente else 1
     nuevoCliente= [nuevoId, clienteNombre, clienteEmail, clienteTelefono, True]
     
     matrizCliente.append(nuevoCliente)
     print(f"Cliente '{clienteNombre}' (ID: {nuevoId}) dado de alta exitosamente.\n")
 
-def bajaCliente(): #Definimos en el ssitema la funcion de baja cleinte, en donde vamos a incorporar el ID del cliente a eliminar. 
+def bajaCliente(): 
     """ Dar de baja un cliente existente"""
     print("\n--- Baja de cliente ---")
     if not matrizCliente:
@@ -260,7 +240,7 @@ def bajaCliente(): #Definimos en el ssitema la funcion de baja cleinte, en donde
                     
                     if condicionAlta == "si":
                         altaCliente() 
-                        break #Agregamos el break para salir del ciclo una vez que se da de alta el cliente nuevamente, evitando asi que el sistema siga preguntando por el mismo cliente dado de baja anteriormente
+                        break 
         if not encontrado: 
             print(f"No se encontró ningún cliente con ID: {idCliente}. \n")
 
@@ -313,3 +293,42 @@ def obtenerCliente(idCliente):
     for i in range(len(matrizCliente)):
         if matrizCliente[i] [0] == idCliente:
             return matrizCliente[i]
+
+def agregarAlCarrito():
+    carrito = []
+    
+    while True:
+        id_buscar = int(input("Ingrese el ID del producto que desea comprar: "))
+        encontrado = False
+            
+        for producto in Producto.matrizProductos: 
+            if producto[0] == id_buscar:
+                encontrado = True
+                cantidad = int(input(f"¿Cuántos {producto[1]} desea agregar al carrito?: "))
+                    
+                if cantidad <= producto[3]: 
+                    carrito.append([producto[0], producto[1], producto[2], cantidad]) 
+                    producto[3] -= cantidad 
+                    print(f"{cantidad} unidades de {producto[1]} agregadas al carrito.")
+                else:
+                    print(f"No hay suficiente stock. Disponible: {producto[3]} unidades.")
+                break 
+            
+        if not encontrado:
+            print(f"No se encontró ningún producto con ID: {id_buscar}.")
+        
+        flag = True
+        while flag:
+            seleccion = input("Desea seguir agregando? (si/no) ")
+            if seleccion.upper().strip() == "SI":
+                flag = False
+            elif seleccion.upper().strip() == "NO":
+                return carrito
+            else:
+                print("Error")
+
+def verCarrito(carrito):
+    print(f"{'ID':<5} {'Nombre':<20} {'Email':<30} {'Telefono':<15} {'Activo':<8}")
+    print("-" * 80)
+    for fila in matrizCliente:
+        print(f"{fila[0]:<5} {fila[1]:<20} {fila[2]:<30} {fila[3]:<15} {str(fila[4]):<8}")
