@@ -1,6 +1,6 @@
 import Producto
 import Cliente
-import reporte
+import Reporte
 
 #print("Inicio de Havanna")
 

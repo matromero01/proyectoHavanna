@@ -1,8 +1,8 @@
-import Producto, Venta, Ticket, reporte
+import Producto, Venta, Ticket, Reporte
 
 matrizCliente = [
-    [1,  "Facundo Mello",      "facundomello34@gmail.com",   "1124084431", True],
-    [2,  "Cristina Kirchner",  "cristinareina@gmail.com",   "1149034410", True],
+    [1,  "Facundo Mello",      "facundomello34@gmail.com",  "1124084431", True],
+    [2,  "Lionel Messi",       "messi@gmail.com",           "1122334455", True],
     [3,  "Juan Perez",         "juanperez@gmail.com",       "1156781234", True],
     [4,  "Maria Lopez",        "marialopez@hotmail.com",    "1167894321", True],
     [5,  "Carlos Gomez",       "carlosgomez@yahoo.com",     "1178905678", False],
@@ -74,12 +74,15 @@ def gestionarUsuarios():
         print('''\n-- Menú de Usuarios --
         1 - Ver Clientes
         2 - Activar / Dar de baja cliente
+        3 - Buscar y Ver compras de cliente
         0 - Volver al menú anterior''')
         opcion = int(input("Seleccione una opción: "))
         if opcion == 1:
             mostrarClientes()
         elif opcion == 2:
             cambiarEstadoCliente()
+        elif opcion == 3:
+            buscarYVerCliente()
         elif opcion == 0:
             print("Volviendo al menú anterior...")
         else:
@@ -117,7 +120,7 @@ def adminMenu():
         elif opcion == 3:
             Venta.menuVenta()
         elif opcion == 4:
-            reporte.menuReportes()
+            Reporte.menuReportes()
         elif opcion == 5:
             Ticket.ticketMenu()
         elif opcion == 0:
@@ -144,8 +147,7 @@ def clienteMenu(idCliente):
         elif opcion == 2:
             carrito.extend(agregarAlCarrito())
         elif opcion == 3:
-            print("Carrito vaciado.")
-            carrito.clear() 
+            vaciarCarrito(carrito)
         elif opcion == 4:
             verCarrito(carrito)
         elif opcion == 5:
@@ -297,4 +299,24 @@ def verCarrito(carrito):
         print(f'{producto[1]:<25}{cantidad:<14}{precio:<8}')
 
     print("-"*55)  
+
+def vaciarCarrito(carrito):
+    if not carrito:
+        print("El carrito está vacío")
+        return
+
+    opcion = input("¿Seguro que quiere vaciar el carrito? (si/no)").lower()
+    while opcion != "si" and opcion != "no":
+        print("ERROR: Por favor ingrese si/no")
+        opcion = input("¿Seguro que quiere vaciar el carrito? (si/no)").lower()
+
+    if opcion == "si":
+        print("Carrito vaciado.")
+        carrito.clear() 
+    else:
+        print("Carrito no vaciado")
+
+
+def buscarYVerCliente():
+    print("Hola Mundo")
 
