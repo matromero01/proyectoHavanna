@@ -214,4 +214,24 @@ def obtenerProducto(idProducto):
     for producto in matrizProductos:
         if int(producto[0]) == int(idProducto):
             return producto
+        
+#Visualización para clientes
+def visualizarListaProducto():
+    
+    print("-"*50)  
+    print(f'{"ID":<4}{"Nombre":<25}{"Precio":<10}{"Stock":<8}')
+    print("-"*50)       
+
+    for fila in matrizProductos:
+        id, nombre, precio, stock, activo = fila
+        
+        if activo:
+            activoString = "SI"
+        else:
+            activoString = "NO"
+
+        
+        print(f'{id:<4}{nombre:<25}{precio:<10}{stock:<8}')
+    
+    print("-"*50)  
      

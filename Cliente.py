@@ -146,7 +146,7 @@ def clienteMenu(idCliente):
 
         opcion = int(input("Seleccione una opción: "))
         if opcion == 1:
-            Producto.mostrarListaProducto()
+            Producto.visualizarListaProducto()
         elif opcion == 2:
             carrito.extend(agregarAlCarrito())
         elif opcion == 3:
