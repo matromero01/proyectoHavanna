@@ -163,6 +163,11 @@ def leerVenta():
         print("No se encontro la venta indicada.")
 
 
+def obtenerVentasPorCliente(id_cliente):
+    ventasEncontradas = [venta for venta in listaVentas if venta['id_cliente'] == id_cliente]
+    return ventasEncontradas
+
+
             
 
 
