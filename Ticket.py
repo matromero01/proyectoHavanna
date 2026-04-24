@@ -83,3 +83,13 @@ def mostrarTicket():
             id_ticket, id_producto, cantidad, subtotal, estado = ticket
             if estado: 
                 print(f"{id_ticket:<15} {id_producto:<15} {cantidad:<13} {subtotal:.2f}")
+
+
+def obtenerTickets(idTicket):
+    ticketsConseguidos = []
+    for ticket in matrizTicket:
+        if ticket[0] == int(idTicket):
+            ticketsConseguidos.append(ticket)
+    
+    return ticketsConseguidos
+

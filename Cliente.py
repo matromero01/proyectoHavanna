@@ -1,4 +1,4 @@
-import Producto, Venta, Ticket, reporte
+import Producto, Venta, Ticket, Reporte
 
 matrizCliente = [
     [1,  "Facundo Mello",      "facundomello34@gmail.com",   "1124084431", True],
@@ -72,13 +72,19 @@ def gestionarUsuarios():
     opcion = 1
     while opcion != 0:
         print('''\n-- Menú de Usuarios --
-        1 - Ver Clientes
-        2 - Activar / Dar de baja cliente
-        0 - Volver al menú anterior''')
+        '1 - Ver Clientes
+        '2 - Alta Cliente
+        '3 - Modificar Cliente
+        '3 - Activar / Dar de baja cliente
+        '0 - Volver al menú anterior''')
         opcion = int(input("Seleccione una opción: "))
         if opcion == 1:
             mostrarClientes()
         elif opcion == 2:
+            altaCliente()
+        elif opcion == 3:
+            altaCliente()
+        elif opcion == 4:
             cambiarEstadoCliente()
         elif opcion == 0:
             print("Volviendo al menú anterior...")
@@ -105,9 +111,9 @@ def adminMenu():
         print('''Menu Principal
         '1 - Gestionar Productos/Stock
         '2 - Administrar Usuarios/Clientes
-        '3 - Gestion de ventas
-        '4 - Reportes
-        '5 - Gestionar Ticket
+        '3 - Gestionar Ventas
+        '4 - Gestionar Ticket
+        '5 - Reportes
         '0 - Salir del sistema''')
         opcion = int(input("Seleccione una opción: "))
         if opcion == 1:
@@ -117,9 +123,9 @@ def adminMenu():
         elif opcion == 3:
             Venta.menuVenta()
         elif opcion == 4:
-            reporte.menuReportes()
-        elif opcion == 5:
             Ticket.ticketMenu()
+        elif opcion == 5:
+            Reporte.menuReportes()
         elif opcion == 0:
             print("Volviendo al menú anterior...")
         else:
