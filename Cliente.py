@@ -72,17 +72,23 @@ def gestionarUsuarios():
     opcion = 1
     while opcion != 0:
         print('''\n-- Menú de Usuarios --
-        1 - Ver Clientes
-        2 - Activar / Dar de baja cliente
-        3 - Buscar y Ver compras de cliente
-        0 - Volver al menú anterior''')
+        '1 - Ver Clientes
+        '2 - Alta Cliente
+        '3 - Modificar Cliente
+        '4 - Activar / Dar de baja cliente
+        '5 - Buscar Ventas de Clientes
+        '0 - Volver al menú anterior''')
         opcion = int(input("Seleccione una opción: "))
         if opcion == 1:
             mostrarClientes()
         elif opcion == 2:
-            cambiarEstadoCliente()
+            altaCliente()
         elif opcion == 3:
-            buscarYVerCliente()
+            altaCliente()
+        elif opcion == 4:
+            cambiarEstadoCliente()
+        elif opcion == 5:
+            buscarVentasCliente()
         elif opcion == 0:
             print("Volviendo al menú anterior...")
         else:
@@ -108,9 +114,9 @@ def adminMenu():
         print('''Menu Principal
         '1 - Gestionar Productos/Stock
         '2 - Administrar Usuarios/Clientes
-        '3 - Gestion de ventas
-        '4 - Reportes
-        '5 - Gestionar Ticket
+        '3 - Gestionar Ventas
+        '4 - Gestionar Ticket
+        '5 - Reportes
         '0 - Salir del sistema''')
         opcion = int(input("Seleccione una opción: "))
         if opcion == 1:
@@ -120,9 +126,9 @@ def adminMenu():
         elif opcion == 3:
             Venta.menuVenta()
         elif opcion == 4:
-            Reporte.menuReportes()
-        elif opcion == 5:
             Ticket.ticketMenu()
+        elif opcion == 5:
+            Reporte.menuReportes()
         elif opcion == 0:
             print("Volviendo al menú anterior...")
         else:
@@ -317,6 +323,42 @@ def vaciarCarrito(carrito):
         print("Carrito no vaciado")
 
 
-def buscarYVerCliente():
-    print("Hola Mundo")
+def buscarVentasCliente():
+    idCliente = int(input("Ingrese el ID del cliente: "))
+
+    encontrado = False
+    for cliente in matrizCliente:
+        if cliente[0] == idCliente: 
+            encontrado = True
+            ventas = Venta.obtenerVentasPorCliente(idCliente)
+            for venta in ventas:
+                
+                tickets = Ticket.obtenerTickets(venta['id_ticket'])
+
+                idCliente, nombreCliente, mail, numero, estadoCliente = cliente
+
+                print("-"*65)  
+            
+                print(f'{"ID_Venta:":<5} {venta['id_venta']} {"ID_Ticket: ":>48} {venta['id_ticket']}')
+            
+                print("-"*65)
+
+                print(f'{"Producto":<40}{"Cantidad":<15}{"Subtotal $":<10}')
+
+                for prod in tickets:
+                    idTicket, idProducto, cantidad, subtotal, estadoTicket = prod
+                    producto = Producto.obtenerProducto(idProducto)
+                    print(f"{producto[1]:<43} {cantidad:<15} {subtotal:<10}")
+
+                print("-"*65)  
+
+                print(f'{"Cliente: "} {idCliente} - {nombreCliente} {"Total: ":>18} {venta['monto_total']} - {venta['metodo_pago']}')
+
+                print("-"*65) 
+    
+    if not encontrado:
+        print("No se encontro la venta indicada.")
+    else :
+        return
+
 

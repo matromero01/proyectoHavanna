@@ -22,6 +22,7 @@ def menuVenta():
         '2 - Baja Venta (APAGADA)
         '3 - Modificacion Venta
         '4 - Mostrar Venta
+        '5 - Leer venta
         '0 - Volver al menu principal''')
 
         opcion = int(input("Ingresa un numero: "))
@@ -33,6 +34,8 @@ def menuVenta():
             modificacionVenta()
         if opcion == 4:
             mostrarVentas()
+        if opcion == 5:
+            leerVenta()
         
 
 def altaVenta(idCliente, carrito):  
@@ -121,6 +124,50 @@ def modificacionVenta():
             
     if not encontrado:
         print("ID incorrecto (No se encontro la venta)")
+
+
+def leerVenta():
+    idVenta = int(input("Ingrese el ID de la venta: "))
+
+    encontrado = False
+    for venta in listaVentas:
+        if venta['id_venta'] == idVenta: 
+            encontrado = True
+
+            cliente = Cliente.obtenerCliente(venta['id_cliente'])
+            tickets = Ticket.obtenerTickets(venta['id_ticket'])
+
+            idCliente, nombreCliente, mail, numero, estadoCliente = cliente
+
+            print("-"*65)  
+            
+            print(f'{"ID_Venta:":<5} {venta['id_venta']} {"ID_Ticket: ":>48} {venta['id_ticket']}')
+            
+            print("-"*65)
+
+            print(f'{"Producto":<40}{"Cantidad":<15}{"Subtotal $":<10}')
+
+            for prod in tickets:
+                idTicket, idProducto, cantidad, subtotal, estadoTicket = prod
+                producto = Producto.obtenerProducto(idProducto)
+                print(f"{producto[1]:<43} {cantidad:<15} {subtotal:<10}")
+
+            print("-"*65)  
+
+            print(f'{"Cliente: "} {idCliente} - {nombreCliente} {"Total: ":>18} {venta['monto_total']} - {venta['metodo_pago']}')
+
+            print("-"*65)  
+            return
+    
+    if not encontrado:
+        print("No se encontro la venta indicada.")
+
+
+def obtenerVentasPorCliente(id_cliente):
+    ventasEncontradas = [venta for venta in listaVentas if venta['id_cliente'] == id_cliente]
+    return ventasEncontradas
+
+
             
 
 
