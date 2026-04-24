@@ -135,7 +135,7 @@ def altaProducto():
 
             print("Producto: "+productoNombre+" ¡Agregado correctamente!")
         else:
-            print("Se ingresaron: "+ cont + "producto/s correctamente")
+            print(f"Se ingresaron: {cont} producto/s correctamente")
         
 def modificacionProducto():
     if not matrizProductos:

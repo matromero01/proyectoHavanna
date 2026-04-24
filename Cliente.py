@@ -1,4 +1,4 @@
-import Producto, Venta, Ticket
+import Producto, Venta, Ticket, reporte
 
 matrizCliente = [
     [1,  "Facundo Mello",      "facundomello34@gmail.com",   "1124084431", True],
@@ -13,16 +13,17 @@ matrizCliente = [
 
 
 def menuAutenticacion():
-    print("\n¿Sos administrador? (si/no): ")
-    es_admin = input("Respuesta: ").strip().lower()
-
+    es_admin = ""
+    while es_admin != "si" and es_admin != "no":
+        print("\n¿Sos administrador? (si/no): ")
+        es_admin = input("Respuesta: ").strip().lower()
+        if es_admin != "si" and es_admin != "no":
+            print("Respuesta inválida. Ingrese 'si' o 'no'.")
+    
     if es_admin == "si":
         loginAdmin()
     elif es_admin == "no":
         loginCliente()
-    else:
-        print("Respuesta inválida. Ingrese 'si' o 'no'.")
-        menuAutenticacion()
 
 
 def loginAdmin():
@@ -36,22 +37,6 @@ def loginAdmin():
     else: 
         print("Usuario o contraseña son incorrectos. Intente nuevamente.")
         menuAutenticacion()
-
-
-def altaCliente():
-    """Permite a nuevos usuarios registrarse en el sistema."""
-    nombre = input("Ingrese su nombre completo: ")
-    email = input("Ingrese su correo electrónico: ")
-    telefono = input("Ingrese su número de contacto: ")
-    
-    # Generar nuevo ID
-    nuevo_id = matrizCliente[-1][0] + 1 if matrizCliente else 1
-    
-    # Agregar nuevo cliente
-    nuevoCliente = [nuevo_id, nombre, email, telefono, True]
-    matrizCliente.append(nuevoCliente)
-    print(f"Cliente '{nombre}' registrado exitosamente con ID: {nuevo_id}")
-
 
 def mostrarClientes():
     print("\nListado de clientes:")
@@ -132,7 +117,7 @@ def adminMenu():
         elif opcion == 3:
             Venta.menuVenta()
         elif opcion == 4:
-            print("Funcionalidad de reportes en desarrollo.")
+            reporte.menuReportes()
         elif opcion == 5:
             Ticket.ticketMenu()
         elif opcion == 0:
@@ -283,7 +268,6 @@ def agregarAlCarrito():
             if producto[0] == id_buscar:
                 encontrado = True
                 cantidad = int(input(f"¿Cuántos {producto[1]} desea agregar al carrito?: "))
-                    
                 if cantidad <= producto[3]: 
                     carrito.append([int(Ticket.matrizTicket[-1][0]) + 1, producto[0], cantidad, producto[2]*cantidad, True]) 
                     producto[3] -= cantidad 
@@ -295,15 +279,12 @@ def agregarAlCarrito():
         if not encontrado:
             print(f"No se encontró ningún producto con ID: {id_buscar}.")
         
-        flag = True
-        while flag:
+        seleccion = input("Desea seguir agregando? (si/no) ")
+        while seleccion.upper().strip() != "SI" and seleccion.upper().strip() != "NO":
+            print("Error")
             seleccion = input("Desea seguir agregando? (si/no) ")
-            if seleccion.upper().strip() == "SI":
-                flag = False
-            elif seleccion.upper().strip() == "NO":
-                return carrito
-            else:
-                print("Error")
+        if seleccion.upper().strip() == "NO":
+            return carrito
 
 def verCarrito(carrito):
     print("-"*55)  
