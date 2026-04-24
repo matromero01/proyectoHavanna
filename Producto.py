@@ -209,5 +209,9 @@ def mostrarProducto():
         if not encontrado:
             print("No se encontró ningún producto con ese ID.")
 
-# Alias para compatibilidad con imports
-menuProducto = productoMenu
+
+def obtenerProducto(idProducto):
+    for producto in matrizProductos:
+        if int(producto[0]) == int(idProducto):
+            return producto
+     

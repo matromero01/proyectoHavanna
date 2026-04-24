@@ -1,4 +1,4 @@
-import Producto
+import Producto, Cliente
 
 # Id_ticket, id_producto, cantidad, subtotal, activo
 matrizTicket = matrizTicket = [
@@ -34,69 +34,37 @@ def ticketMenu():
             print("Adios!")
                 
     
-def altaTicket(matrizTicket, matrizProductos):
-    ticket_auxiliar = []
-    flag = True
-    numeroTicket = int(matrizTicket[-1][0]) + 1
-    while flag:
-        print()
-        Producto.mostrarListaProducto()
-        print()
-        idProducto = int(input("Ingrese el ID del producto que desea comprar: "))
-        encontrado = False
-        for i in range(len(matrizProductos)): 
-            if matrizProductos[i][0] == idProducto:
-                encontrado = True
-                nombre = matrizProductos[i][1]
-                
-                cantidad = int(input(f"Ingrese la cantidad de {nombre} que desea llevar: "))
-
-                ticket_auxiliar.append([numeroTicket, idProducto, cantidad, (matrizProductos[i][2] * cantidad), True])
-                print("Se agregó correctamente.")
-                break
-
-        if not encontrado:
-            print("Opción inválida: El ID ingresado no existe.")
-        
-        continuar = ""
-        while continuar.strip().lower() != "s" and continuar.strip().lower() != "n":
-            continuar = input("Desea agregar otro producto? (s/n): ")
-            if continuar.strip().lower() == "s":
-                flag = True
-            elif continuar.strip().lower() == "n":   
-                flag = False
-            else: 
-                print("Opción inválida.")
+def altaTicket(carrito):
+    matrizTicket.extend(carrito)
     
-    continuar = ""
-    while continuar.strip().lower() != "s" and continuar.strip().lower() != "n":
-        continuar = input("Desea confirmar el pedido? (s/n): ")
-        if continuar.strip().lower() == "s":
-            return ticket_auxiliar
-        elif continuar.strip().lower() == "n":   
-            return 
-        else: 
-            print("Opción inválida.")
+    
 
-def imprimir_ticket(cliente, ticket_auxiliar):
+def imprimir_ticket(cliente, carrito):
     total = 0
-    print(f"IdTicket --> {ticket_auxiliar[0][0]}")
-    print("|    Producto    |    Cantidad    |    Subtotal    |")
     
-    for linea in ticket_auxiliar:
+    print("-"*55) 
+    print(f"IdTicket --> {carrito[0][0]}")
+    print("-"*55) 
+    
+    print(f'{"PRODUCTO":<15}{"Cantidad":<16}{"Subtotal $":<10}')
+    print("-"*55) 
+    
+    for linea in carrito:
       idTicket, idProducto, cantidad, subtotal, estadoTicket = linea
-      print(f"|       {idProducto}       |       {cantidad}       |       {subtotal}       |")
+      producto = Producto.obtenerProducto(idProducto)
+      print(f"{producto[1]:<25} {cantidad:<16} {subtotal:<10}")
       total+= subtotal
     
+    print("-"*55) 
     print(f"Total --> {total}")
+    print("-"*55) 
     
     idCliente, nombre, mail, telefono, estadoCliente = cliente
     print(f"Cliente --> {nombre}")
-
+    print("-"*55) 
+    
     return total
 
-def agregarTicket(ticket_auxiliar):
-    matrizTicket.extend(ticket_auxiliar)
 
 def bajaTicket(id_ticket):
     for ticket in matrizTicket:

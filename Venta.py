@@ -8,56 +8,53 @@ listaVentas = [
     {"id_venta": 5, "id_ticket": 127, "id_cliente": 4, "monto_total": 180.0, "metodo_pago": "tarjeta",  "fecha": "2025-06-03", "estado": True},
 ]
 
+# CODIGO ANSI
+RESET = "\33[0m"
+VERDE = "\33[32;1m"
+ROJO = "\33[31;1m"
+
 def menuVenta():
     opcion = 1
     while opcion != 0:
         print('''
         --Menu Venta--
-        '1 - Alta Venta
-        '2 - Baja Venta
+        '1 - Alta Venta (APAGADA)
+        '2 - Baja Venta (APAGADA)
         '3 - Modificacion Venta
         '4 - Mostrar Venta
         '0 - Volver al menu principal''')
 
         opcion = int(input("Ingresa un numero: "))
-        if opcion == 1:
-            altaVenta()
-        if opcion == 2:
-            bajaVenta()
-       # if opcion == 3:
-       #     modificacionProducto()
+        #if opcion == 1:
+        #    altaVenta()    Se apagaron porque se utiliza en otra Cliente
+        # if opcion == 2:
+        #     bajaVenta()
+        if opcion == 3:
+            modificacionVenta()
         if opcion == 4:
             mostrarVentas()
-       # if opcion == 5:
-       #     mostrarProducto()
-        if opcion == 0:
-            print("Adios!")     
-
-def altaVenta():
-    idCliente = int(input("Ingrese el ID del cliente: "))
-    if Cliente.existeCliente(idCliente):
-        ticketAuxiliar = Ticket.altaTicket(Ticket.matrizTicket, Producto.matrizProductos)
-        if ticketAuxiliar:  # Validar que el ticket se creó correctamente
-            total = Ticket.imprimir_ticket(Cliente.obtenerCliente(idCliente), ticketAuxiliar)
-            Ticket.agregarTicket(ticketAuxiliar)
         
-            nuevo_id = listaVentas[-1]["id_venta"] + 1 if listaVentas else 1
-            listaVentas.append({"id_venta": nuevo_id, "id_ticket": ticketAuxiliar[0][0], "id_cliente": idCliente, "monto_total": total, "metodo_pago": "pendiente", "fecha": "2025-06-04", "estado": True})
-            print("Venta registrada exitosamente.")
-    else:
-        print("El cliente no existe o está dado de baja.")
+
+def altaVenta(idCliente, carrito):  
+    if carrito:  
+        Ticket.altaTicket(carrito)
+        total = Ticket.imprimir_ticket(Cliente.obtenerCliente(idCliente), carrito)
+        
+        nuevo_id = listaVentas[-1]["id_venta"] + 1 if listaVentas else 1
+        listaVentas.append({"id_venta": nuevo_id, "id_ticket": carrito[0][0], "id_cliente": idCliente, "monto_total": total, "metodo_pago": "pendiente", "fecha": "2025-06-04", "estado": True})
+        print(f"{VERDE}Compra realizada correctamente.{RESET}")
 
 def mostrarVentas():
     if not listaVentas:
         print("No hay ventas registradas.")
     else:
-        print("-"*55)  
-        print(f'{"ID_Venta":<15}{"Ticket":<15}{"Cliente":<16}{"Total $":<10}')
-        print("-"*55)  
+        print("-"*90)  
+        print(f'{"ID_Venta":<15}{"Ticket":<15}{"Cliente":<16}{"Metodo de Pago":<18}{"Total $":<10}')
+        print("-"*90)  
         for venta in listaVentas:
             if venta['estado']:
                   
-                print(f"{venta['id_venta']:<15} {venta['id_ticket']:<15} {venta['id_cliente']:<13} {venta['monto_total']:.2f}")
+                print(f"{venta['id_venta']:<15} {venta['id_ticket']:<15} {venta['id_cliente']:<13} {venta['metodo_pago']:<18} {venta['monto_total']:.2f}")
 
 
 def bajaVenta():
@@ -80,6 +77,45 @@ def bajaVenta():
                         print("Error. Ingrese si o no.")
 
 
+def modificacionVenta():
+    print("| Modificacion de la Venta |")
+    
+    idVenta = int(input("Ingrese el ID de la venta: "))
+    encontrado = False
 
-                
+    for venta in listaVentas:
+        if venta['id_venta'] == idVenta:
+            encontrado = True
+            print(f"Venta encontrada. Metodo de pago actual: {venta['metodo_pago']}")
+            
+            opcion = 0
 
+            while opcion not in [1, 2, 3]:
+                print("\nSeleccione el nuevo metodo de pago:")
+                print("1. Efectivo")
+                print("2. Tarjeta")
+                print("3. Transferencia")
+
+                entrada = input("Seleccione nuevo metodo de pago (1-3): ")
+                if entrada.isdigit():
+                    opcion = int(entrada)
+                    
+                    if opcion not in [1, 2, 3]:
+                        print("Error: El numero debe ser 1, 2, o 3")
+                else:
+
+                    print("Error: Por favor ingrese solo numeros (1-3)")
+            
+            metodos = {1: "efectivo", 2: "tarjeta", 3: "transferencia"}
+            venta['metodo_pago'] = metodos[opcion]
+            
+            print(f"\nCambio de metodo de pago exitoso a: {venta['metodo_pago']}")
+            break 
+            
+    if not encontrado:
+        print("ID incorrecto (No se encontro la venta)")
+            
+
+
+            
+     

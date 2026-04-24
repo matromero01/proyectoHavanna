@@ -1,7 +1,7 @@
 import Producto, Venta, Ticket
 
 matrizCliente = [
-    [1,  "Facundo Mello",      "facundomello34@mail.com",   "1124084431", True],
+    [1,  "Facundo Mello",      "facundomello34@gmail.com",   "1124084431", True],
     [2,  "Cristina Kirchner",  "cristinareina@gmail.com",   "1149034410", True],
     [3,  "Juan Perez",         "juanperez@gmail.com",       "1156781234", True],
     [4,  "Maria Lopez",        "marialopez@hotmail.com",    "1167894321", True],
@@ -10,6 +10,7 @@ matrizCliente = [
     [7,  "Diego Martinez",     "diegom@outlook.com",        "1190127890", True],
     [8,  "Ana Rodriguez",      "anar@gmail.com",            "1101238901", False],
 ]
+
 
 def menuAutenticacion():
     print("\n¿Sos administrador? (si/no): ")
@@ -50,20 +51,6 @@ def altaCliente():
     nuevoCliente = [nuevo_id, nombre, email, telefono, True]
     matrizCliente.append(nuevoCliente)
     print(f"Cliente '{nombre}' registrado exitosamente con ID: {nuevo_id}")
-
-def existeCliente(idCliente):
-    """Verifica si un cliente existe en el sistema."""
-    for cliente in matrizCliente:
-        if cliente[0] == idCliente and cliente[4] == True:
-            return True
-    return False
-
-def obtenerCliente(idCliente):
-    """Obtiene los datos de un cliente por su ID."""
-    for cliente in matrizCliente:
-        if cliente[0] == idCliente and cliente[4] == True:
-            return cliente
-    return None
 
 
 def mostrarClientes():
@@ -121,7 +108,7 @@ def loginCliente():
     for cliente in matrizCliente:
         if cliente[2] == email and cliente[3] == telefono and cliente[4] == True:
             print(f"Login completado exitosamente. Bienvenido, {cliente[1]}!")
-            clienteMenu()
+            clienteMenu(cliente[0])
             return
 
     print("Correo electrónico o número de contacto incorrectos, o el cliente está dado de baja. Intente nuevamente.")
@@ -154,7 +141,7 @@ def adminMenu():
             print("Opción inválida. Intente nuevamente.")
 
 
-def clienteMenu():
+def clienteMenu(idCliente):
     carrito = []
     opcion = 1
     while opcion != 0:
@@ -170,7 +157,7 @@ def clienteMenu():
         if opcion == 1:
             Producto.mostrarListaProducto()
         elif opcion == 2:
-            carrito = agregarAlCarrito()
+            carrito.extend(agregarAlCarrito())
         elif opcion == 3:
             print("Carrito vaciado.")
             carrito.clear() 
@@ -180,17 +167,8 @@ def clienteMenu():
             if not carrito:
                 print("El carrito está vacío. No hay productos para comprar.")
             else:
-                total_calculado = 0
-                print("\n--- Resumen de compra ---")
-                
-                for item in carrito:
-                    subtotal = item[2] * item[3]
-                    total_calculado += subtotal
-                    print(f"{item[1]} x {item[3]} = ${subtotal}")
-                print("-" * 25)
-                print(f"Total a pagar: ${total_calculado}")
-                print("Gracias por su compra. ¡Vuelva pronto!")
-
+                Venta.altaVenta(idCliente, carrito)
+                carrito.clear()
         if opcion == 0:
             print("Volviendo al menu principal...")
 
@@ -285,7 +263,7 @@ def existeCliente(idCliente):
             break
 
     if not encontrado:
-        print("El cliente no existe en la matriz.")
+        print("El cliente no existe.")
 
     return encontrado
 
@@ -307,7 +285,7 @@ def agregarAlCarrito():
                 cantidad = int(input(f"¿Cuántos {producto[1]} desea agregar al carrito?: "))
                     
                 if cantidad <= producto[3]: 
-                    carrito.append([producto[0], producto[1], producto[2], cantidad]) 
+                    carrito.append([int(Ticket.matrizTicket[-1][0]) + 1, producto[0], cantidad, producto[2]*cantidad, True]) 
                     producto[3] -= cantidad 
                     print(f"{cantidad} unidades de {producto[1]} agregadas al carrito.")
                 else:
@@ -328,7 +306,14 @@ def agregarAlCarrito():
                 print("Error")
 
 def verCarrito(carrito):
-    print(f"{'ID':<5} {'Nombre':<20} {'Email':<30} {'Telefono':<15} {'Activo':<8}")
-    print("-" * 80)
-    for fila in matrizCliente:
-        print(f"{fila[0]:<5} {fila[1]:<20} {fila[2]:<30} {fila[3]:<15} {str(fila[4]):<8}")
+    print("-"*55)  
+    print(f'{"Producto":<25}{"Cantidad":<14}{"Precio":<8}')
+    print("-"*55)       
+
+    for producto in carrito:
+        id, idProducto, cantidad, precio, estado = producto
+        producto = Producto.obtenerProducto(idProducto)
+        print(f'{producto[1]:<25}{cantidad:<14}{precio:<8}')
+
+    print("-"*55)  
+
