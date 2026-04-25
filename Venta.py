@@ -18,23 +18,17 @@ def menuVenta():
     while opcion != 0:
         print('''
         --Menu Venta--
-        '1 - Alta Venta (APAGADA)
-        '2 - Baja Venta (APAGADA)
-        '3 - Modificacion Venta
-        '4 - Mostrar Venta
-        '5 - Leer venta
+        '1 - Modificacion Venta
+        '2 - Mostrar Venta
+        '3 - Leer venta
         '0 - Volver al menu principal''')
 
         opcion = int(input("Ingresa un numero: "))
-        #if opcion == 1:
-        #    altaVenta()    Se apagaron porque se utiliza en otra Cliente
-        # if opcion == 2:
-        #     bajaVenta()
-        if opcion == 3:
+        if opcion == 1:
             modificacionVenta()
-        if opcion == 4:
+        if opcion == 2:
             mostrarVentas()
-        if opcion == 5:
+        if opcion == 3:
             leerVenta()
         
 
