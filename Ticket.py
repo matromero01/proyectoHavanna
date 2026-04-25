@@ -18,17 +18,14 @@ def ticketMenu():
     while opcion != 0:
         print('''
         --Menu Ticket--
-        '1 - Alta Ticket
-        '2 - Baja Ticket
-        '3 - Modificacion Ticket
-        '4 - Mostrar Ticket
-        '5 - Leer Ticket
+        '1 - Mostrar Ticket
+
         '0 - Volver al menu principal''')
 
         opcion = int(input("Ingresa un numero: "))
+       # if opcion == 1:
+        #    altaTicket()
         if opcion == 1:
-            altaTicket()
-        if opcion == 4:
             mostrarTicket()
         if opcion == 0:
             print("Adios!")
