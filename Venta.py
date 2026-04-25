@@ -1,4 +1,4 @@
-import Cliente, Ticket, Producto
+import Usuario, Ticket, Producto
 
 listaVentas = [
     {"id_venta": 1, "id_ticket": 123, "id_cliente": 1, "monto_total": 744.0, "metodo_pago": "efectivo", "fecha": "2025-06-01", "estado": True},
@@ -41,7 +41,7 @@ def menuVenta():
 def altaVenta(idCliente, carrito):  
     if carrito:  
         Ticket.altaTicket(carrito)
-        total = Ticket.imprimir_ticket(Cliente.obtenerCliente(idCliente), carrito)
+        total = Ticket.imprimir_ticket(Usuario.obtenerCliente(idCliente), carrito)
         
         nuevo_id = listaVentas[-1]["id_venta"] + 1 if listaVentas else 1
         listaVentas.append({"id_venta": nuevo_id, "id_ticket": carrito[0][0], "id_cliente": idCliente, "monto_total": total, "metodo_pago": "pendiente", "fecha": "2025-06-04", "estado": True})
@@ -134,7 +134,7 @@ def leerVenta():
         if venta['id_venta'] == idVenta: 
             encontrado = True
 
-            cliente = Cliente.obtenerCliente(venta['id_cliente'])
+            cliente = Usuario.obtenerCliente(venta['id_cliente'])
             tickets = Ticket.obtenerTickets(venta['id_ticket'])
 
             idCliente, nombreCliente, mail, numero, estadoCliente = cliente

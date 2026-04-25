@@ -1,4 +1,4 @@
-import Cliente
+import Usuario
 import Venta
 import Producto
 import Ticket

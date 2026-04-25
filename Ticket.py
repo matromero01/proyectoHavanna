@@ -1,4 +1,4 @@
-import Producto, Cliente
+import Producto, Usuario
 
 # Id_ticket, id_producto, cantidad, subtotal, activo
 matrizTicket = matrizTicket = [
