@@ -1,4 +1,4 @@
-import Producto, Venta, Ticket, Reporte
+import Producto, Venta, Ticket, reporte
 
 matrizCliente = [
     [1,  "Facundo Mello",      "facundomello34@gmail.com",  "1124084431", True],
@@ -84,7 +84,7 @@ def gestionarUsuarios():
         elif opcion == 2:
             altaCliente()
         elif opcion == 3:
-            altaCliente()
+            modificacionCliente()
         elif opcion == 4:
             cambiarEstadoCliente()
         elif opcion == 5:
@@ -128,7 +128,7 @@ def adminMenu():
         elif opcion == 4:
             Ticket.ticketMenu()
         elif opcion == 5:
-            Reporte.menuReportes()
+            reporte.menuReportes()
         elif opcion == 0:
             print("Volviendo al menú anterior...")
         else:
@@ -339,7 +339,7 @@ def buscarVentasCliente():
 
                 print("-"*65)  
             
-                print(f'{"ID_Venta:":<5} {venta['id_venta']} {"ID_Ticket: ":>48} {venta['id_ticket']}')
+                print(f'{"ID_Venta:":<5} {venta["id_venta"]} {"ID_Ticket: ":>48} {venta["id_ticket"]}')
             
                 print("-"*65)
 
@@ -352,7 +352,7 @@ def buscarVentasCliente():
 
                 print("-"*65)  
 
-                print(f'{"Cliente: "} {idCliente} - {nombreCliente} {"Total: ":>18} {venta['monto_total']} - {venta['metodo_pago']}')
+                print(f'{"Cliente: "} {idCliente} - {nombreCliente} {"Total: ":>18} {venta["monto_total"]} - {venta["metodo_pago"]}')
 
                 print("-"*65) 
     

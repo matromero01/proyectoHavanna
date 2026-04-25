@@ -1,4 +1,4 @@
-import Usuario, Ticket, Producto
+import Usuario, Ticket, Producto, reporte
 
 listaVentas = [
     {"id_venta": 1, "id_ticket": 123, "id_cliente": 1, "monto_total": 744.0, "metodo_pago": "efectivo", "fecha": "2025-06-01", "estado": True},
@@ -32,14 +32,17 @@ def menuVenta():
             leerVenta()
         
 
-def altaVenta(idCliente, carrito):  
-    if carrito:  
+def altaVenta(idCliente, carrito):
+    if carrito:
         Ticket.altaTicket(carrito)
         total = Ticket.imprimir_ticket(Usuario.obtenerCliente(idCliente), carrito)
         
         nuevo_id = listaVentas[-1]["id_venta"] + 1 if listaVentas else 1
         listaVentas.append({"id_venta": nuevo_id, "id_ticket": carrito[0][0], "id_cliente": idCliente, "monto_total": total, "metodo_pago": "pendiente", "fecha": "2025-06-04", "estado": True})
         print(f"{VERDE}Compra realizada correctamente.{RESET}")
+        
+        cliente = Usuario.obtenerCliente(idCliente)  # ← agregá esto
+        reporte.registrarCompra(cliente, carrito)     # ← y esto
 
 def mostrarVentas():
     if not listaVentas:
@@ -135,7 +138,7 @@ def leerVenta():
 
             print("-"*65)  
             
-            print(f'{"ID_Venta:":<5} {venta['id_venta']} {"ID_Ticket: ":>48} {venta['id_ticket']}')
+            print(f'{"ID_Venta:":<5} {venta["id_venta"]} {"ID_Ticket: ":>48} {venta["id_ticket"]}')
             
             print("-"*65)
 
@@ -148,7 +151,7 @@ def leerVenta():
 
             print("-"*65)  
 
-            print(f'{"Cliente: "} {idCliente} - {nombreCliente} {"Total: ":>18} {venta['monto_total']} - {venta['metodo_pago']}')
+            print(f'{"Cliente: "} {idCliente} - {nombreCliente} {"Total: ":>18} {venta["monto_total"]} - {venta["metodo_pago"]}')
 
             print("-"*65)  
             return

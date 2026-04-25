@@ -4,7 +4,11 @@ import Producto
 import Ticket
 from functools import reduce
 
-historialCompras = []
+historialCompras = [
+    [1, 1, "Facundo Mello", [["Cortado", 2, 244.0], ["Medialunas x3", 1, 120.0]], 364.0],
+    [2, 3, "Juan Perez",    [["Tostado de jamón", 1, 180.0]], 180.0],
+    [3, 2, "Lionel Messi",  [["Capuccino", 2, 340.0], ["Cheesecake", 1, 250.0]], 590.0],
+]
 
 def registrarCompra(cliente, carrito):
     ''' Guarda la compra finalizada en el historial de compras. '''
@@ -28,22 +32,6 @@ def registrarCompra(cliente, carrito):
     historialCompras.append([idCompra, idCliente, nombreCliente, productosComprados, total])
     print(f"Compra registrada exitosamente para el cliente {nombreCliente}. Total: ${total:.2f}")
 
-def totalRecaudado():
-    # filter - solo ventas activas
-    ventas_activas = list(filter(lambda v: v["estado"] == True, Venta.listaVentas))
-    
-    # map - extrae solo los montos
-    montos = list(map(lambda v: v["monto_total"], ventas_activas))
-    
-    if not montos:
-        print("No hay ventas registradas.")
-        return
-    
-    # reduce - suma todos los montos
-    total = reduce(lambda x, y: x + y, montos)
-    
-    print(f"Total recaudado: ${total:.2f}")
-
 def productoMasVendido():
     conteo = {}
     
@@ -59,6 +47,22 @@ def productoMasVendido():
     producto = Producto.obtenerProducto(id_mas_vendido)
     
     print(f"Producto más vendido: {producto[1]} con {conteo[id_mas_vendido]} unidades vendidas.")
+
+def totalRecaudado():
+    # filter - solo ventas activas
+    ventas_activas = list(filter(lambda v: v["estado"] == True, Venta.listaVentas))
+    
+    # map - extrae solo los montos
+    montos = list(map(lambda v: v["monto_total"], ventas_activas))
+    
+    if not montos:
+        print("No hay ventas registradas.")
+        return
+    
+    # reduce - suma todos los montos
+    total = reduce(lambda x, y: x + y, montos)
+    
+    print(f"Total recaudado: ${total:.2f}")
 
 def menuReportes():
     opcion = 1
