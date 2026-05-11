@@ -117,13 +117,19 @@ def modificacionProducto():
 
                 print(f"Producto '{nombre}' (ID: {idProducto}) fue modificado correctamente")
                 return
-        print("Opción inválida: El ID ingresado no existe.")            
+        print("Opción inválida: El ID ingresado no existe.")       
 
-def mostrarListaProducto():
+
+def mostrarListaProducto(es_cliente=False):
     
-    print("-"*55)  
-    print(f'{"ID":<4}{"Nombre":<25}{"Precio":<10}{"Stock":<8}{"Activo":<6}')
-    print("-"*55)       
+    if es_cliente:
+        print("-"*50)  
+        print(f'{"ID":<4}{"Nombre":<25}{"Precio":<10}{"Stock":<8}')
+        print("-"*50)
+    else:
+        print("-"*55)  
+        print(f'{"ID":<4}{"Nombre":<25}{"Precio":<10}{"Stock":<8}{"Activo":<6}')
+        print("-"*55) 
 
     for fila in matrizProductos:
         id, nombre, precio, stock, activo = fila
@@ -131,9 +137,18 @@ def mostrarListaProducto():
         if activo:
             activoString = "SI"
         else:
-            activoString = "NO"      
+            activoString = "NO"
 
-        print(f'{id:<4}{nombre:<25}{precio:<10}{stock:<8}{activoString:<6}')
+        if es_cliente:
+            print(f'{id:<4}{nombre:<25}{precio:<10}{stock:<8}')
+        else:
+            print(f'{id:<4}{nombre:<25}{precio:<10}{stock:<8}{activoString:<6}')
+            
+    if es_cliente:
+        print("-"*50)
+    else:
+        print("-"*55)
+
 
 def mostrarProducto():
     if not matrizProductos:
@@ -168,24 +183,3 @@ def obtenerProducto(idProducto):
         if int(matrizProductos[i][0]) == int(idProducto):
             return matrizProductos[i]
         i += 1
-        
-#Visualización para clientes
-def visualizarListaProducto():
-    
-    print("-"*50)  
-    print(f'{"ID":<4}{"Nombre":<25}{"Precio":<10}{"Stock":<8}')
-    print("-"*50)       
-
-    for fila in matrizProductos:
-        id, nombre, precio, stock, activo = fila
-        
-        if activo:
-            activoString = "SI"
-        else:
-            activoString = "NO"
-
-        
-        print(f'{id:<4}{nombre:<25}{precio:<10}{stock:<8}')
-    
-    print("-"*50)  
-     

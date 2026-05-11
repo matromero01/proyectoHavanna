@@ -128,7 +128,7 @@ def clienteMenu(idCliente):
 
         opcion = utilidades.pedirEntero("Seleccione una opción: ")
         if opcion == 1:
-            Producto.visualizarListaProducto()
+            Producto.mostrarListaProducto(es_cliente="false")
         elif opcion == 2:
             carrito.extend(agregarAlCarrito())
         elif opcion == 3:
