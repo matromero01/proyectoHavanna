@@ -2,6 +2,7 @@ import Usuario
 import Venta
 import Producto
 import Ticket
+import utilidades
 from functools import reduce
 
 historialCompras = [
@@ -74,7 +75,7 @@ def menuReportes():
         '3 - Total recaudado
         '0 - Volver al menu principal''')
 
-        opcion = int(input("Ingresa un numero: "))
+        opcion = utilidades.pedirEntero("Ingresa un numero: ")
         if opcion == 1:
             if not historialCompras:
                 print("No hay compras registradas.")

@@ -1,3 +1,4 @@
+import utilidades
 
 # ID | Nombre | Precio | Stock | Estado
 encabezado = ["ID", "Nombre", "Precio", "Stock", "Activo"]
@@ -27,7 +28,7 @@ def productoMenu():
         '6 - Nuevo Producto
         '0 - Volver al menu principal''')
 
-        opcion = int(input("Ingresa una opción: "))
+        opcion = utilidades.pedirEntero("Ingresa una opción: ")
         if opcion == 1:
             altaProducto()
         elif opcion == 2:

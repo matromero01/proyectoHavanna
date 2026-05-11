@@ -1,6 +1,7 @@
 import Producto
 import Usuario
 import reporte
+import utilidades
 
 #print("Inicio de Havanna")
 
@@ -12,7 +13,7 @@ def inicio():
         1 - Login
         0 - Salir del sistema''')
 
-        opcion = int(input("Ingresa una opción: "))
+        opcion = utilidades.pedirEntero("Ingresa una opción: ")
         if opcion == 1:
             Usuario.menuAutenticacion()
         elif opcion == 0:

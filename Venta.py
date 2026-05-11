@@ -1,4 +1,4 @@
-import Usuario, Ticket, Producto, reporte
+import Usuario, Ticket, Producto, reporte, utilidades
 
 listaVentas = [
     {"id_venta": 1, "id_ticket": 123, "id_cliente": 1, "monto_total": 744.0, "metodo_pago": "efectivo", "fecha": "2025-06-01", "estado": True},
@@ -24,7 +24,7 @@ def menuVenta():
         '4 - Baja Venta
         '0 - Volver al menu principal''')
 
-        opcion = int(input("Ingresa un numero: "))
+        opcion = utilidades.pedirEntero("Ingresa un numero: ")
         if opcion == 1:
             modificacionVenta()
         elif opcion == 2:

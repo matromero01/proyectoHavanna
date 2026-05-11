@@ -1,4 +1,4 @@
-import Producto, Venta, Ticket, reporte
+import Producto, Venta, Ticket, reporte, utilidades
 
 matrizCliente = [
     [1,  "Facundo Mello",      "facundomello34@gmail.com",  "1124084431", True],
@@ -79,7 +79,8 @@ def gestionarUsuarios():
         '5 - Buscar Ventas de Clientes
         '6 - Dar de baja cliente
         '0 - Volver al menú anterior''')
-        opcion = int(input("Seleccione una opción: "))
+
+        opcion = utilidades.pedirEntero("Seleccione una opción: ")
         if opcion == 1:
             mostrarClientes()
         elif opcion == 2:
@@ -121,7 +122,8 @@ def adminMenu():
         '4 - Gestionar Ticket
         '5 - Reportes
         '0 - Salir del sistema''')
-        opcion = int(input("Seleccione una opción: "))
+
+        opcion = utilidades.pedirEntero("Seleccione una opción: ")
         if opcion == 1:
             Producto.productoMenu()
         elif opcion == 2:
@@ -150,7 +152,7 @@ def clienteMenu(idCliente):
         '5 - Finalizar compra
         '0 - Salir del sistema''')
 
-        opcion = int(input("Seleccione una opción: "))
+        opcion = utilidades.pedirEntero("Seleccione una opción: ")
         if opcion == 1:
             Producto.visualizarListaProducto()
         elif opcion == 2:

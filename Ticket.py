@@ -1,4 +1,4 @@
-import Producto, Usuario
+import Producto, Usuario, utilidades
 
 # Id_ticket, id_producto, cantidad, subtotal, activo
 matrizTicket = [
@@ -23,7 +23,7 @@ def ticketMenu():
 
         '0 - Volver al menu principal''')
 
-        opcion = int(input("Ingresa un numero: "))
+        opcion = utilidades.pedirEntero("Ingresa un numero: ")
        # if opcion == 1:
         #    altaTicket()
         if opcion == 1:
