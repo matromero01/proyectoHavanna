@@ -29,27 +29,16 @@ def productoMenu():
         opcion = int(input("Ingresa una opción: "))
         if opcion == 1:
             altaProducto()
-        if opcion == 2:
+        elif opcion == 2:
             bajaProducto()
-        if opcion == 3:
+        elif opcion == 3:
             modificacionProducto()
-        if opcion == 4:
+        elif opcion == 4:
             mostrarListaProducto()
-        if opcion == 5:
+        elif opcion == 5:
             mostrarProducto()
-        if opcion == 0:
+        elif opcion == 0:
             print("Adios!") 
-        
-        
-    
-def altaProducto1():
-    productoNombre = input("Ingrese el nombre del producto: ")
-    productoPrecio = input("Ingrese el precio del producto: ")
-    productoCantidad = input("Ingrese el stock del producto: ")
-
-    producto = [matrizProductos[-1][0] + 1, productoNombre, productoPrecio, productoCantidad, True]
-
-    matrizProductos.append(producto)
 
 def bajaProducto():
     if not matrizProductos:
@@ -211,9 +200,11 @@ def mostrarProducto():
 
 
 def obtenerProducto(idProducto):
-    for producto in matrizProductos:
-        if int(producto[0]) == int(idProducto):
-            return producto
+    i = 0
+    while i < len(matrizProductos):
+        if int(matrizProductos[i][0]) == int(idProducto):
+            return matrizProductos[i]
+        i += 1
         
 #Visualización para clientes
 def visualizarListaProducto():

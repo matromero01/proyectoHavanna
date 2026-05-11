@@ -1,7 +1,7 @@
 import Producto, Usuario
 
 # Id_ticket, id_producto, cantidad, subtotal, activo
-matrizTicket = matrizTicket = [
+matrizTicket = [
     [123, 1, 2, 244.0, True], 
     [123, 2, 4, 500.0, True], 
     [124, 9, 1, 250.0, True], 
@@ -19,6 +19,7 @@ def ticketMenu():
         print('''
         --Menu Ticket--
         '1 - Mostrar Ticket
+        '2 - Baja Ticket
 
         '0 - Volver al menu principal''')
 
@@ -27,6 +28,9 @@ def ticketMenu():
         #    altaTicket()
         if opcion == 1:
             mostrarTicket()
+        elif opcion == 2:
+            id_ticket = int(input("Ingrese el ID del ticket a dar de baja: "))
+            bajaTicket(id_ticket)
         if opcion == 0:
             print("Adios!")
                 

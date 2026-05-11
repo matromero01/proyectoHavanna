@@ -77,6 +77,7 @@ def gestionarUsuarios():
         '3 - Modificar Cliente
         '4 - Activar / Dar de baja cliente
         '5 - Buscar Ventas de Clientes
+        '6 - Dar de baja cliente
         '0 - Volver al menú anterior''')
         opcion = int(input("Seleccione una opción: "))
         if opcion == 1:
@@ -89,6 +90,8 @@ def gestionarUsuarios():
             cambiarEstadoCliente()
         elif opcion == 5:
             buscarVentasCliente()
+        elif opcion == 6:
+            bajaCliente()
         elif opcion == 0:
             print("Volviendo al menú anterior...")
         else:
@@ -249,21 +252,22 @@ def mostrarListaCliente():
         print(f"{fila[0]:<5} {fila[1]:<20} {fila[2]:<30} {fila[3]:<15} {str(fila[4]):<8}")
 
 def existeCliente(idCliente):
-    encontrado = False 
-    for i in range(len(matrizCliente)):
+    encontrado = False
+    i = 0
+    while i < len(matrizCliente) and not encontrado:
         if matrizCliente[i][0] == idCliente:
             encontrado = True
-            break
-
+        i += 1
     if not encontrado:
         print("El cliente no existe.")
-
     return encontrado
 
 def obtenerCliente(idCliente):
-    for i in range(len(matrizCliente)):
-        if matrizCliente[i] [0] == idCliente:
+    i = 0
+    while i < len(matrizCliente):
+        if matrizCliente[i][0] == idCliente:
             return matrizCliente[i]
+        i += 1
 
 def agregarAlCarrito():
     carrito = []
@@ -271,19 +275,21 @@ def agregarAlCarrito():
     while True:
         id_buscar = int(input("Ingrese el ID del producto que desea comprar: "))
         encontrado = False
-            
-        for producto in Producto.matrizProductos: 
+
+        i = 0
+        while i < len(Producto.matrizProductos):
+            producto = Producto.matrizProductos[i]
             if producto[0] == id_buscar:
                 encontrado = True
                 cantidad = int(input(f"¿Cuántos {producto[1]} desea agregar al carrito?: "))
-                if cantidad <= producto[3]: 
-                    carrito.append([int(Ticket.matrizTicket[-1][0]) + 1, producto[0], cantidad, producto[2]*cantidad, True]) 
-                    producto[3] -= cantidad 
-                    print(f"{cantidad} unidades de {producto[1]} agregadas al carrito.")
+                if cantidad <= producto[3]:
+                    carrito.append([int(Ticket.matrizTicket[-1][0]) + 1, producto[0], cantidad, producto[2]*cantidad, True])
+                    producto[3] -= cantidad
+                    print(f"{cantidad} unidades de {producto[1]} agregadas al carrito")
                 else:
-                    print(f"No hay suficiente stock. Disponible: {producto[3]} unidades.")
-                break 
-            
+                    print (f"No hay suficiente stock. Disponible: {producto[3]} unidades.")
+                break
+            i += 1
         if not encontrado:
             print(f"No se encontró ningún producto con ID: {id_buscar}.")
         
@@ -317,8 +323,15 @@ def vaciarCarrito(carrito):
         opcion = input("¿Seguro que quiere vaciar el carrito? (si/no)").lower()
 
     if opcion == "si":
-        print("Carrito vaciado.")
+        for item in carrito:
+            id_producto = item[1]
+            cantidad = item[2]
+            for producto in Producto.matrizProductos:
+                if producto[0] == id_producto:
+                    producto[3] += cantidad
+                    break
         carrito.clear() 
+        print("Carrito vaciado.")
     else:
         print("Carrito no vaciado")
 

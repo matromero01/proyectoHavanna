@@ -21,15 +21,18 @@ def menuVenta():
         '1 - Modificacion Venta
         '2 - Mostrar Venta
         '3 - Leer venta
+        '4 - Baja Venta
         '0 - Volver al menu principal''')
 
         opcion = int(input("Ingresa un numero: "))
         if opcion == 1:
             modificacionVenta()
-        if opcion == 2:
+        elif opcion == 2:
             mostrarVentas()
-        if opcion == 3:
+        elif opcion == 3:
             leerVenta()
+        elif opcion == 4:
+            bajaVenta()
         
 
 def altaVenta(idCliente, carrito):
