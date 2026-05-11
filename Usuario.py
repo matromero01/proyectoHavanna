@@ -1,46 +1,34 @@
 import Producto, Venta, Ticket, reporte, utilidades
 
-matrizCliente = [
-    [1,  "Facundo Mello",      "facundomello34@gmail.com",  "1124084431", True],
-    [2,  "Lionel Messi",       "messi@gmail.com",           "1122334455", True],
-    [3,  "Juan Perez",         "juanperez@gmail.com",       "1156781234", True],
-    [4,  "Maria Lopez",        "marialopez@hotmail.com",    "1167894321", True],
-    [5,  "Carlos Gomez",       "carlosgomez@yahoo.com",     "1178905678", False],
-    [6,  "Laura Fernandez",    "lauraf@gmail.com",          "1189016789", True],
-    [7,  "Diego Martinez",     "diegom@outlook.com",        "1190127890", True],
-    [8,  "Ana Rodriguez",      "anar@gmail.com",            "1101238901", False],
+#IdUsuario
+matrizUsuario = [
+    [1,  "Admin",              "admin@gmail.com",           "12345678",   True, True],
+    [2,  "Facundo Mello",      "facundomello34@gmail.com",  "1124084431", True, False],
+    [3,  "Lionel Messi",       "messi@gmail.com",           "1122334455", True, False],
+    [4,  "Juan Perez",         "juanperez@gmail.com",       "1156781234", True, False],
+    [5,  "Maria Lopez",        "marialopez@hotmail.com",    "1167894321", True, False],
+    [6,  "Carlos Gomez",       "carlosgomez@yahoo.com",     "1178905678", False, False],
+    [7,  "Laura Fernandez",    "lauraf@gmail.com",          "1189016789", True, False],
+    [8,  "Diego Martinez",     "diegom@outlook.com",        "1190127890", True, False],
+    [9,  "Ana Rodriguez",      "anar@gmail.com",            "1101238901", False, False],
 ]
 
+def login():
+    usuario = input("Ingrese el usuario: ").strip().lower()
 
-def menuAutenticacion():
-    es_admin = ""
-    while es_admin != "si" and es_admin != "no":
-        print("\n¿Sos administrador? (si/no): ")
-        es_admin = input("Respuesta: ").strip().lower()
-        if es_admin != "si" and es_admin != "no":
-            print("Respuesta inválida. Ingrese 'si' o 'no'.")
-    
-    if es_admin == "si":
-        loginAdmin()
-    elif es_admin == "no":
-        loginCliente()
+    for user in matrizUsuario:
+        if user[1].lower() == usuario:
+            if user[5]:
+                adminMenu()
+            else:
+                clienteMenu(user[0])
+            return        
+    print("Usuario no encontrado.")
 
-
-def loginAdmin():
-    print("\n--- Login Administrador ---")
-    usuario = input("Ingrese su nombre de usuario: ")
-    contraseña = input("Ingresa tu contraseña: ")
-
-    if usuario == "admin" and contraseña == "admin123":
-        print("Login completado exitosamente. Bienvenido, Administrador!")
-        adminMenu()
-    else: 
-        print("Usuario o contraseña son incorrectos. Intente nuevamente.")
-        menuAutenticacion()
 
 def mostrarClientes():
     print("\nListado de clientes:")
-    for cliente in matrizCliente:
+    for cliente in matrizUsuario:
         estado = "Activo" if cliente[4] else "Inactivo"
         print(f"ID: {cliente[0]}, Nombre: {cliente[1]}, Email: {cliente[2]}, Teléfono: {cliente[3]}, Estado: {estado}")
 
@@ -48,7 +36,7 @@ def mostrarClientes():
 def cambiarEstadoCliente():
     mostrarClientes()
     id_cliente = int(input("\nIngrese el ID del cliente a modificar: "))
-    for cliente in matrizCliente:
+    for cliente in matrizUsuario:
         if cliente[0] == id_cliente:
             if cliente[4]:
                 confirmar = input(f"El cliente {cliente[1]} está activo. Desea darlo de baja? (si/no): ").strip().lower()
@@ -97,20 +85,6 @@ def gestionarUsuarios():
             print("Volviendo al menú anterior...")
         else:
             print("Opción inválida. Intente nuevamente.")
-
-
-def loginCliente():
-    print("\n--- Login Cliente ---")
-    email = input("Ingrese su correo electrónico: ")
-    telefono = input("Ingrese su número de contacto: ")
-    for cliente in matrizCliente:
-        if cliente[2] == email and cliente[3] == telefono and cliente[4] == True:
-            print(f"Login completado exitosamente. Bienvenido, {cliente[1]}!")
-            clienteMenu(cliente[0])
-            return
-
-    print("Correo electrónico o número de contacto incorrectos, o el cliente está dado de baja. Intente nuevamente.")
-    menuAutenticacion()
 
 def adminMenu():
     opcion = 1
@@ -184,28 +158,28 @@ def altaCliente():
         clienteTelefono= input("Ingrese su número de contacto: ")
 
 
-    nuevoId= matrizCliente[-1] [0] + 1 if matrizCliente else 1
+    nuevoId= matrizUsuario[-1] [0] + 1 if matrizUsuario else 1
     nuevoCliente= [nuevoId, clienteNombre, clienteEmail, clienteTelefono, True]
     
-    matrizCliente.append(nuevoCliente)
+    matrizUsuario.append(nuevoCliente)
     print(f"Cliente '{clienteNombre}' (ID: {nuevoId}) dado de alta exitosamente.\n")
 
 def bajaCliente(): 
     """ Dar de baja un cliente existente"""
     print("\n--- Baja de cliente ---")
-    if not matrizCliente:
+    if not matrizUsuario:
         print("No hay clientes para eliminar.")
     else: 
         idCliente = int(input("Ingrese el ID del cliente a dar de baja: "))
         encontrado = False
 
 
-        for i in range(len(matrizCliente)):
-            cliente = matrizCliente[i][1]
-            if matrizCliente[i] [0] == idCliente:
+        for i in range(len(matrizUsuario)):
+            cliente = matrizUsuario[i][1]
+            if matrizUsuario[i] [0] == idCliente:
                 encontrado = True
-                if matrizCliente[i][4] == True:
-                    matrizCliente[i] [4] = False
+                if matrizUsuario[i][4] == True:
+                    matrizUsuario[i] [4] = False
                     print(f"Cliente '{cliente}' (ID: {idCliente}) dado de baja exitosamente.")
                 else: 
                     print(f"Cliente '{cliente}' (ID: {idCliente}) ya fue dado de baja anteriormente.")
@@ -221,27 +195,27 @@ def bajaCliente():
             print(f"No se encontró ningún cliente con ID: {idCliente}. \n")
 
 def modificacionCliente():
-    if not matrizCliente:
+    if not matrizUsuario:
         print("No hay cliente para modificar.")
     else:
         mostrarListaCliente() 
         idCliente = int(input("Ingrese el ID del cliente para modificar: "))
 
-        for i in range(len(matrizCliente)): 
-            if matrizCliente[i][0] == idCliente:
-                id, nombre, mail, numero, activo =matrizCliente[i]
+        for i in range(len(matrizUsuario)): 
+            if matrizUsuario[i][0] == idCliente:
+                id, nombre, mail, numero, activo =matrizUsuario[i]
 
                 datoModificado = input("Ingrese un nombre: (Deje vacio si no quiere modificarlo) ")
                 if datoModificado.strip() != "":
-                    matrizCliente[i][1] = datoModificado
+                    matrizUsuario[i][1] = datoModificado
                 
                 datoModificado = input("Ingrese un mail: (Deje vacio si no quiere modificarlo) ")
                 if datoModificado.strip() != "":
-                    matrizCliente[i][2] = datoModificado
+                    matrizUsuario[i][2] = datoModificado
                 
                 datoModificado = input("Ingrese un numero: (Deje vacio si no quiere modificarlo) ")
                 if datoModificado.strip() != "":
-                    matrizCliente[i][3] = datoModificado
+                    matrizUsuario[i][3] = datoModificado
 
                 print(f"Cliente '{nombre}' (ID: {idCliente}) fue modificado correctamente")
                 return
@@ -250,14 +224,14 @@ def modificacionCliente():
 def mostrarListaCliente():
     print(f"{'ID':<5} {'Nombre':<20} {'Email':<30} {'Telefono':<15} {'Activo':<8}")
     print("-" * 80)
-    for fila in matrizCliente:
+    for fila in matrizUsuario:
         print(f"{fila[0]:<5} {fila[1]:<20} {fila[2]:<30} {fila[3]:<15} {str(fila[4]):<8}")
 
 def existeCliente(idCliente):
     encontrado = False
     i = 0
-    while i < len(matrizCliente) and not encontrado:
-        if matrizCliente[i][0] == idCliente:
+    while i < len(matrizUsuario) and not encontrado:
+        if matrizUsuario[i][0] == idCliente:
             encontrado = True
         i += 1
     if not encontrado:
@@ -266,9 +240,9 @@ def existeCliente(idCliente):
 
 def obtenerCliente(idCliente):
     i = 0
-    while i < len(matrizCliente):
-        if matrizCliente[i][0] == idCliente:
-            return matrizCliente[i]
+    while i < len(matrizUsuario):
+        if matrizUsuario[i][0] == idCliente:
+            return matrizUsuario[i]
         i += 1
 
 def agregarAlCarrito():
@@ -342,7 +316,7 @@ def buscarVentasCliente():
     idCliente = int(input("Ingrese el ID del cliente: "))
 
     encontrado = False
-    for cliente in matrizCliente:
+    for cliente in matrizUsuario:
         if cliente[0] == idCliente: 
             encontrado = True
             ventas = Venta.obtenerVentasPorCliente(idCliente)

@@ -15,3 +15,4 @@ def pedirDecimal(mensaje):
             return float(input(mensaje))
         except ValueError:
             print("Error: ingrese solo numeros.")
+

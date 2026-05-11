@@ -15,7 +15,7 @@ def inicio():
 
         opcion = utilidades.pedirEntero("Ingresa una opción: ")
         if opcion == 1:
-            Usuario.menuAutenticacion()
+            Usuario.login()
         elif opcion == 0:
             print("Saliendo del sistema... ")
 if __name__ == "__main__":
