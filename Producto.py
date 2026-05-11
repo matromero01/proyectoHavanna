@@ -24,6 +24,7 @@ def productoMenu():
         '3 - Modificacion Producto
         '4 - Mostrar Productos
         '5 - Leer Producto
+        '6 - Nuevo Producto
         '0 - Volver al menu principal''')
 
         opcion = int(input("Ingresa una opción: "))
@@ -37,6 +38,8 @@ def productoMenu():
             mostrarListaProducto()
         elif opcion == 5:
             mostrarProducto()
+        elif opcion == 6:
+            nuevoProducto()
         elif opcion == 0:
             print("Adios!") 
 
@@ -47,85 +50,47 @@ def bajaProducto():
         mostrarListaProducto()
         idProducto = int(input("Ingrese el ID del producto a dar de baja: "))
         encontrado = False
+        i = 0
 
-        for i in range(len(matrizProductos)): 
+        while i < len(matrizProductos) and not encontrado:
             if matrizProductos[i][0] == idProducto:
                 encontrado = True
-
-                nombre = matrizProductos[i][1] 
-
+                nombre = matrizProductos[i][1]
                 if matrizProductos[i][4] == True:
                     matrizProductos[i][4] = False
                     print(f"Producto '{nombre}' (ID: {idProducto}) dado de baja exitosamente.")
                 else:
-                    print(f"Producto '{nombre}' (ID: {idProducto}) ya fue dado de baja anteriormente")
-                    condicionAlta = input("¿Quiere dar de alta el producto ahora? (si/no): \nProducto '{nombre}' (ID: {idProducto})").strip().lower()
-                    
-                    while condicionAlta != "si" and condicionAlta != "no":
-                        print("Respuesta inválida. Por favor ingrese 'si' o 'no'.")
-                        condicionAlta = input("¿Quiere darlo de alta ahora? (si/no): ").strip().lower()
-                    
-                    if condicionAlta == "si":
-                        altaProducto()
-                break
-
-    if not encontrado:
-        print("Opción inválida: El ID ingresado no existe.")
+                    print(f"Producto {nombre} (ID: {idProducto}) ya estaba dado de baja.")
+            i += 1
+        if not encontrado:
+            print(f"No existe ningun producto con ID: {idProducto}.")
 
 def altaProducto():
-    if not matrizProductos:
-        print("No hay productos para dar de alta.")
-    else:
-        mostrarListaProducto() 
-        idProducto = int(input("Ingrese el ID del producto a dar de alta: "))
-        encontrado = False
-
-        for i in range(len(matrizProductos)): 
-            if matrizProductos[i][0] == idProducto:
-                encontrado = True
-                nombre = matrizProductos[i][1] 
-                
-                if matrizProductos[i][4] == False:
-                    matrizProductos[i][4] = True
-                    print(f"Producto '{nombre}' (ID: {idProducto}) dado de alta exitosamente.")
-                else:
-                    print(f"El producto '{nombre}' (ID: {idProducto}) ya está activo.")
-                    condicionBaja = input("¿Quiere darlo de baja ahora? (si/no): ").strip().lower()
-                    
-                    while condicionBaja != "si" and condicionBaja != "no":
-                        print("Respuesta inválida. Por favor ingrese 'si' o 'no'.")
-                        condicionBaja = input("¿Quiere darlo de baja ahora? (si/no): ").strip().lower()
-                    
-                    if condicionBaja == "si":
-                        bajaProducto() 
-                break 
-
-    if not encontrado:
-        print("Opción inválida: El ID {idProducto} ingresado no existe.") 
-        seguirIngresando = input("¿Desea ingresar un nuevo producto? (si/no)").strip().lower()
-        cont = 0
-        while seguirIngresando != "si" and seguirIngresando != "no":
-            print("ERROR DE TIPEO. Por favor ingrese "'si'" o "'no'"")
-            seguirIngresando = input("¿Desea ingresar un nuevo producto? (si/no)").strip().lower()
-        
-        if seguirIngresando == "si":
-            productoNombre = input("Ingrese el nombre del producto: ")
-            productoPrecio = float(input("Ingrese el precio del producto: "))
-            productoCantidad = int(input("Ingrese el stock del producto: "))
-            cont = cont +1
-
-            if matrizProductos:
-                nuevo_id = matrizProductos[-1][0] + 1
+    mostrarListaProducto()
+    idProducto = int(input("Ingrese el ID del producto a dar de alta: "))
+    encontrado = False
+    i = 0
+    while i < len(matrizProductos) and not encontrado:
+        if matrizProductos[i][0] == idProducto:
+            encontrado = True
+            nombre = matrizProductos[i][1]
+            if matrizProductos[i][4] == False:
+                matrizProductos[i][4] = True
+                print (f"Producto '{nombre} (ID: {idProducto}) dado de alta exitosamente.'")
             else:
-                nuevo_id = 1
+                print(f"El producto '{nombre}' (ID: {idProducto}) ya está activo.")
+        i += 1
+    if not encontrado:
+        print(f"No existe ningun producto con ID: {idProducto}")
 
-            producto = [matrizProductos[-1][0] + 1, productoNombre, productoPrecio, productoCantidad, True]
-            matrizProductos.append(producto)
+def nuevoProducto():
+    productoNombre = input("Ingrese el nombre del producto: ")
+    productoPrecio = float(input("Ingrese el precio del producto: "))
+    productoCantidad = int(input("Ingrese el stock del producto: "))
+    nuevo_id = matrizProductos[-1][0] + 1
+    matrizProductos.append ([nuevo_id, productoNombre, productoPrecio, productoCantidad, True])
+    print(f"Producto '{productoNombre}' agregado con ID: {nuevo_id}")
 
-            print("Producto: "+productoNombre+" ¡Agregado correctamente!")
-        else:
-            print(f"Se ingresaron: {cont} producto/s correctamente")
-        
 def modificacionProducto():
     if not matrizProductos:
         print("No hay productos para modificar.")
@@ -153,7 +118,6 @@ def modificacionProducto():
                 return
         print("Opción inválida: El ID ingresado no existe.")            
 
-
 def mostrarListaProducto():
     
     print("-"*55)  
@@ -166,9 +130,8 @@ def mostrarListaProducto():
         if activo:
             activoString = "SI"
         else:
-            activoString = "NO"
+            activoString = "NO"      
 
-        
         print(f'{id:<4}{nombre:<25}{precio:<10}{stock:<8}{activoString:<6}')
 
 def mostrarProducto():
@@ -197,7 +160,6 @@ def mostrarProducto():
         
         if not encontrado:
             print("No se encontró ningún producto con ese ID.")
-
 
 def obtenerProducto(idProducto):
     i = 0

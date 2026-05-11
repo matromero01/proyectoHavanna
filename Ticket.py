@@ -31,14 +31,11 @@ def ticketMenu():
         elif opcion == 2:
             id_ticket = int(input("Ingrese el ID del ticket a dar de baja: "))
             bajaTicket(id_ticket)
-        if opcion == 0:
-            print("Adios!")
-                
+        elif opcion == 0:
+            print("Adios!")             
     
 def altaTicket(carrito):
-    matrizTicket.extend(carrito)
-    
-    
+    matrizTicket.extend(carrito)    
 
 def imprimir_ticket(cliente, carrito):
     total = 0
