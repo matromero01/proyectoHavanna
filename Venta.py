@@ -13,6 +13,8 @@ RESET = "\33[0m"
 VERDE = "\33[32;1m"
 ROJO = "\33[31;1m"
 
+MetodosPago = ("efectivo", "tarjeta", "transferencia")
+
 def menuVenta():
     opcion = 1
     while opcion != 0:
@@ -103,22 +105,18 @@ def modificacionVenta():
 
             while opcion not in [1, 2, 3]:
                 print("\nSeleccione el nuevo metodo de pago:")
-                print("1. Efectivo")
-                print("2. Tarjeta")
-                print("3. Transferencia")
+                for i, metodo in enumerate(MetodosPago):
+                    print(f"{i+1}. {metodo.capitalize()}")
 
                 entrada = input("Seleccione nuevo metodo de pago (1-3): ")
                 if entrada.isdigit():
                     opcion = int(entrada)
-                    
                     if opcion not in [1, 2, 3]:
                         print("Error: El numero debe ser 1, 2, o 3")
                 else:
-
                     print("Error: Por favor ingrese solo numeros (1-3)")
             
-            metodos = {1: "efectivo", 2: "tarjeta", 3: "transferencia"}
-            venta['metodo_pago'] = metodos[opcion]
+            venta['metodo_pago'] = MetodosPago[opcion - 1]
             
             print(f"\nCambio de metodo de pago exitoso a: {venta['metodo_pago']}")
             break 
