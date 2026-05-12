@@ -162,9 +162,9 @@ def altaCliente():
         print("Teléfono inválido. Debe tener entre 10 y 12 dígitos.")
         clienteTelefono = input("Ingrese su número de contacto: ")
 
-    nuevoId = matrizCliente[-1][0] + 1 if matrizCliente else 1
-    nuevoCliente = [nuevoId, clienteNombre, clienteEmail, clienteTelefono, True]
-    matrizCliente.append(nuevoCliente)
+    nuevoId = matrizUsuario[-1][0] + 1 if matrizUsuario else 1
+    nuevoCliente = [nuevoId, clienteNombre, clienteEmail, clienteTelefono, True, False]
+    matrizUsuario.append(nuevoCliente)
     print(f"Cliente '{clienteNombre}' (ID: {nuevoId}) dado de alta exitosamente.")
 
 def bajaCliente(): 
