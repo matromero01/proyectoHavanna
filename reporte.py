@@ -89,18 +89,15 @@ def productoMasVendido():
     print(f"Producto más vendido: {producto[1]} con {conteo[id_mas_vendido]} unidades vendidas.")
 
 def totalRecaudado():
-    def totalRecaudado():
-    # Antes filtraban con: lambda v: v["estado"] == True
-    # Ahora usan la lambda directa ya definida:
-        ventas_activas = list(filter(es_venta_activa, Venta.listaVentas))
-        montos = list(map(lambda v: v["monto_total"], ventas_activas))
+    ventas_activas = list(filter(es_venta_activa, Venta.listaVentas))
+    montos = list(map(lambda v: v["monto_total"], ventas_activas))
 
     if not montos:
         print("No hay ventas registradas.")
         return
 
     total = reduce(lambda x, y: x + y, montos)
-    promedio = calcular_promedio(total, len(montos))  # ← lambda directa
+    promedio = calcular_promedio(total, len(montos))
 
     print(f"Total recaudado:  ${total:.2f}")
     print(f"Promedio por venta: ${promedio:.2f}")

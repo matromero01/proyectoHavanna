@@ -144,9 +144,7 @@ def clienteMenu(idCliente):
                 carrito.clear()
         if opcion == 0:
             print("Volviendo al menu principal...")
-  
-    
-    """ Dar dealta un nuevo cliente"""
+
 PATRON_EMAIL    = r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}"
 PATRON_TELEFONO = r"\d{10,12}"
 
