@@ -1,4 +1,4 @@
-import Producto, Venta, Ticket, reporte, utilidades
+import Producto, Venta, Ticket, reporte, utilidades, re
 
 #IdUsuario
 matrizUsuario = [
@@ -143,26 +143,30 @@ def clienteMenu(idCliente):
                 carrito.clear()
         if opcion == 0:
             print("Volviendo al menu principal...")
-
-def altaCliente():  
-    """ Dar de alta un nuevo cliente"""
-    print("\n--- Registrarse ---")
-    clienteNombre= input("Ingrese su nombre nuevo cliente: ")
-    clienteEmail= input("Ingrese su Email: ")
-    while "@" not in clienteEmail or "." not in clienteEmail:
-        print("Correo electrónico no válido. Por favor, ingrese un correo electrónico válido.")
-        clienteEmail = input("Ingrese su Email: ")
-    clienteTelefono= input("Ingrese su número de contacto: ")
-    while not clienteTelefono.isdigit() or len(clienteTelefono) < 7:
-        print("Número de teléfono invalido, por favor, vuelve a ingresarlo nuevamente.")
-        clienteTelefono= input("Ingrese su número de contacto: ")
-
-
-    nuevoId= matrizUsuario[-1] [0] + 1 if matrizUsuario else 1
-    nuevoCliente= [nuevoId, clienteNombre, clienteEmail, clienteTelefono, True]
+  
     
-    matrizUsuario.append(nuevoCliente)
-    print(f"Cliente '{clienteNombre}' (ID: {nuevoId}) dado de alta exitosamente.\n")
+    """ Dar dealta un nuevo cliente"""
+PATRON_EMAIL    = r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}"
+PATRON_TELEFONO = r"\d{10,12}"
+
+def altaCliente():
+    print("\n--- Registrarse ---")
+    clienteNombre = input("Ingrese su nombre: ")
+
+    clienteEmail = input("Ingrese su Email: ")
+    while not re.fullmatch(PATRON_EMAIL, clienteEmail):
+        print("Correo electrónico no válido. Debe tener formato usuario@dominio.com")
+        clienteEmail = input("Ingrese su Email: ")
+
+    clienteTelefono = input("Ingrese su número de contacto: ")
+    while not re.fullmatch(PATRON_TELEFONO, clienteTelefono):
+        print("Teléfono inválido. Debe tener entre 10 y 12 dígitos.")
+        clienteTelefono = input("Ingrese su número de contacto: ")
+
+    nuevoId = matrizCliente[-1][0] + 1 if matrizCliente else 1
+    nuevoCliente = [nuevoId, clienteNombre, clienteEmail, clienteTelefono, True]
+    matrizCliente.append(nuevoCliente)
+    print(f"Cliente '{clienteNombre}' (ID: {nuevoId}) dado de alta exitosamente.")
 
 def bajaCliente(): 
     """ Dar de baja un cliente existente"""

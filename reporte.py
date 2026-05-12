@@ -3,7 +3,15 @@ import Venta
 import Producto
 import Ticket
 import utilidades
+
 from functools import reduce
+import Producto, Venta, Ticket, utilidades, Usuario
+
+# ── Lambdas directas ──────────────────────────────────────
+calcular_subtotal = lambda precio, cantidad: precio * cantidad
+aplicar_descuento = lambda precio: precio * 0.9
+calcular_promedio = lambda total, cant: total / cant if cant > 0 else 0
+es_venta_activa   = lambda venta: venta["estado"] == True
 
 historialCompras = [
     [1, 1, "Facundo Mello", [["Cortado", 2, 244.0], ["Medialunas x3", 1, 120.0]], 364.0],
@@ -33,7 +41,38 @@ def registrarCompra(cliente, carrito):
     historialCompras.append([idCompra, idCliente, nombreCliente, productosComprados, total])
     print(f"Compra registrada exitosamente para el cliente {nombreCliente}. Total: ${total:.2f}")
 
+def estadisticasVentas():
+    ventas_activas = list(filter(es_venta_activa, Venta.listaVentas))
+
+    if not ventas_activas:
+        print("No hay ventas registradas.")
+        return
+
+    montos = list(map(lambda v: v["monto_total"], ventas_activas))
+    total    = reduce(lambda x, y: x + y, montos)
+    promedio = calcular_promedio(total, len(montos))   # lambda directa
+    minimo   = min(montos)
+    maximo   = max(montos)
+
+    print("\n===== Estadísticas de ventas =====")
+    print(f"  Total de ventas:    {len(ventas_activas)}")
+    print(f"  Total recaudado:    ${total:.2f}")
+    print(f"  Promedio por venta: ${promedio:.2f}")
+    print(f"  Venta mínima:       ${minimo:.2f}")
+    print(f"  Venta máxima:       ${maximo:.2f}")
+
+    # ── Porcentajes por método de pago ──────────────────
+    print("\n  Ventas por método de pago:")
+    metodos = ["efectivo", "tarjeta", "transferencia"]
+    for metodo in metodos:
+        cantidad  = len([v for v in ventas_activas if v["metodo_pago"] == metodo])
+        porcentaje = calcular_promedio(cantidad * 100, len(ventas_activas))
+        print(f"    {metodo:<15} {cantidad} ventas  ({porcentaje:.1f}%)")
+
+    print("==================================")
+
 def productoMasVendido():
+
     conteo = {}
     
     for ticket in Ticket.matrizTicket:
@@ -50,20 +89,21 @@ def productoMasVendido():
     print(f"Producto más vendido: {producto[1]} con {conteo[id_mas_vendido]} unidades vendidas.")
 
 def totalRecaudado():
-    # filter - solo ventas activas
-    ventas_activas = list(filter(lambda v: v["estado"] == True, Venta.listaVentas))
-    
-    # map - extrae solo los montos
-    montos = list(map(lambda v: v["monto_total"], ventas_activas))
-    
+    def totalRecaudado():
+    # Antes filtraban con: lambda v: v["estado"] == True
+    # Ahora usan la lambda directa ya definida:
+        ventas_activas = list(filter(es_venta_activa, Venta.listaVentas))
+        montos = list(map(lambda v: v["monto_total"], ventas_activas))
+
     if not montos:
         print("No hay ventas registradas.")
         return
-    
-    # reduce - suma todos los montos
+
     total = reduce(lambda x, y: x + y, montos)
-    
-    print(f"Total recaudado: ${total:.2f}")
+    promedio = calcular_promedio(total, len(montos))  # ← lambda directa
+
+    print(f"Total recaudado:  ${total:.2f}")
+    print(f"Promedio por venta: ${promedio:.2f}")
 
 def menuReportes():
     opcion = 1
@@ -92,6 +132,8 @@ def menuReportes():
             productoMasVendido()
         elif opcion == 3:
             totalRecaudado()
+        elif opcion == 4:
+            estadisticasVentas()
         elif opcion == 0:
             print("Volviendo al menú principal...")
         else:
