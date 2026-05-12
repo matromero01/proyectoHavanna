@@ -57,7 +57,7 @@ def imprimir_ticket(cliente, carrito):
     print(f"Total --> {total}")
     print("-"*55) 
     
-    idCliente, nombre, mail, telefono, estadoCliente = cliente
+    idCliente, nombre, mail, telefono, estadoCliente, *resto = cliente
     print(f"Cliente --> {nombre}")
     print("-"*55) 
     

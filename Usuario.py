@@ -1,4 +1,4 @@
-import Producto, Venta, Ticket, reporte, utilidades, re
+import Producto, Venta, Ticket, utilidades, re
 
 #IdUsuario
 matrizUsuario = [
@@ -87,6 +87,7 @@ def gestionarUsuarios():
             print("Opción inválida. Intente nuevamente.")
 
 def adminMenu():
+    import reporte
     opcion = 1
     while opcion != 0:
         print('''Menu Principal

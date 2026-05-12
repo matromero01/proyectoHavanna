@@ -5,7 +5,7 @@ import Ticket
 import utilidades
 
 from functools import reduce
-import Producto, Venta, Ticket, utilidades, Usuario
+
 
 # ── Lambdas directas ──────────────────────────────────────
 calcular_subtotal = lambda precio, cantidad: precio * cantidad

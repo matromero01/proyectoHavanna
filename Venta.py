@@ -1,4 +1,4 @@
-import Usuario, Ticket, Producto, reporte, utilidades
+import Usuario, Ticket, Producto, utilidades
 
 listaVentas = [
     {"id_venta": 1, "id_ticket": 123, "id_cliente": 1, "monto_total": 744.0, "metodo_pago": "efectivo", "fecha": "2025-06-01", "estado": True},
@@ -36,6 +36,7 @@ def menuVenta():
         
 
 def altaVenta(idCliente, carrito):
+    import reporte
     if carrito:
         Ticket.altaTicket(carrito)
         total = Ticket.imprimir_ticket(Usuario.obtenerCliente(idCliente), carrito)
