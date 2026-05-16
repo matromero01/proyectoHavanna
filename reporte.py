@@ -111,6 +111,7 @@ def menuReportes():
         '1 - Ver Historial de Compras
         '2 - Producto mas vendido
         '3 - Total recaudado
+        '4 - Estadisticas de Ventas
         '0 - Volver al menu principal''')
 
         opcion = utilidades.pedirEntero("Ingresa un numero: ")

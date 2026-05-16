@@ -206,7 +206,7 @@ def modificacionCliente():
 
         for i in range(len(matrizUsuario)): 
             if matrizUsuario[i][0] == idCliente:
-                id, nombre, mail, numero, activo =matrizUsuario[i]
+                id, nombre, mail, numero, activo, esAdmin =matrizUsuario[i]
 
                 datoModificado = input("Ingrese un nombre: (Deje vacio si no quiere modificarlo) ")
                 if datoModificado.strip() != "":

@@ -42,13 +42,22 @@ def altaVenta(idCliente, carrito):
     if carrito:
         Ticket.altaTicket(carrito)
         total = Ticket.imprimir_ticket(Usuario.obtenerCliente(idCliente), carrito)
-        
+
+        print("Seleccione metodo de pago:")
+        for i, metodo in enumerate(MetodosPago):
+            print(f"{i+1}. {metodo.capitalize()}")
+        opcionPago = utilidades.pedirEntero("Ingrese opcion: ")
+        while opcionPago not in [1, 2, 3]:
+            print("Opcion invalida")
+            opcionPago = utilidades.pedirEntero("Ingrese opcion: ")
+        metodoPago = MetodosPago[opcionPago - 1]
+
         nuevo_id = listaVentas[-1]["id_venta"] + 1 if listaVentas else 1
-        listaVentas.append({"id_venta": nuevo_id, "id_ticket": carrito[0][0], "id_cliente": idCliente, "monto_total": total, "metodo_pago": "pendiente", "fecha": "2025-06-04", "estado": True})
+        listaVentas.append({"id_venta": nuevo_id, "id_ticket": carrito[0][0], "id_cliente": idCliente, "monto_total": total, "metodo_pago": metodoPago, "fecha": "2025-06-04", "estado": True})
         print(f"{VERDE}Compra realizada correctamente.{RESET}")
-        
-        cliente = Usuario.obtenerCliente(idCliente)  # ← agregá esto
-        reporte.registrarCompra(cliente, carrito)     # ← y esto
+
+        cliente = Usuario.obtenerCliente(idCliente)
+        reporte.registrarCompra(cliente, carrito)
 
 def mostrarVentas():
     if not listaVentas:

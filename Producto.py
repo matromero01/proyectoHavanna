@@ -77,7 +77,7 @@ def altaProducto():
             nombre = matrizProductos[i][1]
             if matrizProductos[i][4] == False:
                 matrizProductos[i][4] = True
-                print (f"Producto '{nombre} (ID: {idProducto}) dado de alta exitosamente.'")
+                print (f"Producto '{nombre}' (ID: {idProducto}) dado de alta exitosamente.")
             else:
                 print(f"El producto '{nombre}' (ID: {idProducto}) ya está activo.")
         i += 1
@@ -154,7 +154,7 @@ def mostrarProducto():
     if not matrizProductos:
         print("No se encuentra el producto en el sistema.")
     else: 
-        idProducto = int(input("Ingresa el ID del prodcuto para buscar: "))
+        idProducto = int(input("Ingresa el ID del producto para buscar: "))
         encontrado = False
 
         for i in range(len(matrizProductos)):
