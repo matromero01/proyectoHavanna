@@ -1,6 +1,4 @@
-# ============================================================
 # utilidades.py - Funciones auxiliares reutilizables
-# ============================================================
 
 def pedirEntero(mensaje):
     while True:

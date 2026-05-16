@@ -7,11 +7,11 @@ import utilidades
 from functools import reduce
 
 
-# ── Lambdas directas ──────────────────────────────────────
+#Lambdas directas
 calcular_subtotal = lambda precio, cantidad: precio * cantidad
 aplicar_descuento = lambda precio: precio * 0.9
 calcular_promedio = lambda total, cant: total / cant if cant > 0 else 0
-es_venta_activa   = lambda venta: venta["estado"] == True
+es_venta_activa = lambda venta: venta["estado"] == True
 
 historialCompras = [
     [1, 1, "Facundo Mello", [["Cortado", 2, 244.0], ["Medialunas x3", 1, 120.0]], 364.0],
