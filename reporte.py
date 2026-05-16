@@ -63,8 +63,9 @@ def estadisticasVentas():
 
     # ── Porcentajes por método de pago ──────────────────
     print("\n  Ventas por método de pago:")
-    metodos = ["efectivo", "tarjeta", "transferencia"]
-    for metodo in metodos:
+    metodos_usados = {v["metodo_pago"] for v in ventas_activas}
+    print(f"\n Metodos utilizado: {metodos_usados}")
+    for metodo in metodos_usados:
         cantidad  = len([v for v in ventas_activas if v["metodo_pago"] == metodo])
         porcentaje = calcular_promedio(cantidad * 100, len(ventas_activas))
         print(f"    {metodo:<15} {cantidad} ventas  ({porcentaje:.1f}%)")
@@ -117,7 +118,8 @@ def menuReportes():
             if not historialCompras:
                 print("No hay compras registradas.")
             else:
-                for compra in historialCompras:
+                print("Ultimas 3 compras: ")
+                for compra in historialCompras[-3:]:
                     idCompra, idCliente, nombreCliente, productosComprados, total = compra
                     print(f"Compra ID: {idCompra}, Cliente: {nombreCliente} (ID: {idCliente}), Total: ${total:.2f}")
                     print("Productos Comprados:")
