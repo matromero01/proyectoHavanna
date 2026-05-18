@@ -7,6 +7,7 @@ import utilidades
 
 def inicio():
     print("Bienvenido a Havanna")
+    Producto.cargarProductos()
     opcion = 1
     while opcion != 0:
         print('''\nMenu de Inicio
