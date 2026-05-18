@@ -1,10 +1,52 @@
-import Producto, Venta, Ticket, utilidades, re
+import Producto, Venta, Ticket, reporte, utilidades
+
+def obtener_usuarios():
+    usuarios = []
+    try:
+        with open('Archivos/archivoUsuario.txt', "rt", encoding="utf-8") as arch:
+            for linea in arch:
+                if linea.strip():
+                    datos = linea.strip().split(";")
+                    usuarios.append(datos)
+    except FileNotFoundError:
+        print("No se encontró el archivo de usuarios.")
+    return usuarios
+
+def guardar_usuarios(usuarios):
+    try:
+        with open('Archivos/archivoUsuario.txt', "wt", encoding="utf-8") as arch:
+            for user in usuarios:
+                arch.write(";".join(user) + "\n")
+    except OSError as error:
+        print("No se pudo guardar el archivo:", error)
+
+def obtener_ultimo_id(archivo):
+    ultimo_id = 0
+    try:
+        with open(archivo, "rt", encoding="utf-8") as arch:
+            for linea in arch:
+                datos = linea.strip().split(";")
+                if datos[0].isdigit():
+                    ultimo_id = int(datos[0])
+    except FileNotFoundError:
+        pass
+    return ultimo_id
+
+def usuarioExiste(usuario):
+    usuarioLimpio = usuario.strip().lower().replace(" ", "")
+    for user in obtener_usuarios():
+        if user[1].strip().lower().replace(" ", "") == usuarioLimpio:
+            return True
+    return False
 
 def login():
     usuarioInput = input("Ingrese el usuario: ").strip().lower()
     for user in obtener_usuarios():
         if user[1].lower() == usuarioInput:
-            if user[5] == "True":
+            if user[5] == "False":
+                print("Usuario dado de baja. Contacte al administrador.")
+                return
+            if user[6] == "True":
                 adminMenu()
             else:
                 clienteMenu(user[0])
@@ -14,20 +56,25 @@ def login():
 def mostrarClientes():
     print("\nListado de clientes:")
     for user in obtener_usuarios():
-        estado = "Activo" if user[4] == "True" else "Inactivo"
-        print(f"ID: {user[0]}, Nombre: {user[1]}, Email: {user[2]}, Teléfono: {user[3]}, Estado: {estado}")
+        estado = "Activo" if user[5] == "True" else "Inactivo"
+        print(f"ID: {user[0]}, Usuario: {user[1]}, Nombre: {user[2]}, Email: {user[3]}, Teléfono: {user[4]}, Estado: {estado}")
 
 def mostrarListaCliente():
-    print(f"{'ID':<5} {'Nombre':<20} {'Email':<25} {'Telefono':<15} {'Activo':<8}")
-    print("-" * 80)
+    print(f"{'ID':<5} {'Usuario':<15} {'Nombre':<20} {'Email':<30} {'Telefono':<15} {'Activo':<8}")
+    print("-" * 95)
     for user in obtener_usuarios():
-        estado = verificar_Activo(user[4])
-        print(f"{user[0]:<5}{user[1]:<20}{user[2]:<28}{user[3]:<15}{estado:<20}")
+        print(f"{user[0]:<5}{user[1]:<15}{user[2]:<20}{user[3]:<30}{user[4]:<15}{user[5]:<8}")
 
 def altaCliente():
     """Dar de alta un nuevo cliente"""
     print("\n--- Registrarse ---")
-    clienteNombre = input("Ingrese su nombre: ")
+
+    clienteUsuario = input("Ingrese su nombre de usuario: ").strip()
+    if usuarioExiste(clienteUsuario):
+        print(f"Ya existe un usuario con el nombre '{clienteUsuario}'.")
+        return
+
+    clienteNombre = input("Ingrese su nombre completo: ")
 
     clienteEmail = input("Ingrese su Email: ")
     while "@" not in clienteEmail or "." not in clienteEmail:
@@ -42,7 +89,7 @@ def altaCliente():
     try:
         nuevoId = obtener_ultimo_id('Archivos/archivoUsuario.txt') + 1
         with open('Archivos/archivoUsuario.txt', "a", encoding="utf-8") as arch:
-            arch.write(f"{nuevoId};{clienteNombre};{clienteEmail};{clienteTelefono};True;False\n")
+            arch.write(f"{nuevoId};{clienteUsuario};{clienteNombre};{clienteEmail};{clienteTelefono};True;False\n")
         print(f"Cliente '{clienteNombre}' (ID: {nuevoId}) dado de alta exitosamente.")
     except OSError as error:
         print("No se puede grabar el archivo:", error)
@@ -62,17 +109,17 @@ def bajaCliente():
     for user in usuarios:
         if user[0] == idCliente:
             encontrado = True
-            if user[4] == "True":
-                user[4] = "False"
+            if user[5] == "True":
+                user[5] = "False"
                 guardar_usuarios(usuarios)
-                print(f"Cliente '{user[1]}' (ID: {idCliente}) dado de baja exitosamente.")
+                print(f"Cliente '{user[2]}' (ID: {idCliente}) dado de baja exitosamente.")
             else:
-                print(f"Cliente '{user[1]}' (ID: {idCliente}) ya estaba dado de baja.")
+                print(f"Cliente '{user[2]}' (ID: {idCliente}) ya estaba dado de baja.")
                 condicion = input("¿Querés darlo de alta ahora? (si/no): ").strip().lower()
                 if condicion == "si":
-                    user[4] = "True"
+                    user[5] = "True"
                     guardar_usuarios(usuarios)
-                    print(f"Cliente '{user[1]}' dado de alta exitosamente.")
+                    print(f"Cliente '{user[2]}' dado de alta exitosamente.")
             return
 
     if not encontrado:
@@ -89,20 +136,27 @@ def modificacionCliente():
 
     for user in usuarios:
         if user[0] == idCliente:
-            dato = input("Ingrese un nombre (deje vacío para no modificar): ")
-            if dato.strip():
+            dato = input("Ingrese un usuario (deje vacío para no modificar): ").strip()
+            if dato:
+                if usuarioExiste(dato) and dato.lower() != user[1].lower():
+                    print("Ese nombre de usuario ya existe.")
+                    return
                 user[1] = dato
 
-            dato = input("Ingrese un email (deje vacío para no modificar): ")
-            if dato.strip():
+            dato = input("Ingrese un nombre completo (deje vacío para no modificar): ").strip()
+            if dato:
                 user[2] = dato
 
-            dato = input("Ingrese un teléfono (deje vacío para no modificar): ")
-            if dato.strip():
+            dato = input("Ingrese un email (deje vacío para no modificar): ").strip()
+            if dato:
                 user[3] = dato
 
+            dato = input("Ingrese un teléfono (deje vacío para no modificar): ").strip()
+            if dato:
+                user[4] = dato
+
             guardar_usuarios(usuarios)
-            print(f"Cliente '{user[1]}' (ID: {idCliente}) modificado correctamente.")
+            print(f"Cliente '{user[2]}' (ID: {idCliente}) modificado correctamente.")
             return
 
     print("No se encontró el ID ingresado.")
@@ -114,20 +168,20 @@ def cambiarEstadoCliente():
 
     for user in usuarios:
         if user[0] == idCliente:
-            if user[4] == "True":
-                confirmar = input(f"El cliente {user[1]} está activo. ¿Dar de baja? (si/no): ").strip().lower()
+            if user[5] == "True":
+                confirmar = input(f"El cliente {user[2]} está activo. ¿Dar de baja? (si/no): ").strip().lower()
                 if confirmar == "si":
-                    user[4] = "False"
+                    user[5] = "False"
                     guardar_usuarios(usuarios)
-                    print(f"Cliente {user[1]} dado de baja.")
+                    print(f"Cliente {user[2]} dado de baja.")
                 else:
                     print("No se realizaron cambios.")
             else:
-                confirmar = input(f"El cliente {user[1]} está inactivo. ¿Dar de alta? (si/no): ").strip().lower()
+                confirmar = input(f"El cliente {user[2]} está inactivo. ¿Dar de alta? (si/no): ").strip().lower()
                 if confirmar == "si":
-                    user[4] = "True"
+                    user[5] = "True"
                     guardar_usuarios(usuarios)
-                    print(f"Cliente {user[1]} dado de alta.")
+                    print(f"Cliente {user[2]} dado de alta.")
                 else:
                     print("No se realizaron cambios.")
             return
@@ -166,7 +220,7 @@ def buscarVentasCliente():
                     producto = Producto.obtenerProducto(idProducto)
                     print(f"{producto[1]:<43} {cantidad:<15} {subtotal:<10}")
                 print("-"*65)
-                print(f'Cliente: {user[0]} - {user[1]} {"Total:":>18} {venta["monto_total"]} - {venta["metodo_pago"]}')
+                print(f'Cliente: {user[0]} - {user[2]} {"Total:":>18} {venta["monto_total"]} - {venta["metodo_pago"]}')
                 print("-"*65)
 
     if not encontrado:
@@ -191,7 +245,7 @@ def agregarAlCarrito():
                 break
 
         if not encontrado:
-            print(f"No se encontró ningún producto con ese ID.")
+            print("No se encontró ningún producto con ese ID.")
 
         seleccion = input("¿Desea seguir agregando? (si/no): ").strip().upper()
         while seleccion not in ["SI", "NO"]:
@@ -312,41 +366,3 @@ def clienteMenu(idCliente):
                 carrito.clear()
         elif opcion == 0:
             print("Volviendo al menú principal...")
-
-def obtener_usuarios():
-    usuarios = []
-    try:
-        with open('Archivos/archivoUsuario.txt', "rt", encoding="utf-8") as arch:
-            for linea in arch:
-                if linea.strip():
-                    datos = linea.strip().split(";")
-                    usuarios.append(datos)
-    except FileNotFoundError:
-        print("No se encontró el archivo de usuarios.")
-    return usuarios
-
-def guardar_usuarios(usuarios):
-    try:
-        with open('Archivos/archivoUsuario.txt', "wt", encoding="utf-8") as arch:
-            for user in usuarios:
-                arch.write(";".join(user) + "\n")
-    except OSError as error:
-        print("No se pudo guardar el archivo:", error)
-
-def obtener_ultimo_id(archivo):
-    ultimo_id = 0
-    try:
-        with open(archivo, "rt", encoding="utf-8") as arch:
-            for linea in arch:
-                datos = linea.strip().split(";")
-                if datos[0].isdigit():
-                    ultimo_id = int(datos[0])
-    except FileNotFoundError:
-        pass
-    return ultimo_id
-
-def verificar_Activo(activo):
-    if activo == "True":
-        return "SI"
-    else:
-        return "NO"
