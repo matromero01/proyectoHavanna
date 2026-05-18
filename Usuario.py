@@ -116,6 +116,7 @@ def adminMenu():
 
 def clienteMenu(idCliente):
     carrito = []
+    Producto.cargaProductos()
     opcion = 1
     while opcion != 0:
         print('''Menu Principal
