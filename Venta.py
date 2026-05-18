@@ -1,4 +1,4 @@
-import Usuario, Ticket, Producto, reporte, utilidades
+import Usuario, Ticket, Producto, utilidades
 
 listaVentas = [
     {"id_venta": 1, "id_ticket": 123, "id_cliente": 1, "monto_total": 744.0, "metodo_pago": "efectivo", "fecha": "2025-06-01", "estado": True},
@@ -12,6 +12,8 @@ listaVentas = [
 RESET = "\33[0m"
 VERDE = "\33[32;1m"
 ROJO = "\33[31;1m"
+
+MetodosPago = ("efectivo", "tarjeta", "transferencia")
 
 def menuVenta():
     opcion = 1
@@ -36,16 +38,26 @@ def menuVenta():
         
 
 def altaVenta(idCliente, carrito):
+    import reporte
     if carrito:
         Ticket.altaTicket(carrito)
         total = Ticket.imprimir_ticket(Usuario.obtenerCliente(idCliente), carrito)
-        
+
+        print("Seleccione metodo de pago:")
+        for i, metodo in enumerate(MetodosPago):
+            print(f"{i+1}. {metodo.capitalize()}")
+        opcionPago = utilidades.pedirEntero("Ingrese opcion: ")
+        while opcionPago not in [1, 2, 3]:
+            print("Opcion invalida")
+            opcionPago = utilidades.pedirEntero("Ingrese opcion: ")
+        metodoPago = MetodosPago[opcionPago - 1]
+
         nuevo_id = listaVentas[-1]["id_venta"] + 1 if listaVentas else 1
-        listaVentas.append({"id_venta": nuevo_id, "id_ticket": carrito[0][0], "id_cliente": idCliente, "monto_total": total, "metodo_pago": "pendiente", "fecha": "2025-06-04", "estado": True})
+        listaVentas.append({"id_venta": nuevo_id, "id_ticket": carrito[0][0], "id_cliente": idCliente, "monto_total": total, "metodo_pago": metodoPago, "fecha": "2025-06-04", "estado": True})
         print(f"{VERDE}Compra realizada correctamente.{RESET}")
-        
-        cliente = Usuario.obtenerCliente(idCliente)  # ← agregá esto
-        reporte.registrarCompra(cliente, carrito)     # ← y esto
+
+        cliente = Usuario.obtenerCliente(idCliente)
+        reporte.registrarCompra(cliente, carrito)
 
 def mostrarVentas():
     if not listaVentas:
@@ -102,22 +114,18 @@ def modificacionVenta():
 
             while opcion not in [1, 2, 3]:
                 print("\nSeleccione el nuevo metodo de pago:")
-                print("1. Efectivo")
-                print("2. Tarjeta")
-                print("3. Transferencia")
+                for i, metodo in enumerate(MetodosPago):
+                    print(f"{i+1}. {metodo.capitalize()}")
 
                 entrada = input("Seleccione nuevo metodo de pago (1-3): ")
                 if entrada.isdigit():
                     opcion = int(entrada)
-                    
                     if opcion not in [1, 2, 3]:
                         print("Error: El numero debe ser 1, 2, o 3")
                 else:
-
                     print("Error: Por favor ingrese solo numeros (1-3)")
             
-            metodos = {1: "efectivo", 2: "tarjeta", 3: "transferencia"}
-            venta['metodo_pago'] = metodos[opcion]
+            venta['metodo_pago'] = MetodosPago[opcion - 1]
             
             print(f"\nCambio de metodo de pago exitoso a: {venta['metodo_pago']}")
             break 

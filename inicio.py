@@ -6,6 +6,7 @@ import utilidades
 #print("Inicio de Havanna")
 
 def inicio():
+    Producto.cargarProductos()
     print("Bienvenido a Havanna")
     opcion = 1
     while opcion != 0:

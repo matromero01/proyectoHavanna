@@ -9,4 +9,3 @@
 9;"Cheesecake";250.0;4;True
 10;"Agua mineral";80.0;30;True
 11;"Prueba archivo";100.0;10;False
-    

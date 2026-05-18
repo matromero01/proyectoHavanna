@@ -1,57 +1,31 @@
+import json
 import utilidades
 import os
-
-directorio_actual = os.path.dirname(os.path.abspath(__file__))
-archivoProducto = os.path.join(directorio_actual, "Archivos", "archivoProducto.txt")
 
 encabezado = ["ID", "Nombre", "Precio", "Stock", "Activo"]
 matrizProductos = []
 
-# ID | Nombre | Precio | Stock | Estado
-#encabezado = ["ID", "Nombre", "Precio", "Stock", "Activo"]
-#matrizProductos = [
-#    [1,  "Cortado",           122.0, 5,  True],
-#    [2,  "Americano",         125.0, 10, True],
-#    [3,  "Café con leche",    150.0, 8,  True],
-#    [4,  "Capuccino",         170.0, 6,  True],
-#    [5,  "Té con limón",      130.0, 12, True],
-#    [6,  "Medialunas x3",     120.0, 20, True],
-#    [7,  "Tostado de jamón",  180.0, 7,  True],
-#    [8,  "Jugo de naranja",   110.0, 15, True],
-#    [9,  "Cheesecake",        250.0, 4,  True],
-#    [10, "Agua mineral",       80.0, 30, True],
-#]
-
-def cargaProductos():
-    if not os.path.exists(archivoProducto):
-        return
-
-    with open(archivoProducto, "r", encoding="utf-8") as p:
-        for linea in p:
-            linea = linea.strip()
-            if not linea:
-                continue
-
-            partes = linea.split(";")
-
-            if len(partes) >= 5:
-                id_prod = int(partes[0])
-                nombre = partes[1].strip('"')
-                precio = float(partes[2])
-                stock = int(partes[3])
-                activo = partes[4].strip() == "True"
-
-                matrizProductos.append([id_prod, nombre, precio, stock, activo])
-
+def cargarProductos():
+    try:
+        with open("Archivos/archivoProducto.json", "r", encoding="utf-8") as archivos:
+            datos=json.load(archivos)
+            for p in datos:
+                matrizProductos.append([p["id"], p["nombre"], p["precio"], p["stock"], p["activo"]])
+    except FileNotFoundError:
+        print("Error: No se encontró el archivo prodcutos.json.")
 
 def guardarProductos():
-    with open(archivoProducto, "w", encoding="utf-8") as archivo:
-        for producto in matrizProductos:
-            archivo.write(f'{producto[0]};"{producto[1]}";{producto[2]};{producto[3]};{producto[4]}\n')
+    datos = []
+    for p in matrizProductos:
+        datos.append({"id": p[0], "nombre": p[1], "precio": p[2], "stock": p[3], "activo": p[4]})
+    try:
+        with open("Archivos/archivoProducto.json", "w", encoding="utf-8") as archivos:
+            json.dump(datos, archivos, indent=4, ensure_ascii=False)
+    except Exception as e:
+        print(f"Error al guardar los productos: {e}")
+
 
 def productoMenu():
-    cargaProductos()
-
     opcion = 1
     while opcion != 0:
         print('''
@@ -95,6 +69,7 @@ def bajaProducto():
                 nombre = matrizProductos[i][1]
                 if matrizProductos[i][4] == True:
                     matrizProductos[i][4] = False
+                    guardarProductos()
                     print(f"Producto '{nombre}' (ID: {idProducto}) dado de baja exitosamente.")
                 else:
                     print(f"Producto {nombre} (ID: {idProducto}) ya estaba dado de baja.")
@@ -113,7 +88,8 @@ def altaProducto():
             nombre = matrizProductos[i][1]
             if matrizProductos[i][4] == False:
                 matrizProductos[i][4] = True
-                print (f"Producto '{nombre} (ID: {idProducto}) dado de alta exitosamente.'")
+                guardarProductos()
+                print (f"Producto '{nombre}' (ID: {idProducto}) dado de alta exitosamente.")
             else:
                 print(f"El producto '{nombre}' (ID: {idProducto}) ya está activo.")
         i += 1
@@ -126,6 +102,7 @@ def nuevoProducto():
     productoCantidad = int(input("Ingrese el stock del producto: "))
     nuevo_id = matrizProductos[-1][0] + 1
     matrizProductos.append ([nuevo_id, productoNombre, productoPrecio, productoCantidad, True])
+    guardarProductos()
     print(f"Producto '{productoNombre}' agregado con ID: {nuevo_id}")
 
 def modificacionProducto():
@@ -150,7 +127,7 @@ def modificacionProducto():
                 datoModificado = input("Ingrese un stock: (Deje vacio si no quiere modificarlo) ")
                 if datoModificado.strip() != "":
                     matrizProductos[i][3] = int(datoModificado)
-
+                    guardarProductos()
                 print(f"Producto '{nombre}' (ID: {idProducto}) fue modificado correctamente")
                 return
         print("Opción inválida: El ID ingresado no existe.")       
@@ -194,7 +171,7 @@ def mostrarProducto():
     if not matrizProductos:
         print("No se encuentra el producto en el sistema.")
     else: 
-        idProducto = int(input("Ingresa el ID del prodcuto para buscar: "))
+        idProducto = int(input("Ingresa el ID del producto para buscar: "))
         encontrado = False
 
         for i in range(len(matrizProductos)):

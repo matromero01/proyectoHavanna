@@ -1,0 +1,13 @@
+[
+    {"id": 1,  "nombre": "Cortado",         "precio": 122.0, "stock": 5,  "activo": true},
+    {"id": 2,  "nombre": "Americano",        "precio": 125.0, "stock": 10, "activo": true},
+    {"id": 3,  "nombre": "Café con leche",   "precio": 150.0, "stock": 8,  "activo": true},
+    {"id": 4,  "nombre": "Capuccino",        "precio": 170.0, "stock": 6,  "activo": true},
+    {"id": 5,  "nombre": "Té con limón",     "precio": 130.0, "stock": 12, "activo": true},
+    {"id": 6,  "nombre": "Medialunas x3",    "precio": 120.0, "stock": 20, "activo": true},
+    {"id": 7,  "nombre": "Tostado de jamón", "precio": 180.0, "stock": 7,  "activo": true},
+    {"id": 8,  "nombre": "Jugo de naranja",  "precio": 110.0, "stock": 15, "activo": true},
+    {"id": 9,  "nombre": "Cheesecake",       "precio": 250.0, "stock": 4,  "activo": true},
+    {"id": 10, "nombre": "Agua mineral",     "precio": 80.0,  "stock": 30, "activo": true},
+    {"id": 11, "nombre": "Prueba JSON",     "precio": 100.0,  "stock": 100, "activo": false}
+]
