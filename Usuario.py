@@ -1,4 +1,4 @@
-import Producto, Venta, Ticket, reporte, utilidades
+import Producto, Venta, Ticket, utilidades, re
 
 def login():
     usuarioInput = input("Ingrese el usuario: ").strip().lower()
