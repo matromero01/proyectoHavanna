@@ -1,12 +1,8 @@
 import Usuario, Ticket, Producto, utilidades
+import os
 
-listaVentas = [
-    {"id_venta": 1, "id_ticket": 123, "id_cliente": 1, "monto_total": 744.0, "metodo_pago": "efectivo", "fecha": "2025-06-01", "estado": True},
-    {"id_venta": 2, "id_ticket": 124, "id_cliente": 3, "monto_total": 370.0, "metodo_pago": "tarjeta",  "fecha": "2025-06-02", "estado": True},
-    {"id_venta": 3, "id_ticket": 125, "id_cliente": 2, "monto_total": 520.0, "metodo_pago": "efectivo", "fecha": "2025-06-02", "estado": True},
-    {"id_venta": 4, "id_ticket": 126, "id_cliente": 1, "monto_total": 290.0, "metodo_pago": "transferencia", "fecha": "2025-06-03", "estado": True},
-    {"id_venta": 5, "id_ticket": 127, "id_cliente": 4, "monto_total": 180.0, "metodo_pago": "tarjeta",  "fecha": "2025-06-03", "estado": True},
-]
+directorio_actual = os.path.dirname(os.path.abspath(__file__))
+archivoVenta = os.path.join(directorio_actual, "Archivos", "archivoVenta.txt")
 
 # CODIGO ANSI
 RESET = "\33[0m"
@@ -35,7 +31,34 @@ def menuVenta():
             leerVenta()
         elif opcion == 4:
             bajaVenta()
-        
+
+def cargaVentas():
+
+    if not os.path.exists(archivoVenta):
+        return
+    
+    with open(archivoVenta, "r", encoding="utf-8") as v:
+        for linea in v:
+
+            linea = linea.strip()
+
+            if not linea:
+                continue
+
+            partes = linea.split(";")
+
+            if len(partes) >= 7:
+                id_venta = int(partes[0])
+                id_ticket = int(partes[1])
+                id_cliente = int(partes[2])
+                monto_total = float(partes[3])
+                metodo_pago = partes[4].strip('"')
+                fecha = partes[5].strip('"')
+
+                estado = partes[6].strip == "True"
+
+                matrizVentas.append([id_venta, id_ticket, id_cliente, monto_total, metodo_pago, fecha, estado])
+
 
 def altaVenta(idCliente, carrito):
     import reporte
