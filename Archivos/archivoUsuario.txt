@@ -1,5 +1,5 @@
 1;admin;Admin;admin@gmail.com;12345678;True;True
-2;facuMello;Facundo Mello;facundomello34@gmail.com;1124084431;False;False
+2;facuMello;Facundo Mello;facundomello34@gmail.com;1124084431;True;False
 3;lioMessi;Lionel Messi;messi@gmail.com;1122334455;False;False
 4;JuanPe;Juan Perez;juanperez@gmail.com;1156781234;True;False
 5;MarLopez;Maria Lopez;marialopez@hotmail.com;1167894321;True;False
