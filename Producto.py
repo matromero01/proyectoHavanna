@@ -12,7 +12,7 @@ def cargarProductos():
             for p in datos:
                 matrizProductos.append([p["id"], p["nombre"], p["precio"], p["stock"], p["activo"]])
     except FileNotFoundError:
-        print("Error: No se encontró el archivo prodcutos.json.")
+        print("Error: No se encontró el archivo producto.json.")
 
 def guardarProductos():
     datos = []
