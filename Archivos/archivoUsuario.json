@@ -1,0 +1,119 @@
+[
+    {
+        "id": 1,
+        "usuario": "admin",
+        "nombre": "Admin",
+        "email": "admin@gmail.com",
+        "telefono": "12345678",
+        "activo": true,
+        "esAdmin": true
+    },
+    {
+        "id": 2,
+        "usuario": "facuMello",
+        "nombre": "Facundo Mello",
+        "email": "facundomello34@gmail.com",
+        "telefono": "1124084431",
+        "activo": true,
+        "esAdmin": false
+    },
+    {
+        "id": 3,
+        "usuario": "lioMessi",
+        "nombre": "Lionel Messi",
+        "email": "messi@gmail.com",
+        "telefono": "1122334455",
+        "activo": false,
+        "esAdmin": false
+    },
+    {
+        "id": 4,
+        "usuario": "JuanPe",
+        "nombre": "Juan Perez",
+        "email": "juanperez@gmail.com",
+        "telefono": "1156781234",
+        "activo": true,
+        "esAdmin": false
+    },
+    {
+        "id": 5,
+        "usuario": "MarLopez",
+        "nombre": "Maria Lopez",
+        "email": "marialopez@hotmail.com",
+        "telefono": "1167894321",
+        "activo": true,
+        "esAdmin": false
+    },
+    {
+        "id": 6,
+        "usuario": "CarlGom",
+        "nombre": "Carlos Gomez",
+        "email": "carlosgomez@yahoo.com",
+        "telefono": "1178905678",
+        "activo": false,
+        "esAdmin": false
+    },
+    {
+        "id": 7,
+        "usuario": "LauFer",
+        "nombre": "Laura Fernandez",
+        "email": "lauraf@gmail.com",
+        "telefono": "1189016789",
+        "activo": true,
+        "esAdmin": false
+    },
+    {
+        "id": 8,
+        "usuario": "DieMar",
+        "nombre": "Diego Martinez",
+        "email": "diegom@outlook.com",
+        "telefono": "1190127890",
+        "activo": true,
+        "esAdmin": false
+    },
+    {
+        "id": 9,
+        "usuario": "AnaRod",
+        "nombre": "Ana Rodriguez",
+        "email": "anaRodri@gmail.com",
+        "telefono": "1101238901",
+        "activo": true,
+        "esAdmin": false
+    },
+    {
+        "id": 10,
+        "usuario": "IntCab",
+        "nombre": "Inti Cabrera",
+        "email": "intiRC@gmail.com",
+        "telefono": "4455112233",
+        "activo": false,
+        "esAdmin": false
+    },
+    {
+        "id": 11,
+        "usuario": "matiRom",
+        "nombre": "Matias Romero",
+        "email": "matiasR@gmail.com",
+        "telefono": "1125457855",
+        "activo": true,
+        "esAdmin": false
+    },
+    {
+        "id": 12,
+        "usuario": "facuNoMello",
+        "nombre": "Facundo NoMello",
+        "email": "facundoNoMello@gmail.com",
+        "telefono": "123123123",
+        "activo": true,
+        "esAdmin": false
+    },
+    {
+        "id": 13,
+        "usuario": "facMello",
+        "nombre": "facundito mello",
+        "email": "facunditomello@gmail.com",
+        "telefono": "456333322",
+        "activo": true,
+        "esAdmin": false
+    }
+]

@@ -1,30 +1,66 @@
 import Producto, Venta, Ticket, reporte, utilidades
+import json
+import os
+
+ARCHIVO_USUARIOS = 'Archivos/archivoUsuario.json'
+
+def obtener_usuarios():
+    try:
+        with open(ARCHIVO_USUARIOS, "rt", encoding="utf-8") as arch:
+            return json.load(arch)
+    except FileNotFoundError:
+        print("No se encontró el archivo de usuarios.")
+        return []
+    except json.JSONDecodeError:
+        print("Error al leer el archivo de usuarios.")
+        return []
+
+def guardar_usuarios(usuarios):
+    try:
+        with open(ARCHIVO_USUARIOS, "wt", encoding="utf-8") as arch:
+            json.dump(usuarios, arch, ensure_ascii=False, indent=4)
+    except OSError as error:
+        print("No se pudo guardar el archivo:", error)
+
+def obtener_ultimo_id():
+    usuarios = obtener_usuarios()
+    if not usuarios:
+        return 0
+    return max(user["id"] for user in usuarios)
+
+def usuarioExiste(usuario):
+    usuarioLimpio = usuario.strip().lower().replace(" ", "")
+    for user in obtener_usuarios():
+        if user["usuario"].strip().lower().replace(" ", "") == usuarioLimpio:
+            return True
+    return False
 
 def login():
     usuarioInput = input("Ingrese el usuario: ").strip().lower()
     for user in obtener_usuarios():
-        if user[1].lower() == usuarioInput:
-            if user[5] == "False":
+        if user["usuario"].lower() == usuarioInput:
+            if not user["activo"]:
                 print("Usuario dado de baja. Contacte al administrador.")
                 return
-            if user[6] == "True":
+            if user["esAdmin"]:
                 adminMenu()
             else:
-                clienteMenu(user[0])
+                clienteMenu(user["id"])
             return
     print("Usuario no encontrado.")
 
 def mostrarClientes():
     print("\nListado de clientes:")
     for user in obtener_usuarios():
-        estado = "Activo" if user[5] == "True" else "Inactivo"
-        print(f"ID: {user[0]}, Usuario: {user[1]}, Nombre: {user[2]}, Email: {user[3]}, Teléfono: {user[4]}, Estado: {estado}")
+        estado = "Activo" if user["activo"] else "Inactivo"
+        print(f"ID: {user['id']}, Usuario: {user['usuario']}, Nombre: {user['nombre']}, Email: {user['email']}, Teléfono: {user['telefono']}, Estado: {estado}")
 
 def mostrarListaCliente():
     print(f"{'ID':<5} {'Usuario':<15} {'Nombre':<20} {'Email':<27} {'Telefono':<12} {'Activo':<8}")
     print("-" * 95)
     for user in obtener_usuarios():
-        print(f"{user[0]:<5}{user[1]:<15}{user[2]:<20}{user[3]:<30}{user[4]:<15}{user[5]:<8}")
+        estado = "True" if user["activo"] else "False"
+        print(f"{user['id']:<5}{user['usuario']:<15}{user['nombre']:<20}{user['email']:<30}{user['telefono']:<15}{estado:<8}")
 
 def altaCliente():
     """Dar de alta un nuevo cliente"""
@@ -35,13 +71,13 @@ def altaCliente():
     if usuarioExiste(clienteUsuario):
         usuarios = obtener_usuarios()
         for user in usuarios:
-            if user[1].strip().lower().replace(" ", "") == clienteUsuario.strip().lower().replace(" ", ""):
-                if user[5] == "False":
-                    confirmar = input(f"El usuario '{user[1]}' está dado de baja. ¿Querés reactivarlo? (si/no): ").strip().lower()
+            if user["usuario"].strip().lower().replace(" ", "") == clienteUsuario.strip().lower().replace(" ", ""):
+                if not user["activo"]:
+                    confirmar = input(f"El usuario '{user['usuario']}' está dado de baja. ¿Querés reactivarlo? (si/no): ").strip().lower()
                     if confirmar == "si":
-                        user[5] = "True"
+                        user["activo"] = True
                         guardar_usuarios(usuarios)
-                        print(f"Usuario '{user[1]}' reactivado exitosamente.")
+                        print(f"Usuario '{user['usuario']}' reactivado exitosamente.")
                     else:
                         print("No se realizaron cambios.")
                 else:
@@ -60,14 +96,21 @@ def altaCliente():
         print("Número de teléfono inválido.")
         clienteTelefono = input("Ingrese su número de contacto: ")
 
-    try:
-        nuevoId = obtener_ultimo_id('Archivos/archivoUsuario.txt') + 1
-        with open('Archivos/archivoUsuario.txt', "a", encoding="utf-8") as arch:
-            arch.write(f"{nuevoId};{clienteUsuario};{clienteNombre};{clienteEmail};{clienteTelefono};True;False\n")
-        print(f"Cliente '{clienteNombre}' (ID: {nuevoId}) dado de alta exitosamente.")
-    except OSError as error:
-        print("No se puede grabar el archivo:", error)
-        
+    nuevoUsuario = {
+        "id": obtener_ultimo_id() + 1,
+        "usuario": clienteUsuario,
+        "nombre": clienteNombre,
+        "email": clienteEmail,
+        "telefono": clienteTelefono,
+        "activo": True,
+        "esAdmin": False
+    }
+
+    usuarios = obtener_usuarios()
+    usuarios.append(nuevoUsuario)
+    guardar_usuarios(usuarios)
+    print(f"Cliente '{clienteNombre}' (ID: {nuevoUsuario['id']}) dado de alta exitosamente.")
+
 def bajaCliente():
     """Dar de baja un cliente existente"""
     print("\n--- Baja de cliente ---")
@@ -77,23 +120,23 @@ def bajaCliente():
         return
 
     mostrarListaCliente()
-    idCliente = input("Ingrese el ID del cliente a dar de baja: ").strip()
+    idCliente = utilidades.pedirEntero("Ingrese el ID del cliente a dar de baja: ")
     encontrado = False
 
     for user in usuarios:
-        if user[0] == idCliente:
+        if user["id"] == idCliente:
             encontrado = True
-            if user[5] == "True":
-                user[5] = "False"
+            if user["activo"]:
+                user["activo"] = False
                 guardar_usuarios(usuarios)
-                print(f"Cliente '{user[2]}' (ID: {idCliente}) dado de baja exitosamente.")
+                print(f"Cliente '{user['nombre']}' (ID: {idCliente}) dado de baja exitosamente.")
             else:
-                print(f"Cliente '{user[2]}' (ID: {idCliente}) ya estaba dado de baja.")
+                print(f"Cliente '{user['nombre']}' (ID: {idCliente}) ya estaba dado de baja.")
                 condicion = input("¿Querés darlo de alta ahora? (si/no): ").strip().lower()
                 if condicion == "si":
-                    user[5] = "True"
+                    user["activo"] = True
                     guardar_usuarios(usuarios)
-                    print(f"Cliente '{user[2]}' dado de alta exitosamente.")
+                    print(f"Cliente '{user['nombre']}' dado de alta exitosamente.")
             return
 
     if not encontrado:
@@ -106,57 +149,56 @@ def modificacionCliente():
         return
 
     mostrarListaCliente()
-    idCliente = input("Ingrese el ID del cliente a modificar: ").strip()
+    idCliente = utilidades.pedirEntero("Ingrese el ID del cliente a modificar: ")
 
     for user in usuarios:
-        if user[0] == idCliente:
+        if user["id"] == idCliente:
             dato = input("Ingrese un usuario (deje vacío para no modificar): ").strip()
             if dato:
-                if usuarioExiste(dato) and dato.lower() != user[1].lower():
+                if usuarioExiste(dato) and dato.lower() != user["usuario"].lower():
                     print("Ese nombre de usuario ya existe.")
                     return
-                user[1] = dato
+                user["usuario"] = dato
 
             dato = input("Ingrese un nombre completo (deje vacío para no modificar): ").strip()
             if dato:
-                user[2] = dato
+                user["nombre"] = dato
 
             dato = input("Ingrese un email (deje vacío para no modificar): ").strip()
             if dato:
-                user[3] = dato
+                user["email"] = dato
 
             dato = input("Ingrese un teléfono (deje vacío para no modificar): ").strip()
             if dato:
-                user[4] = dato
+                user["telefono"] = dato
 
             guardar_usuarios(usuarios)
-            print(f"Cliente '{user[2]}' (ID: {idCliente}) modificado correctamente.")
+            print(f"Cliente '{user['nombre']}' (ID: {idCliente}) modificado correctamente.")
             return
 
     print("No se encontró el ID ingresado.")
 
-#Lo dejo hasta que definamos
 def cambiarEstadoCliente():
     usuarios = obtener_usuarios()
     mostrarListaCliente()
-    idCliente = input("\nIngrese el ID del cliente a modificar: ").strip()
+    idCliente = utilidades.pedirEntero("\nIngrese el ID del cliente a modificar: ")
 
     for user in usuarios:
-        if user[0] == idCliente:
-            if user[5] == "True":
-                confirmar = input(f"El cliente {user[2]} está activo. ¿Dar de baja? (si/no): ").strip().lower()
+        if user["id"] == idCliente:
+            if user["activo"]:
+                confirmar = input(f"El cliente {user['nombre']} está activo. ¿Dar de baja? (si/no): ").strip().lower()
                 if confirmar == "si":
-                    user[5] = "False"
+                    user["activo"] = False
                     guardar_usuarios(usuarios)
-                    print(f"Cliente {user[2]} dado de baja.")
+                    print(f"Cliente {user['nombre']} dado de baja.")
                 else:
                     print("No se realizaron cambios.")
             else:
-                confirmar = input(f"El cliente {user[2]} está inactivo. ¿Dar de alta? (si/no): ").strip().lower()
+                confirmar = input(f"El cliente {user['nombre']} está inactivo. ¿Dar de alta? (si/no): ").strip().lower()
                 if confirmar == "si":
-                    user[5] = "True"
+                    user["activo"] = True
                     guardar_usuarios(usuarios)
-                    print(f"Cliente {user[2]} dado de alta.")
+                    print(f"Cliente {user['nombre']} dado de alta.")
                 else:
                     print("No se realizaron cambios.")
             return
@@ -165,25 +207,25 @@ def cambiarEstadoCliente():
 
 def existeCliente(idCliente):
     for user in obtener_usuarios():
-        if user[0] == str(idCliente):
+        if user["id"] == idCliente:
             return True
     print("El cliente no existe.")
     return False
 
 def obtenerCliente(idCliente):
     for user in obtener_usuarios():
-        if user[0] == str(idCliente):
+        if user["id"] == idCliente:
             return user
     return None
 
 def buscarVentasCliente():
-    idCliente = input("Ingrese el ID del cliente: ").strip()
+    idCliente = utilidades.pedirEntero("Ingrese el ID del cliente: ")
     encontrado = False
 
     for user in obtener_usuarios():
-        if user[0] == idCliente:
+        if user["id"] == idCliente:
             encontrado = True
-            ventas = Venta.obtenerVentasPorCliente(int(idCliente))
+            ventas = Venta.obtenerVentasPorCliente(idCliente)
             for venta in ventas:
                 tickets = Ticket.obtenerTickets(venta['id_ticket'])
                 print("-"*65)
@@ -195,7 +237,7 @@ def buscarVentasCliente():
                     producto = Producto.obtenerProducto(idProducto)
                     print(f"{producto[1]:<43} {cantidad:<15} {subtotal:<10}")
                 print("-"*65)
-                print(f'Cliente: {user[0]} - {user[2]} {"Total:":>18} {venta["monto_total"]} - {venta["metodo_pago"]}')
+                print(f'Cliente: {user["id"]} - {user["nombre"]} {"Total:":>18} {venta["monto_total"]} - {venta["metodo_pago"]}')
                 print("-"*65)
 
     if not encontrado:
@@ -293,7 +335,7 @@ def adminMenu():
         3 - Gestionar Ventas
         4 - Gestionar Ticket
         5 - Reportes
-        0 - Salir del sistema''')
+        0 - Cerrar sesion''')
         opcion = utilidades.pedirEntero("Seleccione una opción: ")
         if opcion == 1:
             Producto.productoMenu()
@@ -312,7 +354,7 @@ def adminMenu():
 
 def clienteMenu(idCliente):
     carrito = []
-    opcion = 1
+    opcion = -1
     while opcion != 0:
         print('''\nMenu Principal
         1 - Ver Productos
@@ -320,7 +362,7 @@ def clienteMenu(idCliente):
         3 - Vaciar Carrito
         4 - Ver Carrito
         5 - Finalizar compra
-        0 - Salir del sistema''')
+        0 - Cerrar sesion''')
         opcion = utilidades.pedirEntero("Seleccione una opción: ")
         if opcion == 1:
             Producto.mostrarListaProducto(es_cliente="false")
@@ -338,42 +380,3 @@ def clienteMenu(idCliente):
                 carrito.clear()
         elif opcion == 0:
             print("Volviendo al menú principal...")
-
-def obtener_usuarios():
-    usuarios = []
-    try:
-        with open('Archivos/archivoUsuario.txt', "rt", encoding="utf-8") as arch:
-            for linea in arch:
-                if linea.strip():
-                    datos = linea.strip().split(";")
-                    usuarios.append(datos)
-    except FileNotFoundError:
-        print("No se encontró el archivo de usuarios.")
-    return usuarios
-
-def guardar_usuarios(usuarios):
-    try:
-        with open('Archivos/archivoUsuario.txt', "wt", encoding="utf-8") as arch:
-            for user in usuarios:
-                arch.write(";".join(user) + "\n")
-    except OSError as error:
-        print("No se pudo guardar el archivo:", error)
-
-def obtener_ultimo_id(archivo):
-    ultimo_id = 0
-    try:
-        with open(archivo, "rt", encoding="utf-8") as arch:
-            for linea in arch:
-                datos = linea.strip().split(";")
-                if datos[0].isdigit():
-                    ultimo_id = int(datos[0])
-    except FileNotFoundError:
-        pass
-    return ultimo_id
-
-def usuarioExiste(usuario):
-    usuarioLimpio = usuario.strip().lower().replace(" ", "")
-    for user in obtener_usuarios():
-        if user[1].strip().lower().replace(" ", "") == usuarioLimpio:
-            return True
-    return False

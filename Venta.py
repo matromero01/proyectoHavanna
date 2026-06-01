@@ -1,12 +1,6 @@
 import Usuario, Ticket, Producto, utilidades
 
-listaVentas = [
-    {"id_venta": 1, "id_ticket": 123, "id_cliente": 1, "monto_total": 744.0, "metodo_pago": "efectivo", "fecha": "2025-06-01", "estado": True},
-    {"id_venta": 2, "id_ticket": 124, "id_cliente": 3, "monto_total": 370.0, "metodo_pago": "tarjeta",  "fecha": "2025-06-02", "estado": True},
-    {"id_venta": 3, "id_ticket": 125, "id_cliente": 2, "monto_total": 520.0, "metodo_pago": "efectivo", "fecha": "2025-06-02", "estado": True},
-    {"id_venta": 4, "id_ticket": 126, "id_cliente": 1, "monto_total": 290.0, "metodo_pago": "transferencia", "fecha": "2025-06-03", "estado": True},
-    {"id_venta": 5, "id_ticket": 127, "id_cliente": 4, "monto_total": 180.0, "metodo_pago": "tarjeta",  "fecha": "2025-06-03", "estado": True},
-]
+ARCHIVO_VENTA = 'Archivos/archivoVenta.txt'
 
 # CODIGO ANSI
 RESET = "\33[0m"
@@ -15,16 +9,51 @@ ROJO = "\33[31;1m"
 
 MetodosPago = ("efectivo", "tarjeta", "transferencia")
 
+def obtener_ventas():
+    ventas = []
+    try:
+        with open(ARCHIVO_VENTA, "rt", encoding="utf-8") as arch:
+            for linea in arch:
+                if linea.strip():
+                    datos = linea.strip().split(";")
+                    venta = {
+                        "id_venta":   int(datos[0]),
+                        "id_ticket":  int(datos[1]),
+                        "id_cliente": int(datos[2]),
+                        "monto_total": float(datos[3]),
+                        "metodo_pago": datos[4],
+                        "fecha":       datos[5],
+                        "estado":      datos[6] == "True"
+                    }
+                    ventas.append(venta)
+    except FileNotFoundError:
+        pass
+    return ventas
+
+def guardar_ventas(ventas):
+    try:
+        with open(ARCHIVO_VENTA, "wt", encoding="utf-8") as arch:
+            for venta in ventas:
+                arch.write(f"{venta['id_venta']};{venta['id_ticket']};{venta['id_cliente']};{venta['monto_total']};{venta['metodo_pago']};{venta['fecha']};{venta['estado']}\n")
+    except OSError as error:
+        print("No se pudo guardar el archivo:", error)
+
+def obtener_ultimo_id():
+    ventas = obtener_ventas()
+    if not ventas:
+        return 0
+    return max(v["id_venta"] for v in ventas)
+
 def menuVenta():
-    opcion = 1
+    opcion = -1
     while opcion != 0:
         print('''
         --Menu Venta--
-        '1 - Modificacion Venta
-        '2 - Mostrar Venta
-        '3 - Leer venta
-        '4 - Baja Venta
-        '0 - Volver al menu principal''')
+        1 - Modificacion Venta
+        2 - Mostrar Venta
+        3 - Leer venta
+        4 - Baja Venta
+        0 - Volver al menu principal''')
 
         opcion = utilidades.pedirEntero("Ingresa un numero: ")
         if opcion == 1:
@@ -35,7 +64,6 @@ def menuVenta():
             leerVenta()
         elif opcion == 4:
             bajaVenta()
-        
 
 def altaVenta(idCliente, carrito):
     import reporte
@@ -52,71 +80,85 @@ def altaVenta(idCliente, carrito):
             opcionPago = utilidades.pedirEntero("Ingrese opcion: ")
         metodoPago = MetodosPago[opcionPago - 1]
 
-        nuevo_id = listaVentas[-1]["id_venta"] + 1 if listaVentas else 1
-        listaVentas.append({"id_venta": nuevo_id, "id_ticket": carrito[0][0], "id_cliente": idCliente, "monto_total": total, "metodo_pago": metodoPago, "fecha": "2025-06-04", "estado": True})
+        nuevo_id = obtener_ultimo_id() + 1
+        nueva_venta = {
+            "id_venta":    nuevo_id,
+            "id_ticket":   carrito[0][0],
+            "id_cliente":  idCliente,
+            "monto_total": total,
+            "metodo_pago": metodoPago,
+            "fecha":       "2026-04-06",
+            "estado":      True
+        }
+        ventas = obtener_ventas()
+        ventas.append(nueva_venta)
+        guardar_ventas(ventas)
         print(f"{VERDE}Compra realizada correctamente.{RESET}")
 
         cliente = Usuario.obtenerCliente(idCliente)
         reporte.registrarCompra(cliente, carrito)
 
 def mostrarVentas():
-    if not listaVentas:
+    ventas = obtener_ventas()
+    if not ventas:
         print("No hay ventas registradas.")
-    else:
-        print("-"*90)  
-        print(f'{"ID_Venta":<15}{"Ticket":<15}{"Cliente":<16}{"Metodo de Pago":<18}{"Total $":<10}')
-        print("-"*90)  
-        for venta in listaVentas:
-            if venta['estado']:
-                  
-                print(f"{venta['id_venta']:<15} {venta['id_ticket']:<15} {venta['id_cliente']:<13} {venta['metodo_pago']:<18} {venta['monto_total']:.2f}")
-
+        return
+    print("-"*90)
+    print(f'{"ID_Venta":<15}{"Ticket":<15}{"Cliente":<16}{"Metodo de Pago":<18}{"Total $":<10}')
+    print("-"*90)
+    for venta in ventas:
+        if venta['estado']:
+            print(f"{venta['id_venta']:<15} {venta['id_ticket']:<15} {venta['id_cliente']:<13} {venta['metodo_pago']:<18} {venta['monto_total']:.2f}")
 
 def bajaVenta():
     print("| Baja de la Venta |")
-    idVenta = int(input("Ingrese el ID de la venta: "))
-    for venta in listaVentas:
+    ventas = obtener_ventas()
+    idVenta = utilidades.pedirEntero("Ingrese el ID de la venta: ")
+
+    for venta in ventas:
         if venta['id_venta'] == idVenta:
             if venta['estado']:
                 while True:
-                    confirmacion = input(f"Desea confirmar la baja de la venta #{venta['id_venta']}? (si/no) ")
-
-                    if confirmacion.upper().strip() == 'SI':
+                    confirmacion = input(f"Desea confirmar la baja de la venta #{venta['id_venta']}? (si/no) ").upper().strip()
+                    if confirmacion == 'SI':
                         venta['estado'] = False
+                        guardar_ventas(ventas)
                         print(f"Confirmacion de la baja. Venta #{venta['id_venta']}!")
                         return
-                    elif confirmacion.upper().strip() == 'NO': 
+                    elif confirmacion == 'NO':
                         print("Saliendo de la baja de venta...")
                         return
                     else:
                         print("Error. Ingrese si o no.")
+            else:
+                print(f"La venta #{idVenta} ya estaba dada de baja.")
+                return
 
+    print("No se encontró la venta indicada.")
 
 def modificacionVenta():
     print("| Modificacion de la Venta |")
-    print("-"*90)  
+    ventas = obtener_ventas()
+    print("-"*90)
     print(f'{"ID_Venta":<15}{"Ticket":<15}{"Cliente":<16}{"Metodo de Pago":<18}{"Total $":<10}')
-    print("-"*90)  
-    for venta in listaVentas:
-        if venta['estado']:              
+    print("-"*90)
+    for venta in ventas:
+        if venta['estado']:
             print(f"{venta['id_venta']:<15} {venta['id_ticket']:<15} {venta['id_cliente']:<13} {venta['metodo_pago']:<18} {venta['monto_total']:.2f}")
 
-    
-    idVenta = int(input("Ingrese el ID de la venta: "))
+    idVenta = utilidades.pedirEntero("Ingrese el ID de la venta: ")
     encontrado = False
 
-    for venta in listaVentas:
+    for venta in ventas:
         if venta['id_venta'] == idVenta:
             encontrado = True
             print(f"Venta encontrada. Metodo de pago actual: {venta['metodo_pago']}")
-            
-            opcion = 0
 
+            opcion = 0
             while opcion not in [1, 2, 3]:
                 print("\nSeleccione el nuevo metodo de pago:")
                 for i, metodo in enumerate(MetodosPago):
                     print(f"{i+1}. {metodo.capitalize()}")
-
                 entrada = input("Seleccione nuevo metodo de pago (1-3): ")
                 if entrada.isdigit():
                     opcion = int(entrada)
@@ -124,35 +166,30 @@ def modificacionVenta():
                         print("Error: El numero debe ser 1, 2, o 3")
                 else:
                     print("Error: Por favor ingrese solo numeros (1-3)")
-            
+
             venta['metodo_pago'] = MetodosPago[opcion - 1]
-            
+            guardar_ventas(ventas)
             print(f"\nCambio de metodo de pago exitoso a: {venta['metodo_pago']}")
-            break 
-            
+            break
+
     if not encontrado:
         print("ID incorrecto (No se encontro la venta)")
 
-
 def leerVenta():
-    idVenta = int(input("Ingrese el ID de la venta: "))
+    ventas = obtener_ventas()
+    idVenta = utilidades.pedirEntero("Ingrese el ID de la venta: ")
 
-    encontrado = False
-    for venta in listaVentas:
-        if venta['id_venta'] == idVenta: 
-            encontrado = True
-
+    for venta in ventas:
+        if venta['id_venta'] == idVenta:
             cliente = Usuario.obtenerCliente(venta['id_cliente'])
             tickets = Ticket.obtenerTickets(venta['id_ticket'])
 
-            idCliente, nombreCliente, mail, numero, estadoCliente = cliente
+            nombreCliente = cliente[2] if isinstance(cliente, list) else cliente["nombre"]
+            idCliente = cliente[0] if isinstance(cliente, list) else cliente["id"]
 
-            print("-"*65)  
-            
-            print(f'{"ID_Venta:":<5} {venta["id_venta"]} {"ID_Ticket: ":>48} {venta["id_ticket"]}')
-            
             print("-"*65)
-
+            print(f'{"ID_Venta:":<5} {venta["id_venta"]} {"ID_Ticket:":>48} {venta["id_ticket"]}')
+            print("-"*65)
             print(f'{"Producto":<40}{"Cantidad":<15}{"Subtotal $":<10}')
 
             for prod in tickets:
@@ -160,24 +197,12 @@ def leerVenta():
                 producto = Producto.obtenerProducto(idProducto)
                 print(f"{producto[1]:<43} {cantidad:<15} {subtotal:<10}")
 
-            print("-"*65)  
-
-            print(f'{"Cliente: "} {idCliente} - {nombreCliente} {"Total: ":>18} {venta["monto_total"]} - {venta["metodo_pago"]}')
-
-            print("-"*65)  
+            print("-"*65)
+            print(f'{"Cliente:"} {idCliente} - {nombreCliente} {"Total:":>18} {venta["monto_total"]} - {venta["metodo_pago"]}')
+            print("-"*65)
             return
-    
-    if not encontrado:
-        print("No se encontro la venta indicada.")
 
+    print("No se encontro la venta indicada.")
 
 def obtenerVentasPorCliente(id_cliente):
-    ventasEncontradas = [venta for venta in listaVentas if venta['id_cliente'] == id_cliente]
-    return ventasEncontradas
-
-
-            
-
-
-            
-     
+    return [v for v in obtener_ventas() if v['id_cliente'] == id_cliente]
