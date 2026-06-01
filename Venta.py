@@ -1,4 +1,5 @@
 import Usuario, Ticket, Producto, utilidades
+import os
 
 ARCHIVO_VENTA = 'Archivos/archivoVenta.txt'
 
