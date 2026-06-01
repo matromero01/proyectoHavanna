@@ -100,7 +100,11 @@ def nuevoProducto():
     productoNombre = input("Ingrese el nombre del producto: ")
     productoPrecio = float(input("Ingrese el precio del producto: "))
     productoCantidad = int(input("Ingrese el stock del producto: "))
-    nuevo_id = matrizProductos[-1][0] + 1
+    
+    if len(matrizProductos) > 0:
+        nuevo_id = matrizProductos[-1][0] + 1
+    else:
+        nuevo_id = 1
     matrizProductos.append ([nuevo_id, productoNombre, productoPrecio, productoCantidad, True])
     guardarProductos()
     print(f"Producto '{productoNombre}' agregado con ID: {nuevo_id}")
