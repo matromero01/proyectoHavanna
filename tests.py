@@ -12,8 +12,8 @@ class TestProducto(unittest.TestCase):
         ])
     def test_obtener_producto_existente(self):
         """ Prueba 1: obtenerProducto debe devolver el producto correcto por ID. """
-        resultado= Producto.obtenerProducto(2)
-        self.assertEqual(resultado[3], "Cortado")
+        resultado= Producto.obtenerProducto(1)
+        self.assertEqual(resultado[1], "Cortado")
 
     def test_obtener_producto_inexistente(self):
         """ Prueba 2: obtenerProducto debe devolver None para un ID que no exista. """

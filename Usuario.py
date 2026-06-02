@@ -215,7 +215,7 @@ def existeCliente(idCliente):
 def obtenerCliente(idCliente):
     for user in obtener_usuarios():
         if user["id"] == idCliente:
-            return user
+            return [user["id"], user["usuario"], user["nombre"], user["email"], user["telefono"], user["activo"], user["esAdmin"]]
     return None
 
 def buscarVentasCliente():
@@ -254,7 +254,7 @@ def agregarAlCarrito():
                 encontrado = True
                 cantidad = utilidades.pedirEntero(f"¿Cuántos {producto[1]} desea agregar?: ")
                 if cantidad <= producto[3]:
-                    carrito.append([int(Ticket.matrizTicket[-1][0]) + 1, producto[0], cantidad, producto[2]*cantidad, True])
+                    carrito.append([Ticket.obtenerUltimoIdTicket() + 1, producto[0], cantidad, producto[2]*cantidad, True])
                     producto[3] -= cantidad
                     print(f"{cantidad} unidades de {producto[1]} agregadas al carrito.")
                 else:
@@ -270,7 +270,7 @@ def agregarAlCarrito():
             seleccion = input("¿Desea seguir agregando? (si/no): ").strip().upper()
         if seleccion == "NO":
             return carrito
-
+        
 def verCarrito(carrito):
     print("-"*55)
     print(f'{"Producto":<25}{"Cantidad":<14}{"Precio":<8}')
