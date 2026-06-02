@@ -17,7 +17,7 @@ def cargarProductos():
 def guardarProductos():
     datos = []
     for p in matrizProductos:
-        datos.append({"id": p[0], "nombre": p[1], "precio": p[2], "stock": p[3], "activo": p[4]})
+        8
     try:
         with open("Archivos/archivoProducto.json", "w", encoding="utf-8") as archivos:
             json.dump(datos, archivos, indent=4, ensure_ascii=False)
@@ -151,7 +151,6 @@ def mostrarListaProducto(es_cliente=False):
     for fila in matrizProductos:
         id_prod, nombre, precio, stock, activo = fila
         
-        # ACÁ ESTÁ LA MAGIA: Si es cliente y no está activo, saltamos a la siguiente fila
         if es_cliente and not activo:
             continue
         
