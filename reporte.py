@@ -19,28 +19,6 @@ es_venta_activa = lambda venta: venta["estado"] == True
    # [3, 2, "Lionel Messi",  [["Capuccino", 2, 340.0], ["Cheesecake", 1, 250.0]], 590.0],
 #]
 
-def registrarCompra(cliente, carrito):
-    ''' Guarda la compra finalizada en el historial de compras. '''
-    if not carrito:
-        print("El carrito está vacío. No se puede registrar la compra.")
-        return
-    idCompra = len(historialCompras) + 1
-    idCliente = cliente[0]
-    nombreCliente = cliente[1]
-    productosComprados= []
-    total = 0
-    for item in carrito:
-        if len(item) == 4:
-            idProducto, nombre, precio, cantidad = item
-            subtotal = precio * cantidad
-        else:
-            idProducto, nombre, precio, cantidad = item[0], item[1], item[2], item[3]
-            subtotal = precio * cantidad
-        productosComprados.append([nombre, cantidad, subtotal])
-        total += subtotal
-    historialCompras.append([idCompra, idCliente, nombreCliente, productosComprados, total])
-    print(f"Compra registrada exitosamente para el cliente {nombreCliente}. Total: ${total:.2f}")
-
 def estadisticasVentas():
     ventas_activas = list(filter(es_venta_activa, Venta.obtener_ventas))
 
@@ -103,6 +81,38 @@ def totalRecaudado():
     print(f"Total recaudado:  ${total:.2f}")
     print(f"Promedio por venta: ${promedio:.2f}")
 
+def clientesRecientes(n=5):
+    usuarios = Usuario.obtener_usuarios()
+    recientes = usuarios[-n:] 
+    print(f"\n--- Últimos {n} clientes registrados ---")
+    for user in recientes:
+        estado = "Activo" if user["activo"] else "Inactivo"
+        print(f"ID: {user['id']} | {user['nombre']:<20} | {estado}")
+
+def productosMasCaros(n=3):
+    activos = [p for p in Producto.matrizProductos if p[4]]
+    ordenados = sorted(activos, key=lambda p: p[2], reverse=True)
+    top = ordenados[:n] 
+
+    print(f"\n--- Top {n} productos más caros ---")
+    for i, p in enumerate(top, 1):
+        print(f"{i}. {p[1]:<25} ${p[2]:.2f}")
+
+def contarClientes(usuarios, indice=0, activos=0, inactivos=0):
+    if indice >= len(usuarios):
+        return activos, inactivos
+    if usuarios[indice]["activo"]:
+        return contarClientes(usuarios, indice + 1, activos + 1, inactivos)
+    return contarClientes(usuarios, indice + 1, activos, inactivos + 1)
+
+def reporteClientes():
+    usuarios = Usuario.obtener_usuarios()
+    activos, inactivos = contarClientes(usuarios)
+    print(f"\n--- Estado de clientes ---")
+    print(f"Activos:   {activos}")
+    print(f"Inactivos: {inactivos}")
+    print(f"Total:     {activos + inactivos}")
+
 def menuReportes():
     opcion = 1
     while opcion != 0:
@@ -112,6 +122,9 @@ def menuReportes():
         '2 - Producto mas vendido
         '3 - Total recaudado
         '4 - Estadisticas de Ventas
+        '5 - Productos mas caros 
+        '6 - Clientes recientes
+        '7 - Estadisticas de Clientes
         '0 - Volver al menu principal''')
 
         opcion = utilidades.pedirEntero("Ingresa un numero: ")
@@ -134,6 +147,12 @@ def menuReportes():
             totalRecaudado()
         elif opcion == 4:
             estadisticasVentas()
+        elif opcion == 5: 
+            productosMasCaros()
+        elif opcion == 6: 
+            clientesRecientes()
+        elif opcion == 7:
+            reporteClientes()
         elif opcion == 0:
             print("Volviendo al menú principal...")
         else:

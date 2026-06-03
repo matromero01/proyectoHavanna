@@ -97,7 +97,7 @@ def altaVenta(idCliente, carrito):
         print(f"{VERDE}Compra realizada correctamente.{RESET}")
 
         cliente = Usuario.obtenerCliente(idCliente)
-        reporte.registrarCompra(cliente, carrito)
+        #reporte.registrarCompra(cliente, carrito)
 
 def mostrarVentas():
     ventas = obtener_ventas()

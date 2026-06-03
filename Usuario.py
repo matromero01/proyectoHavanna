@@ -35,7 +35,11 @@ def usuarioExiste(usuario):
             return True
     return False
 
-def login():
+def login(intentos=3):
+    if intentos == 0:
+        print("Demasiados intentos fallidos. Acceso bloqueado.")
+        return
+    
     usuarioInput = input("Ingrese el usuario: ").strip().lower()
     for user in obtener_usuarios():
         if user["usuario"].lower() == usuarioInput:
@@ -47,7 +51,9 @@ def login():
             else:
                 clienteMenu(user["id"])
             return
-    print("Usuario no encontrado.")
+    
+    print(f"Usuario no encontrado. Intentos restantes: {intentos - 1}")
+    login(intentos - 1)
 
 def mostrarClientes():
     print("\nListado de clientes:")
@@ -216,7 +222,7 @@ def obtenerCliente(idCliente):
     for user in obtener_usuarios():
         if user["id"] == idCliente:
             return [user["id"], user["usuario"], user["nombre"], user["email"], user["telefono"], user["activo"], user["esAdmin"]]
-    return None
+    return None 
 
 def buscarVentasCliente():
     idCliente = utilidades.pedirEntero("Ingrese el ID del cliente: ")
@@ -254,7 +260,7 @@ def agregarAlCarrito():
                 encontrado = True
                 cantidad = utilidades.pedirEntero(f"¿Cuántos {producto[1]} desea agregar?: ")
                 if cantidad <= producto[3]:
-                    carrito.append([Ticket.obtenerUltimoIdTicket() + 1, producto[0], cantidad, producto[2]*cantidad, True])
+                    carrito.append([Ticket.obtenerUltimoIdTicket() + 1, producto[0], cantidad, (producto[2]*cantidad), True])
                     producto[3] -= cantidad
                     print(f"{cantidad} unidades de {producto[1]} agregadas al carrito.")
                 else:
