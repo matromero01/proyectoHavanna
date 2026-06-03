@@ -19,8 +19,37 @@ es_venta_activa = lambda venta: venta["estado"] == True
    # [3, 2, "Lionel Messi",  [["Capuccino", 2, 340.0], ["Cheesecake", 1, 250.0]], 590.0],
 #]
 
+def verHistorialCompras():
+    ventas_activas = list(filter(es_venta_activa, Venta.obtener_ventas()))
+
+    if not ventas_activas:
+        print("No hay compras registradas.")
+        return
+    
+    print("Ultimas 3 compras: ")
+    for venta in ventas_activas[-3:]:
+        idCompra = venta["id_venta"]
+        idCliente = venta["id_cliente"]
+        total = venta["monto_total"]
+
+        cliente = Usuario.obtenerCliente(idCliente)
+        nombreCliente = cliente[2] if cliente else "Cliente Desconocido"
+
+        print(f"Compra ID: {idCompra}, Cliente: {nombreCliente}(ID:{idCliente}), Total:${total:.2f}")
+        print("Productos Comprados:")
+
+        tickets = Ticket.obtenerTickets(venta["id_ticket"])
+        for prod in tickets:
+            idTicket, idProducto, cantidad, subtotal, estadoTicket = prod
+            producto = Producto.obtenerProducto(idProducto)
+            nombreProducto = producto[1] if producto else "Producto Eliminado"
+            
+            print(f" - {nombreProducto}: Cantidad: {cantidad}, Subtotal: {subtotal:.2f}")
+        print("-" * 40)
+
+
 def estadisticasVentas():
-    ventas_activas = list(filter(es_venta_activa, Venta.obtener_ventas))
+    ventas_activas = list(filter(es_venta_activa, Venta.obtener_ventas()))
 
     if not ventas_activas:
         print("No hay ventas registradas.")
@@ -53,14 +82,33 @@ def estadisticasVentas():
 def productoMasVendido():
 
     conteo = {}
+    tickets = Ticket.obtener_tickets()
+    if not tickets:
+        print("No hay ventas registradas para saber cual es el producto mas vendido")
+        return
     
-    for ticket in Ticket.matrizTicket:
+    for ticket in tickets:
         id_producto = ticket[1]
         cantidad = ticket[2]
-        if id_producto in conteo:
-            conteo[id_producto] += cantidad
-        else:
-            conteo[id_producto] = cantidad
+        estado_ticket = ticket[4]
+
+        if estado_ticket == True:
+            if id_producto in conteo:
+                conteo[id_producto] += cantidad
+            else:
+                conteo[id_producto] = cantidad
+    
+    if not conteo:
+        print("No hay ventas activas para calcular")
+        return
+    
+    id_mas_vendido = max(conteo, key=conteo.get)
+    producto = Producto.obtenerProducto(id_mas_vendido)
+
+    nombre_producto = producto[1] if producto else "Producto Desconocido"
+
+    print(f"Producto más vendido: {nombre_producto} con {conteo[id_mas_vendido]} unidades vendidas.")
+       
     
     id_mas_vendido = max(conteo, key=conteo.get)
     producto = Producto.obtenerProducto(id_mas_vendido)
@@ -68,7 +116,7 @@ def productoMasVendido():
     print(f"Producto más vendido: {producto[1]} con {conteo[id_mas_vendido]} unidades vendidas.")
 
 def totalRecaudado():
-    ventas_activas = list(filter(es_venta_activa, Venta.listaVentas))
+    ventas_activas = list(filter(es_venta_activa, Venta.obtener_ventas()))
     montos = list(map(lambda v: v["monto_total"], ventas_activas))
 
     if not montos:
@@ -129,18 +177,7 @@ def menuReportes():
 
         opcion = utilidades.pedirEntero("Ingresa un numero: ")
         if opcion == 1:
-            if not historialCompras:
-                print("No hay compras registradas.")
-            else:
-                print("Ultimas 3 compras: ")
-                for compra in historialCompras[-3:]:
-                    idCompra, idCliente, nombreCliente, productosComprados, total = compra
-                    print(f"Compra ID: {idCompra}, Cliente: {nombreCliente} (ID: {idCliente}), Total: ${total:.2f}")
-                    print("Productos Comprados:")
-                    for producto in productosComprados:
-                        nombre, cantidad, subtotal = producto
-                        print(f" - {nombre}: Cantidad: {cantidad}, Subtotal: ${subtotal:.2f}")
-                    print("-" * 40)
+            verHistorialCompras()
         elif opcion == 2:
             productoMasVendido()
         elif opcion == 3:

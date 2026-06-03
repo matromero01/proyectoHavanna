@@ -96,9 +96,6 @@ def altaVenta(idCliente, carrito):
         guardar_ventas(ventas)
         print(f"{VERDE}Compra realizada correctamente.{RESET}")
 
-        cliente = Usuario.obtenerCliente(idCliente)
-        #reporte.registrarCompra(cliente, carrito)
-
 def mostrarVentas():
     ventas = obtener_ventas()
     if not ventas:
