@@ -13,11 +13,11 @@ aplicar_descuento = lambda precio: precio * 0.9
 calcular_promedio = lambda total, cant: total / cant if cant > 0 else 0
 es_venta_activa = lambda venta: venta["estado"] == True
 
-historialCompras = [
-    [1, 1, "Facundo Mello", [["Cortado", 2, 244.0], ["Medialunas x3", 1, 120.0]], 364.0],
-    [2, 3, "Juan Perez",    [["Tostado de jamón", 1, 180.0]], 180.0],
-    [3, 2, "Lionel Messi",  [["Capuccino", 2, 340.0], ["Cheesecake", 1, 250.0]], 590.0],
-]
+#historialCompras = [
+ #   [1, 1, "Facundo Mello", [["Cortado", 2, 244.0], ["Medialunas x3", 1, 120.0]], 364.0],
+  #  [2, 3, "Juan Perez",    [["Tostado de jamón", 1, 180.0]], 180.0],
+   # [3, 2, "Lionel Messi",  [["Capuccino", 2, 340.0], ["Cheesecake", 1, 250.0]], 590.0],
+#]
 
 def registrarCompra(cliente, carrito):
     ''' Guarda la compra finalizada en el historial de compras. '''
@@ -42,7 +42,7 @@ def registrarCompra(cliente, carrito):
     print(f"Compra registrada exitosamente para el cliente {nombreCliente}. Total: ${total:.2f}")
 
 def estadisticasVentas():
-    ventas_activas = list(filter(es_venta_activa, Venta.listaVentas))
+    ventas_activas = list(filter(es_venta_activa, Venta.obtener_ventas))
 
     if not ventas_activas:
         print("No hay ventas registradas.")

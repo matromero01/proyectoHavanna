@@ -17,7 +17,7 @@ def cargarProductos():
 def guardarProductos():
     datos = []
     for p in matrizProductos:
-        8
+        datos.append({"id": p[0], "nombre": p[1], "precio": p[2], "stock": p[3], "activo": p[4]})
     try:
         with open("Archivos/archivoProducto.json", "w", encoding="utf-8") as archivos:
             json.dump(datos, archivos, indent=4, ensure_ascii=False)
