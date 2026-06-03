@@ -3,7 +3,7 @@
         "id": 1,
         "nombre": "Cortado",
         "precio": 122.0,
-        "stock": 5,
+        "stock": 15,
         "activo": true
     },
     {

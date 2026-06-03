@@ -36,6 +36,7 @@ def productoMenu():
         '4 - Mostrar Productos
         '5 - Leer Producto
         '6 - Nuevo Producto
+        '7 - Agregar stock
         '0 - Volver al menu principal''')
 
         opcion = utilidades.pedirEntero("Ingresa una opción: ")
@@ -51,6 +52,8 @@ def productoMenu():
             mostrarProducto()
         elif opcion == 6:
             nuevoProducto()
+        elif opcion == 7:
+            agregarStock()
         elif opcion == 0:
             print("Adios!") 
 
@@ -203,3 +206,27 @@ def obtenerProducto(idProducto):
         if int(matrizProductos[i][0]) == int(idProducto):
             return matrizProductos[i]
         i += 1
+
+def agregarStock():
+    if not matrizProductos:
+        print("No hay productos cargados.")
+        return
+
+    mostrarListaProducto()
+    idProducto = utilidades.pedirEntero("Ingrese el ID del producto al que desea agregar stock: ")
+
+    for producto in matrizProductos:
+        if producto[0] == idProducto:
+            print(f"Producto: {producto[1]} | Stock actual: {producto[3]}")
+
+            cantidad = utilidades.pedirEntero("Ingrese la cantidad a agregar: ")
+            while cantidad <= 0:
+                print("La cantidad debe ser mayor a 0.")
+                cantidad = utilidades.pedirEntero("Ingrese la cantidad a agregar: ")
+
+            producto[3] += cantidad
+            guardarProductos()
+            print(f"Stock actualizado. Nuevo stock de '{producto[1]}': {producto[3]}")
+            return
+
+    print(f"No se encontró ningún producto con ID: {idProducto}.")
