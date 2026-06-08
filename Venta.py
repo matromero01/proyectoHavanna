@@ -1,4 +1,4 @@
-import Usuario, Ticket, Producto, utilidades
+import Usuario, Ticket, Producto, utilidades, reporte
 import os
 
 ARCHIVO_VENTA = 'Archivos/archivoVenta.txt'
@@ -70,7 +70,7 @@ def altaVenta(idCliente, carrito):
     import reporte
     if carrito:
         Ticket.altaTicket(carrito)
-        total = Ticket.imprimir_ticket(Usuario.obtenerCliente(idCliente), carrito)
+        total = reporte.calcularTotalCarrito(carrito)
 
         print("Seleccione metodo de pago:")
         for i, metodo in enumerate(MetodosPago):

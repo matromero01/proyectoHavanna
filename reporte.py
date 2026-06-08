@@ -147,6 +147,11 @@ def contarClientes(usuarios, indice=0, activos=0, inactivos=0):
         return contarClientes(usuarios, indice + 1, activos + 1, inactivos)
     return contarClientes(usuarios, indice + 1, activos, inactivos + 1)
 
+def calcularTotalCarrito(carrito, indice = 0):
+    if indice >= len(carrito):
+        return 0 
+    return carrito[indice][3] + calcularTotalCarrito(carrito, indice + 1)
+
 def reporteClientes():
     usuarios = Usuario.obtener_usuarios()
     activos, inactivos = contarClientes(usuarios)
