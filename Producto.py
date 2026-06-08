@@ -134,7 +134,8 @@ def modificacionProducto():
                 datoModificado = input("Ingrese un stock: (Deje vacio si no quiere modificarlo) ")
                 if datoModificado.strip() != "":
                     matrizProductos[i][3] = int(datoModificado)
-                    guardarProductos()
+                
+                guardarProductos()
                 print(f"Producto '{nombre}' (ID: {idProducto}) fue modificado correctamente")
                 return
         print("Opción inválida: El ID ingresado no existe.")       

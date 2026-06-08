@@ -50,8 +50,8 @@
     },
     {
         "id": 8,
-        "nombre": "Jugo de naranja",
-        "precio": 110.0,
+        "nombre": "Jugo de Naranja",
+        "precio": 150.0,
         "stock": 15,
         "activo": true
     },
@@ -72,8 +72,8 @@
     {
         "id": 11,
         "nombre": "Prueba JSON",
-        "precio": 100.0,
-        "stock": 100,
+        "precio": 200.0,
+        "stock": 200,
         "activo": true
     },
     {
