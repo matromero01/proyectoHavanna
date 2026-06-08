@@ -109,12 +109,6 @@ def productoMasVendido():
 
     print(f"Producto más vendido: {nombre_producto} con {conteo[id_mas_vendido]} unidades vendidas.")
        
-    
-    id_mas_vendido = max(conteo, key=conteo.get)
-    producto = Producto.obtenerProducto(id_mas_vendido)
-    
-    print(f"Producto más vendido: {producto[1]} con {conteo[id_mas_vendido]} unidades vendidas.")
-
 def totalRecaudado():
     ventas_activas = list(filter(es_venta_activa, Venta.obtener_ventas()))
     montos = list(map(lambda v: v["monto_total"], ventas_activas))

@@ -371,7 +371,7 @@ def clienteMenu(idCliente):
         0 - Cerrar sesion''')
         opcion = utilidades.pedirEntero("Seleccione una opción: ")
         if opcion == 1:
-            Producto.mostrarListaProducto(es_cliente="false")
+            Producto.mostrarListaProducto(es_cliente = False)
         elif opcion == 2:
             carrito.extend(agregarAlCarrito())
         elif opcion == 3:
