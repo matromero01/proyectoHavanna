@@ -1,37 +1,37 @@
 [
     {
         "id": 1,
-        "nombre": "Cortado",
-        "precio": 122.0,
-        "stock": 15,
+        "nombre": "Macchiato",
+        "precio": 4600.0,
+        "stock": 250,
         "activo": true
     },
     {
         "id": 2,
         "nombre": "Americano",
-        "precio": 125.0,
-        "stock": 10,
+        "precio": 3200.0,
+        "stock": 250,
         "activo": true
     },
     {
         "id": 3,
-        "nombre": "Café con leche",
-        "precio": 150.0,
-        "stock": 8,
+        "nombre": "Flat White",
+        "precio": 5100.0,
+        "stock": 239,
         "activo": true
     },
     {
         "id": 4,
-        "nombre": "Capuccino",
-        "precio": 170.0,
-        "stock": 6,
+        "nombre": "Latte",
+        "precio": 4900.0,
+        "stock": 220,
         "activo": true
     },
     {
         "id": 5,
-        "nombre": "Té con limón",
-        "precio": 130.0,
-        "stock": 12,
+        "nombre": "Te(Variedad)",
+        "precio": 3500.0,
+        "stock": 100,
         "activo": true
     },
     {
@@ -59,8 +59,8 @@
         "id": 9,
         "nombre": "Cheescake de Frutilla",
         "precio": 250.0,
-        "stock": 4,
-        "activo": false
+        "stock": 19,
+        "activo": true
     },
     {
         "id": 10,
@@ -74,13 +74,34 @@
         "nombre": "Prueba JSON",
         "precio": 200.0,
         "stock": 200,
-        "activo": true
+        "activo": false
     },
     {
         "id": 12,
         "nombre": "Bagel Sandwich",
         "precio": 120.0,
         "stock": 12,
+        "activo": false
+    },
+    {
+        "id": 13,
+        "nombre": "Cookie Red Velvet",
+        "precio": 4800.0,
+        "stock": 25,
+        "activo": true
+    },
+    {
+        "id": 14,
+        "nombre": "Cookie Chocolate y Sal",
+        "precio": 4900.0,
+        "stock": 25,
+        "activo": true
+    },
+    {
+        "id": 15,
+        "nombre": "Cookie Pistacho",
+        "precio": 5000.0,
+        "stock": 25,
         "activo": true
     }
 ]

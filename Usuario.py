@@ -232,19 +232,24 @@ def buscarVentasCliente():
         if user["id"] == idCliente:
             encontrado = True
             ventas = Venta.obtenerVentasPorCliente(idCliente)
-            for venta in ventas:
-                tickets = Ticket.obtenerTickets(venta['id_ticket'])
-                print("-"*65)
-                print(f'{"ID_Venta:":<5} {venta["id_venta"]} {"ID_Ticket:":>48} {venta["id_ticket"]}')
-                print("-"*65)
-                print(f'{"Producto":<40}{"Cantidad":<15}{"Subtotal $":<10}')
-                for prod in tickets:
-                    idTicket, idProducto, cantidad, subtotal, estadoTicket = prod
-                    producto = Producto.obtenerProducto(idProducto)
-                    print(f"{producto[1]:<43} {cantidad:<15} {subtotal:<10}")
-                print("-"*65)
-                print(f'Cliente: {user["id"]} - {user["nombre"]} {"Total:":>18} {venta["monto_total"]} - {venta["metodo_pago"]}')
-                print("-"*65)
+            if not ventas:
+                print(f"\nEl cliente {user['nombre']} no tiene compras registradas en el sistema.")
+            else:
+                for venta in ventas:
+                    tickets = Ticket.obtenerTickets(venta['id_ticket'])
+                    print("-"*65)
+                    print(f'{"ID_Venta:":<5} {venta["id_venta"]} {"ID_Ticket:":>48} {venta["id_ticket"]}')
+                    print("-"*65)
+                    print(f'{"Producto":<40}{"Cantidad":<15}{"Subtotal $":<10}')
+                    for prod in tickets:
+                        idTicket, idProducto, cantidad, subtotal, estadoTicket = prod
+                        producto = Producto.obtenerProducto(idProducto)
+                        print(f"{producto[1]:<43} {cantidad:<15} {subtotal:<10}")
+                    print("-"*65)
+                    print(f'Cliente: {user["id"]} - {user["nombre"]} {"Total:":>18} {venta["monto_total"]} - {venta["metodo_pago"]}')
+                    print("-"*65)
+
+            break
 
     if not encontrado:
         print("No se encontró el cliente indicado.")

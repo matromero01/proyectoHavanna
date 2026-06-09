@@ -32,7 +32,7 @@
         "nombre": "Juan Perez",
         "email": "juanperez@gmail.com",
         "telefono": "1156781234",
-        "activo": true,
+        "activo": false,
         "esAdmin": false
     },
     {
@@ -41,7 +41,7 @@
         "nombre": "Maria Lopez",
         "email": "marialopez@hotmail.com",
         "telefono": "1167894321",
-        "activo": true,
+        "activo": false,
         "esAdmin": false
     },
     {
@@ -59,7 +59,7 @@
         "nombre": "Laura Fernandez",
         "email": "lauraf@gmail.com",
         "telefono": "1189016789",
-        "activo": true,
+        "activo": false,
         "esAdmin": false
     },
     {
@@ -114,6 +114,15 @@
         "email": "facunditomello@gmail.com",
         "telefono": "456333322",
         "activo": true,
+        "esAdmin": false
+    },
+    {
+        "id": 14,
+        "usuario": "matcrack",
+        "nombre": "matias",
+        "email": "mat@ads.com",
+        "telefono": "123123123",
+        "activo": false,
         "esAdmin": false
     }
 ]
