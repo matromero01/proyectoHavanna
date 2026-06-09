@@ -58,6 +58,7 @@ def estadisticasVentas():
         return
 
     montos = list(map(lambda v: v["monto_total"], ventas_activas))
+    montos.sort()
     total    = reduce(lambda x, y: x + y, montos)
     promedio = calcular_promedio(total, len(montos))   # lambda directa
     minimo   = min(montos)
@@ -73,6 +74,9 @@ def estadisticasVentas():
     # ── Porcentajes por método de pago ──────────────────
     print("\n  Ventas por método de pago:")
     metodos_usados = {v["metodo_pago"] for v in ventas_activas}
+    metodos_sin_usar = set(Venta.MetodosPago) - metodos_usados
+    if metodos_sin_usar:
+        print(f"\n  Metodos sin registrar: {metodos_sin_usar}")
     print(f"\n Metodos utilizado: {metodos_usados}")
     for metodo in metodos_usados:
         cantidad  = len([v for v in ventas_activas if v["metodo_pago"] == metodo])
@@ -133,7 +137,8 @@ def clientesRecientes(n=5):
     print(f"\n--- Últimos {n} clientes registrados ---")
     for user in recientes:
         estado = "Activo" if user["activo"] else "Inactivo"
-        print(f"ID: {user['id']} | {user['nombre']:<20} | {estado}")
+        nombre_corto = user['nombre'][:15]
+        print(f"ID: {user['id']} | {nombre_corto:<15} | {estado}")
 
 def productosMasCaros(n=3):
     """Top N productos mas caros"""
