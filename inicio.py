@@ -10,9 +10,13 @@ def inicio():
     print("Bienvenido a Havanna")
     opcion = 1
     while opcion != 0:
-        print('''\nMenu de Inicio
+        print('''
+    ----------------------------
+        MENU DE INICIO
         1 - Login
-        0 - Salir del sistema''')
+        0 - Salir del sistema
+    ----------------------------
+              ''')
 
         opcion = utilidades.pedirEntero("Ingresa una opción: ")
         if opcion == 1:

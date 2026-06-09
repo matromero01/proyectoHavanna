@@ -6,10 +6,12 @@ def ticketMenu():
     opcion = -1
     while opcion != 0:
         print('''
-        --Menu Ticket--
+    ----------------------------
+            MENU TICKET
         1 - Mostrar Ticket
         2 - Baja Ticket
-        0 - Volver al menu principal''')
+        0 - Volver al menu principal
+    ----------------------------''')
 
         opcion = utilidades.pedirEntero("Ingresa un numero: ")
         if opcion == 1:
