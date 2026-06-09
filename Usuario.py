@@ -1,8 +1,11 @@
+import re
 import Producto, Venta, Ticket, reporte, utilidades
 import json
 import os
 
 ARCHIVO_USUARIOS = 'Archivos/archivoUsuario.json'
+PATRON_MAIL = r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}"
+PATRON_TELEFONO = r"\d{7,12}"
 
 def obtener_usuarios():
     try:
@@ -93,12 +96,12 @@ def altaCliente():
     clienteNombre = input("Ingrese su nombre completo: ")
 
     clienteEmail = input("Ingrese su Email: ")
-    while "@" not in clienteEmail or "." not in clienteEmail:
+    while not re.fullmatch(PATRON_MAIL, clienteEmail):
         print("Correo electrónico no válido.")
         clienteEmail = input("Ingrese su Email: ")
 
     clienteTelefono = input("Ingrese su número de contacto: ")
-    while not clienteTelefono.isdigit() or len(clienteTelefono) < 7:
+    while not re.fullmatch(PATRON_TELEFONO, clienteTelefono):
         print("Número de teléfono inválido.")
         clienteTelefono = input("Ingrese su número de contacto: ")
 
