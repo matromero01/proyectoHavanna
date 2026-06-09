@@ -11,6 +11,7 @@ ROJO = "\33[31;1m"
 MetodosPago = ("efectivo", "tarjeta", "transferencia")
 
 def obtener_ventas():
+    """Carga y devuelve la lista de ventas del .txt"""
     ventas = []
     try:
         with open(ARCHIVO_VENTA, "rt", encoding="utf-8") as arch:
@@ -32,6 +33,7 @@ def obtener_ventas():
     return ventas
 
 def guardar_ventas(ventas):
+    """Guarda la lista de ventas en el .txt"""
     try:
         with open(ARCHIVO_VENTA, "wt", encoding="utf-8") as arch:
             for venta in ventas:
@@ -40,12 +42,14 @@ def guardar_ventas(ventas):
         print("No se pudo guardar el archivo:", error)
 
 def obtener_ultimo_id():
+    """Devuelve el ultimo ID de venta"""
     ventas = obtener_ventas()
     if not ventas:
         return 0
     return max(v["id_venta"] for v in ventas)
 
 def menuVenta():
+    """Menu de gestion para Admin"""
     opcion = -1
     while opcion != 0:
         print('''
@@ -69,6 +73,7 @@ def menuVenta():
             bajaVenta()
 
 def altaVenta(idCliente, carrito):
+    """Registra una nueva venta a partir del carrito del cliente"""
     import reporte
     if carrito:
         Ticket.altaTicket(carrito)
@@ -99,6 +104,7 @@ def altaVenta(idCliente, carrito):
         print(f"{VERDE}Compra realizada correctamente.{RESET}")
 
 def mostrarVentas():
+    """Muestra todas las ventas"""
     ventas = obtener_ventas()
     if not ventas:
         print("No hay ventas registradas.")
@@ -111,6 +117,7 @@ def mostrarVentas():
             print(f"{venta['id_venta']:<15} {venta['id_ticket']:<15} {venta['id_cliente']:<13} {venta['metodo_pago']:<18} {venta['monto_total']:.2f}")
 
 def bajaVenta():
+    """Da de baja una venta - cambia estado a False"""
     print("| Baja de la Venta |")
     ventas = obtener_ventas()
     idVenta = utilidades.pedirEntero("Ingrese el ID de la venta: ")
@@ -137,6 +144,7 @@ def bajaVenta():
     print("No se encontró la venta indicada.")
 
 def modificacionVenta():
+    """Permite cambiar el metodo de pago de una venta"""
     print("| Modificacion de la Venta |")
     ventas = obtener_ventas()
     print("-"*90)
@@ -176,6 +184,7 @@ def modificacionVenta():
         print("ID incorrecto (No se encontro la venta)")
 
 def leerVenta():
+    """Muestra el detalle completo de una venta por ID"""
     ventas = obtener_ventas()
     idVenta = utilidades.pedirEntero("Ingrese el ID de la venta: ")
 
@@ -205,4 +214,5 @@ def leerVenta():
     print("No se encontro la venta indicada.")
 
 def obtenerVentasPorCliente(id_cliente):
+    """Devuelve la lista de ventas de un cliente"""
     return [v for v in obtener_ventas() if v['id_cliente'] == id_cliente]

@@ -8,6 +8,7 @@ PATRON_MAIL = r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}"
 PATRON_TELEFONO = r"\d{7,12}"
 
 def obtener_usuarios():
+    """Carga y devuelve la lista de usuarios del archivo JSON"""
     try:
         with open(ARCHIVO_USUARIOS, "rt", encoding="utf-8") as arch:
             return json.load(arch)
@@ -19,6 +20,7 @@ def obtener_usuarios():
         return []
 
 def guardar_usuarios(usuarios):
+    """Guarda la lista de usuarios en el JSON"""
     try:
         with open(ARCHIVO_USUARIOS, "wt", encoding="utf-8") as arch:
             json.dump(usuarios, arch, ensure_ascii=False, indent=4)
@@ -26,12 +28,14 @@ def guardar_usuarios(usuarios):
         print("No se pudo guardar el archivo:", error)
 
 def obtener_ultimo_id():
+    """Devuelve el ultimo ID registrado"""
     usuarios = obtener_usuarios()
     if not usuarios:
         return 0
     return max(user["id"] for user in usuarios)
 
 def usuarioExiste(usuario):
+    """Verifica si el usuario ya existe"""
     usuarioLimpio = usuario.strip().lower().replace(" ", "")
     for user in obtener_usuarios():
         if user["usuario"].strip().lower().replace(" ", "") == usuarioLimpio:
@@ -39,6 +43,7 @@ def usuarioExiste(usuario):
     return False
 
 def login(intentos=3):
+    """Maneja el inicio de sesion de manera recursiva"""
     if intentos == 0:
         print("Demasiados intentos fallidos. Acceso bloqueado.")
         return
@@ -59,12 +64,14 @@ def login(intentos=3):
     login(intentos - 1)
 
 def mostrarClientes():
+    """Muestra los clientes"""
     print("\nListado de clientes:")
     for user in obtener_usuarios():
         estado = "Activo" if user["activo"] else "Inactivo"
         print(f"ID: {user['id']}, Usuario: {user['usuario']}, Nombre: {user['nombre']}, Email: {user['email']}, Teléfono: {user['telefono']}, Estado: {estado}")
 
 def mostrarListaCliente():
+    """Muestra los clientes en formato tabla"""
     print(f"{'ID':<5} {'Usuario':<15} {'Nombre':<20} {'Email':<27} {'Telefono':<12} {'Activo':<8}")
     print("-" * 95)
     for user in obtener_usuarios():
@@ -152,6 +159,7 @@ def bajaCliente():
         print(f"No se encontró ningún cliente con ID: {idCliente}.")
 
 def modificacionCliente():
+    """Permite modificar datos de un cliente"""
     usuarios = obtener_usuarios()
     if not usuarios:
         print("No hay clientes para modificar.")
@@ -188,6 +196,7 @@ def modificacionCliente():
     print("No se encontró el ID ingresado.")
 
 def cambiarEstadoCliente():
+    """Activa o desactiva un cliente"""
     usuarios = obtener_usuarios()
     mostrarListaCliente()
     idCliente = utilidades.pedirEntero("\nIngrese el ID del cliente a modificar: ")
@@ -215,6 +224,7 @@ def cambiarEstadoCliente():
     print("No se encontró el cliente con ese ID.")
 
 def existeCliente(idCliente):
+    """Verifica si existe un cliente con ese ID"""
     for user in obtener_usuarios():
         if user["id"] == idCliente:
             return True
@@ -222,12 +232,14 @@ def existeCliente(idCliente):
     return False
 
 def obtenerCliente(idCliente):
+    """Devuelve los datos de un cliente con el ID indicado"""
     for user in obtener_usuarios():
         if user["id"] == idCliente:
             return [user["id"], user["usuario"], user["nombre"], user["email"], user["telefono"], user["activo"], user["esAdmin"]]
     return None 
 
 def buscarVentasCliente():
+    """Muestra el historial de compras de un cliente"""
     idCliente = utilidades.pedirEntero("Ingrese el ID del cliente: ")
     encontrado = False
 
@@ -258,6 +270,7 @@ def buscarVentasCliente():
         print("No se encontró el cliente indicado.")
 
 def agregarAlCarrito():
+    """Permite al cliente agregar productos al carrito y returnea el carrito"""
     carrito = []
     while True:
         id_buscar = utilidades.pedirEntero("Ingrese el ID del producto que desea comprar: ")
@@ -286,6 +299,7 @@ def agregarAlCarrito():
             return carrito
         
 def verCarrito(carrito):
+    """Muestra los productos del carrito"""
     print("-"*55)
     print(f'{"Producto":<25}{"Cantidad":<14}{"Precio":<8}')
     print("-"*55)
@@ -296,6 +310,7 @@ def verCarrito(carrito):
     print("-"*55)
 
 def vaciarCarrito(carrito):
+    """Vacia el carrito y restaura el stock"""
     if not carrito:
         print("El carrito está vacío.")
         return
@@ -315,6 +330,7 @@ def vaciarCarrito(carrito):
         print("Carrito no vaciado.")
 
 def gestionarUsuarios():
+    """Menú de gestion de clientes para el admin"""
     opcion = -1
     while opcion != 0:
         print('''
@@ -344,6 +360,7 @@ def gestionarUsuarios():
             print("Opción inválida. Intente nuevamente.")
 
 def adminMenu():
+    """Menu principal del admin"""
     opcion = -1
     while opcion != 0:
         print('''
@@ -373,6 +390,7 @@ def adminMenu():
             print("Opción inválida. Intente nuevamente.")
 
 def clienteMenu(idCliente):
+    """Menu principal del cliente"""
     carrito = []
     opcion = -1
     while opcion != 0:

@@ -6,6 +6,7 @@ encabezado = ["ID", "Nombre", "Precio", "Stock", "Activo"]
 matrizProductos = []
 
 def cargarProductos():
+    """Carga los productos del JSON a la matriz"""
     try:
         with open("Archivos/archivoProducto.json", "r", encoding="utf-8") as archivos:
             datos=json.load(archivos)
@@ -15,6 +16,7 @@ def cargarProductos():
         print("Error: No se encontró el archivo producto.json.")
 
 def guardarProductos():
+    """Guarda la matriz de productos en el JSON"""
     datos = []
     for p in matrizProductos:
         datos.append({"id": p[0], "nombre": p[1], "precio": p[2], "stock": p[3], "activo": p[4]})
@@ -26,6 +28,7 @@ def guardarProductos():
 
 
 def productoMenu():
+    """Menu de gestion de productos para el admin"""
     opcion = 1
     while opcion != 0:
         print('''
@@ -60,6 +63,7 @@ def productoMenu():
             print("Adios!") 
 
 def bajaProducto():
+    """Da de baja un producto - cambia su estado a False"""
     if not matrizProductos:
         print("No hay productos para eliminar.")
     else:
@@ -83,6 +87,7 @@ def bajaProducto():
             print(f"No existe ningun producto con ID: {idProducto}.")
 
 def altaProducto():
+    """Reactiva un producto - cambia su estado a True"""
     mostrarListaProducto()
     idProducto = int(input("Ingrese el ID del producto a dar de alta: "))
     encontrado = False
@@ -102,6 +107,7 @@ def altaProducto():
         print(f"No existe ningun producto con ID: {idProducto}")
 
 def nuevoProducto():
+    """Crea y agrega un producto a la matriz"""
     productoNombre = input("Ingrese el nombre del producto: ")
     productoPrecio = float(input("Ingrese el precio del producto: "))
     productoCantidad = int(input("Ingrese el stock del producto: "))
@@ -115,6 +121,7 @@ def nuevoProducto():
     print(f"Producto '{productoNombre}' agregado con ID: {nuevo_id}")
 
 def modificacionProducto():
+    """Permite modificar datos de un producto"""
     if not matrizProductos:
         print("No hay productos para modificar.")
     else:
@@ -144,6 +151,7 @@ def modificacionProducto():
 
 
 def mostrarListaProducto(es_cliente=False):
+    """Nuestra la lista de productos"""
     
     if es_cliente:
         print("-"*50)  
@@ -177,6 +185,7 @@ def mostrarListaProducto(es_cliente=False):
 
 
 def mostrarProducto():
+    """Busca y muestra los datos de un producto por su ID"""
     if not matrizProductos:
         print("No se encuentra el producto en el sistema.")
     else: 
@@ -204,6 +213,7 @@ def mostrarProducto():
             print("No se encontró ningún producto con ese ID.")
 
 def obtenerProducto(idProducto):
+    """Devuelve el producto con el ID """
     i = 0
     while i < len(matrizProductos):
         if int(matrizProductos[i][0]) == int(idProducto):
@@ -211,6 +221,7 @@ def obtenerProducto(idProducto):
         i += 1
 
 def agregarStock():
+    """Agrega stock a un producto existente"""
     if not matrizProductos:
         print("No hay productos cargados.")
         return

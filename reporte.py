@@ -20,6 +20,7 @@ es_venta_activa = lambda venta: venta["estado"] == True
 #]
 
 def verHistorialCompras():
+    """Muestra las ultimas 3 compras"""
     ventas_activas = list(filter(es_venta_activa, Venta.obtener_ventas()))
 
     if not ventas_activas:
@@ -49,6 +50,7 @@ def verHistorialCompras():
 
 
 def estadisticasVentas():
+    """Muestra estadisticas de ventas: total - promedio - min - max - y % de metodos de pago"""
     ventas_activas = list(filter(es_venta_activa, Venta.obtener_ventas()))
 
     if not ventas_activas:
@@ -80,7 +82,7 @@ def estadisticasVentas():
     print("==================================")
 
 def productoMasVendido():
-
+    """Muestra el producto con mas u. vendidas"""
     conteo = {}
     tickets = Ticket.obtener_tickets()
     if not tickets:
@@ -110,6 +112,7 @@ def productoMasVendido():
     print(f"Producto más vendido: {nombre_producto} con {conteo[id_mas_vendido]} unidades vendidas.")
        
 def totalRecaudado():
+    """Muestra el total recaudado y promedio por venta"""
     ventas_activas = list(filter(es_venta_activa, Venta.obtener_ventas()))
     montos = list(map(lambda v: v["monto_total"], ventas_activas))
 
@@ -124,6 +127,7 @@ def totalRecaudado():
     print(f"Promedio por venta: ${promedio:.2f}")
 
 def clientesRecientes(n=5):
+    """Muestra los ultimos N clientes registrados"""
     usuarios = Usuario.obtener_usuarios()
     recientes = usuarios[-n:] 
     print(f"\n--- Últimos {n} clientes registrados ---")
@@ -132,6 +136,7 @@ def clientesRecientes(n=5):
         print(f"ID: {user['id']} | {user['nombre']:<20} | {estado}")
 
 def productosMasCaros(n=3):
+    """Top N productos mas caros"""
     activos = [p for p in Producto.matrizProductos if p[4]]
     ordenados = sorted(activos, key=lambda p: p[2], reverse=True)
     top = ordenados[:n] 
@@ -141,6 +146,7 @@ def productosMasCaros(n=3):
         print(f"{i}. {p[1]:<25} ${p[2]:.2f}")
 
 def contarClientes(usuarios, indice=0, activos=0, inactivos=0):
+    """Cuenta clientes activos e inactivos de forma recursiva"""
     if indice >= len(usuarios):
         return activos, inactivos
     if usuarios[indice]["activo"]:
@@ -148,11 +154,13 @@ def contarClientes(usuarios, indice=0, activos=0, inactivos=0):
     return contarClientes(usuarios, indice + 1, activos, inactivos + 1)
 
 def calcularTotalCarrito(carrito, indice = 0):
+    """Calcula el carrito de forma recursiva"""
     if indice >= len(carrito):
         return 0 
     return carrito[indice][3] + calcularTotalCarrito(carrito, indice + 1)
 
 def reporteClientes():
+    """Muestra un resumen del estado de los clientes"""
     usuarios = Usuario.obtener_usuarios()
     activos, inactivos = contarClientes(usuarios)
     print(f"\n--- Estado de clientes ---")
@@ -161,6 +169,7 @@ def reporteClientes():
     print(f"Total:     {activos + inactivos}")
 
 def menuReportes():
+    """Menu de reportes para admin"""
     opcion = 1
     while opcion != 0:
         print('''

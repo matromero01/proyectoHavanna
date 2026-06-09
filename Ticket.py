@@ -3,6 +3,7 @@ import Producto, Usuario, utilidades
 ARCHIVO_TICKET = 'Archivos/archivoTicket.txt'
 
 def ticketMenu():
+    """Menu de gestion de ticket para admin"""
     opcion = -1
     while opcion != 0:
         print('''
@@ -23,11 +24,13 @@ def ticketMenu():
             print("Adios!")
 
 def altaTicket(carrito):
+    """Guarda los items del carrito como ticket"""
     tickets = obtener_tickets()
     tickets.extend(carrito)
     guardar_tickets(tickets)
 
 def imprimir_ticket(cliente, carrito):
+    """Imprime el detalle del ticket y devuelve el total"""
     total = 0
 
     print("-"*55)
@@ -54,6 +57,7 @@ def imprimir_ticket(cliente, carrito):
     return total
 
 def bajaTicket(id_ticket):
+    """Da de baja todos los items de un ticket por ID"""
     tickets = obtener_tickets()
     encontrado = False
     for ticket in tickets:
@@ -67,6 +71,7 @@ def bajaTicket(id_ticket):
         print(f"No se encontró el ticket con ID: {id_ticket}.")
 
 def mostrarTicket():
+    """Muestra todos los tickets activos en una tabla"""
     tickets = obtener_tickets()
     if not tickets:
         print("No hay tickets registrados.")
@@ -80,15 +85,18 @@ def mostrarTicket():
             print(f"{id_ticket:<15} {id_producto:<15} {cantidad:<13} {subtotal:.2f}")
 
 def obtenerTickets(idTicket):
+    """Devuelve los items de un ticket por su ID"""
     return [t for t in obtener_tickets() if t[0] == int(idTicket)]
 
 def obtenerUltimoIdTicket():
+    """Devuelve el ultimo ID de ticket"""
     tickets = obtener_tickets()
     if not tickets:
         return 0
     return max(t[0] for t in tickets)
 
 def obtener_tickets():
+    """Carga y devuelve todos los tickets del .txt"""
     tickets = []
     try:
         with open(ARCHIVO_TICKET, "rt", encoding="utf-8") as arch:
@@ -108,6 +116,7 @@ def obtener_tickets():
     return tickets
 
 def guardar_tickets(tickets):
+    """Guarda la lista de tickets en el .txt"""
     try:
         with open(ARCHIVO_TICKET, "wt", encoding="utf-8") as arch:
             for ticket in tickets:
