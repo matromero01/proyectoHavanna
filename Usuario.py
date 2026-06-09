@@ -314,13 +314,16 @@ def vaciarCarrito(carrito):
 def gestionarUsuarios():
     opcion = -1
     while opcion != 0:
-        print('''\n-- Menú de Usuarios --
+        print('''
+    ----------------------------
+            MENU DE USUARIOS
         1 - Ver Clientes
         2 - Alta Cliente
         3 - Modificar Cliente
         4 - Buscar Ventas de Clientes
         5 - Dar de baja cliente
-        0 - Volver al menú anterior''')
+        0 - Volver al menú anterior
+    ----------------------------''')
         opcion = utilidades.pedirEntero("Seleccione una opción: ")
         if opcion == 1:
             mostrarListaCliente()
@@ -340,13 +343,16 @@ def gestionarUsuarios():
 def adminMenu():
     opcion = -1
     while opcion != 0:
-        print('''\nMenu Principal
+        print('''
+    ----------------------------
+          MENU PRINCIPAL
         1 - Gestionar Productos/Stock
         2 - Administrar Usuarios/Clientes
         3 - Gestionar Ventas
         4 - Gestionar Ticket
         5 - Reportes
-        0 - Cerrar sesion''')
+        0 - Cerrar sesion
+    ----------------------------''')
         opcion = utilidades.pedirEntero("Seleccione una opción: ")
         if opcion == 1:
             Producto.productoMenu()
@@ -367,13 +373,16 @@ def clienteMenu(idCliente):
     carrito = []
     opcion = -1
     while opcion != 0:
-        print('''\nMenu Principal
+        print('''
+    ----------------------------
+          MENU PRINCIPAL
         1 - Ver Productos
         2 - Agregar al Carrito
         3 - Vaciar Carrito
         4 - Ver Carrito
         5 - Finalizar compra
-        0 - Cerrar sesion''')
+        0 - Cerrar sesion
+    ----------------------------''')
         opcion = utilidades.pedirEntero("Seleccione una opción: ")
         if opcion == 1:
             Producto.mostrarListaProducto(es_cliente = False)

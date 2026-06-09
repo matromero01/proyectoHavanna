@@ -164,7 +164,8 @@ def menuReportes():
     opcion = 1
     while opcion != 0:
         print('''
-        --Menu Reportes--
+    ----------------------------
+             MENU REPORTES
         '1 - Ver Historial de Compras
         '2 - Producto mas vendido
         '3 - Total recaudado
@@ -172,7 +173,8 @@ def menuReportes():
         '5 - Productos mas caros 
         '6 - Clientes recientes
         '7 - Estadisticas de Clientes
-        '0 - Volver al menu principal''')
+        '0 - Volver al menu principal
+    ----------------------------''')
 
         opcion = utilidades.pedirEntero("Ingresa un numero: ")
         if opcion == 1:

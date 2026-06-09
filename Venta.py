@@ -49,12 +49,14 @@ def menuVenta():
     opcion = -1
     while opcion != 0:
         print('''
-        --Menu Venta--
+    ----------------------------
+            MENU VENTA
         1 - Modificacion Venta
         2 - Mostrar Venta
         3 - Leer venta
         4 - Baja Venta
-        0 - Volver al menu principal''')
+        0 - Volver al menu principal
+    ----------------------------''')
 
         opcion = utilidades.pedirEntero("Ingresa un numero: ")
         if opcion == 1:

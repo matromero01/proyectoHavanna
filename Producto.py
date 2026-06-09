@@ -29,7 +29,8 @@ def productoMenu():
     opcion = 1
     while opcion != 0:
         print('''
-        --Menu Producto--
+    ----------------------------
+            MENU PRODUCTO
         '1 - Alta Producto
         '2 - Baja Producto
         '3 - Modificacion Producto
@@ -37,7 +38,8 @@ def productoMenu():
         '5 - Leer Producto
         '6 - Nuevo Producto
         '7 - Agregar stock
-        '0 - Volver al menu principal''')
+        '0 - Volver al menu principal
+    ----------------------------''')
 
         opcion = utilidades.pedirEntero("Ingresa una opción: ")
         if opcion == 1:
