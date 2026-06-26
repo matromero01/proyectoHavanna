@@ -60,10 +60,12 @@ def bajaTicket(id_ticket):
     """Da de baja todos los items de un ticket por ID"""
     tickets = obtener_tickets()
     encontrado = False
-    for ticket in tickets:
-        if ticket[0] == id_ticket:
-            ticket[4] = False
+    i = 0
+    while i < len(tickets):
+        if tickets[i][0] == id_ticket:
+            tickets[i][4] = False
             encontrado = True
+        i += 1
     if encontrado:
         guardar_tickets(tickets)
         print(f"Ticket {id_ticket} dado de baja exitosamente.")

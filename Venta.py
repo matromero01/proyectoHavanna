@@ -122,26 +122,33 @@ def bajaVenta():
     ventas = obtener_ventas()
     idVenta = utilidades.pedirEntero("Ingrese el ID de la venta: ")
 
-    for venta in ventas:
-        if venta['id_venta'] == idVenta:
-            if venta['estado']:
-                while True:
-                    confirmacion = input(f"Desea confirmar la baja de la venta #{venta['id_venta']}? (si/no) ").upper().strip()
-                    if confirmacion == 'SI':
-                        venta['estado'] = False
-                        guardar_ventas(ventas)
-                        print(f"Confirmacion de la baja. Venta #{venta['id_venta']}!")
-                        return
-                    elif confirmacion == 'NO':
-                        print("Saliendo de la baja de venta...")
-                        return
-                    else:
-                        print("Error. Ingrese si o no.")
-            else:
-                print(f"La venta #{idVenta} ya estaba dada de baja.")
-                return
+    i = 0
+    encontrado = False
+    while i < len(ventas) and not encontrado:
+        if ventas[i]['id_venta'] == idVenta:
+            encontrado = True
+        else:
+            i += 1
 
-    print("No se encontró la venta indicada.")
+    if encontrado:
+        venta = ventas[i]
+        if venta['estado']:
+            while True:
+                confirmacion = input(f"Desea confirmar la baja de la venta #{venta['id_venta']}? (si/no) ").upper().strip()
+                if confirmacion == 'SI':
+                    venta['estado'] = False
+                    guardar_ventas(ventas)
+                    print(f"Confirmacion de la baja. Venta #{venta['id_venta']}!")
+                    return
+                elif confirmacion == 'NO':
+                    print("Saliendo de la baja de venta...")
+                    return
+                else:
+                    print("Error. Ingrese si o no.")
+        else:
+            print(f"La venta #{idVenta} ya estaba dada de baja.")
+    else:
+        print("No se encontró la venta indicada.")
 
 def modificacionVenta():
     """Permite cambiar el metodo de pago de una venta"""
@@ -155,32 +162,36 @@ def modificacionVenta():
             print(f"{venta['id_venta']:<15} {venta['id_ticket']:<15} {venta['id_cliente']:<13} {venta['metodo_pago']:<18} {venta['monto_total']:.2f}")
 
     idVenta = utilidades.pedirEntero("Ingrese el ID de la venta: ")
+
+    i = 0
     encontrado = False
-
-    for venta in ventas:
-        if venta['id_venta'] == idVenta:
+    while i < len(ventas) and not encontrado:
+        if ventas[i]['id_venta'] == idVenta:
             encontrado = True
-            print(f"Venta encontrada. Metodo de pago actual: {venta['metodo_pago']}")
+        else:
+            i += 1
 
-            opcion = 0
-            while opcion not in [1, 2, 3]:
-                print("\nSeleccione el nuevo metodo de pago:")
-                for i, metodo in enumerate(MetodosPago):
-                    print(f"{i+1}. {metodo.capitalize()}")
-                entrada = input("Seleccione nuevo metodo de pago (1-3): ")
-                if entrada.isdigit():
-                    opcion = int(entrada)
-                    if opcion not in [1, 2, 3]:
-                        print("Error: El numero debe ser 1, 2, o 3")
-                else:
-                    print("Error: Por favor ingrese solo numeros (1-3)")
+    if encontrado:
+        venta = ventas[i]
+        print(f"Venta encontrada. Metodo de pago actual: {venta['metodo_pago']}")
 
-            venta['metodo_pago'] = MetodosPago[opcion - 1]
-            guardar_ventas(ventas)
-            print(f"\nCambio de metodo de pago exitoso a: {venta['metodo_pago']}")
-            break
+        opcion = 0
+        while opcion not in [1, 2, 3]:
+            print("\nSeleccione el nuevo metodo de pago:")
+            for i_metodo, metodo in enumerate(MetodosPago):
+                print(f"{i_metodo+1}. {metodo.capitalize()}")
+            entrada = input("Seleccione nuevo metodo de pago (1-3): ")
+            if entrada.isdigit():
+                opcion = int(entrada)
+                if opcion not in [1, 2, 3]:
+                    print("Error: El numero debe ser 1, 2, o 3")
+            else:
+                print("Error: Por favor ingrese solo numeros (1-3)")
 
-    if not encontrado:
+        venta['metodo_pago'] = MetodosPago[opcion - 1]
+        guardar_ventas(ventas)
+        print(f"\nCambio de metodo de pago exitoso a: {venta['metodo_pago']}")
+    else:
         print("ID incorrecto (No se encontro la venta)")
 
 def leerVenta():
@@ -188,30 +199,37 @@ def leerVenta():
     ventas = obtener_ventas()
     idVenta = utilidades.pedirEntero("Ingrese el ID de la venta: ")
 
-    for venta in ventas:
-        if venta['id_venta'] == idVenta:
-            cliente = Usuario.obtenerCliente(venta['id_cliente'])
-            tickets = Ticket.obtenerTickets(venta['id_ticket'])
+    i = 0
+    encontrado = False
+    while i < len(ventas) and not encontrado:
+        if ventas[i]['id_venta'] == idVenta:
+            encontrado = True
+        else:
+            i += 1
 
-            nombreCliente = cliente[2] if isinstance(cliente, list) else cliente["nombre"]
-            idCliente = cliente[0] if isinstance(cliente, list) else cliente["id"]
+    if encontrado:
+        venta = ventas[i]
+        cliente = Usuario.obtenerCliente(venta['id_cliente'])
+        tickets = Ticket.obtenerTickets(venta['id_ticket'])
 
-            print("-"*65)
-            print(f'{"ID_Venta:":<5} {venta["id_venta"]} {"ID_Ticket:":>48} {venta["id_ticket"]}')
-            print("-"*65)
-            print(f'{"Producto":<40}{"Cantidad":<15}{"Subtotal $":<10}')
+        nombreCliente = cliente[2] if isinstance(cliente, list) else cliente["nombre"]
+        idCliente = cliente[0] if isinstance(cliente, list) else cliente["id"]
 
-            for prod in tickets:
-                idTicket, idProducto, cantidad, subtotal, estadoTicket = prod
-                producto = Producto.obtenerProducto(idProducto)
-                print(f"{producto[1]:<43} {cantidad:<15} {subtotal:<10}")
+        print("-"*65)
+        print(f'{"ID_Venta:":<5} {venta["id_venta"]} {"ID_Ticket:":>48} {venta["id_ticket"]}')
+        print("-"*65)
+        print(f'{"Producto":<40}{"Cantidad":<15}{"Subtotal $":<10}')
 
-            print("-"*65)
-            print(f'{"Cliente:"} {idCliente} - {nombreCliente} {"Total:":>18} {venta["monto_total"]} - {venta["metodo_pago"]}')
-            print("-"*65)
-            return
+        for prod in tickets:
+            idTicket, idProducto, cantidad, subtotal, estadoTicket = prod
+            producto = Producto.obtenerProducto(idProducto)
+            print(f"{producto[1]:<43} {cantidad:<15} {subtotal:<10}")
 
-    print("No se encontro la venta indicada.")
+        print("-"*65)
+        print(f'{"Cliente:"} {idCliente} - {nombreCliente} {"Total:":>18} {venta["monto_total"]} - {venta["metodo_pago"]}')
+        print("-"*65)
+    else:
+        print("No se encontro la venta indicada.")
 
 def obtenerVentasPorCliente(id_cliente):
     """Devuelve la lista de ventas de un cliente"""

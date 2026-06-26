@@ -37,29 +37,43 @@ def obtener_ultimo_id():
 def usuarioExiste(usuario):
     """Verifica si el usuario ya existe"""
     usuarioLimpio = usuario.strip().lower().replace(" ", "")
-    for user in obtener_usuarios():
-        if user["usuario"].strip().lower().replace(" ", "") == usuarioLimpio:
-            return True
-    return False
+    usuarios = obtener_usuarios()
+    i = 0
+    encontrado = False
+    while i < len(usuarios) and not encontrado:
+        if usuarios[i]["usuario"].strip().lower().replace(" ", "") == usuarioLimpio:
+            encontrado = True
+        else:
+            i += 1
+    return encontrado
 
 def login(intentos=3):
     """Maneja el inicio de sesion de manera recursiva"""
     if intentos == 0:
         print("Demasiados intentos fallidos. Acceso bloqueado.")
         return
-    
+
     usuarioInput = input("Ingrese el usuario: ").strip().lower()
-    for user in obtener_usuarios():
-        if user["usuario"].lower() == usuarioInput:
-            if not user["activo"]:
-                print("Usuario dado de baja. Contacte al administrador.")
-                return
-            if user["esAdmin"]:
-                adminMenu()
-            else:
-                clienteMenu(user["id"])
+    usuarios = obtener_usuarios()
+    i = 0
+    encontrado = False
+    while i < len(usuarios) and not encontrado:
+        if usuarios[i]["usuario"].lower() == usuarioInput:
+            encontrado = True
+        else:
+            i += 1
+
+    if encontrado:
+        user = usuarios[i]
+        if not user["activo"]:
+            print("Usuario dado de baja. Contacte al administrador.")
             return
-    
+        if user["esAdmin"]:
+            adminMenu()
+        else:
+            clienteMenu(user["id"])
+        return
+
     print(f"Usuario no encontrado. Intentos restantes: {intentos - 1}")
     login(intentos - 1)
 
@@ -86,19 +100,28 @@ def altaCliente():
 
     if usuarioExiste(clienteUsuario):
         usuarios = obtener_usuarios()
-        for user in usuarios:
-            if user["usuario"].strip().lower().replace(" ", "") == clienteUsuario.strip().lower().replace(" ", ""):
-                if not user["activo"]:
-                    confirmar = input(f"El usuario '{user['usuario']}' está dado de baja. ¿Querés reactivarlo? (si/no): ").strip().lower()
-                    if confirmar == "si":
-                        user["activo"] = True
-                        guardar_usuarios(usuarios)
-                        print(f"Usuario '{user['usuario']}' reactivado exitosamente.")
-                    else:
-                        print("No se realizaron cambios.")
+        i = 0
+        encontrado = False
+        clienteLimpio = clienteUsuario.strip().lower().replace(" ", "")
+        while i < len(usuarios) and not encontrado:
+            if usuarios[i]["usuario"].strip().lower().replace(" ", "") == clienteLimpio:
+                encontrado = True
+            else:
+                i += 1
+
+        if encontrado:
+            user = usuarios[i]
+            if not user["activo"]:
+                confirmar = input(f"El usuario '{user['usuario']}' está dado de baja. ¿Querés reactivarlo? (si/no): ").strip().lower()
+                if confirmar == "si":
+                    user["activo"] = True
+                    guardar_usuarios(usuarios)
+                    print(f"Usuario '{user['usuario']}' reactivado exitosamente.")
                 else:
-                    print(f"Ya existe un usuario activo con el nombre '{clienteUsuario}'.")
-                return
+                    print("No se realizaron cambios.")
+            else:
+                print(f"Ya existe un usuario activo con el nombre '{clienteUsuario}'.")
+            return
 
     clienteNombre = input("Ingrese su nombre completo: ")
 
@@ -137,25 +160,29 @@ def bajaCliente():
 
     mostrarListaCliente()
     idCliente = utilidades.pedirEntero("Ingrese el ID del cliente a dar de baja: ")
+
+    i = 0
     encontrado = False
-
-    for user in usuarios:
-        if user["id"] == idCliente:
+    while i < len(usuarios) and not encontrado:
+        if usuarios[i]["id"] == idCliente:
             encontrado = True
-            if user["activo"]:
-                user["activo"] = False
-                guardar_usuarios(usuarios)
-                print(f"Cliente '{user['nombre']}' (ID: {idCliente}) dado de baja exitosamente.")
-            else:
-                print(f"Cliente '{user['nombre']}' (ID: {idCliente}) ya estaba dado de baja.")
-                condicion = input("¿Querés darlo de alta ahora? (si/no): ").strip().lower()
-                if condicion == "si":
-                    user["activo"] = True
-                    guardar_usuarios(usuarios)
-                    print(f"Cliente '{user['nombre']}' dado de alta exitosamente.")
-            return
+        else:
+            i += 1
 
-    if not encontrado:
+    if encontrado:
+        user = usuarios[i]
+        if user["activo"]:
+            user["activo"] = False
+            guardar_usuarios(usuarios)
+            print(f"Cliente '{user['nombre']}' (ID: {idCliente}) dado de baja exitosamente.")
+        else:
+            print(f"Cliente '{user['nombre']}' (ID: {idCliente}) ya estaba dado de baja.")
+            condicion = input("¿Querés darlo de alta ahora? (si/no): ").strip().lower()
+            if condicion == "si":
+                user["activo"] = True
+                guardar_usuarios(usuarios)
+                print(f"Cliente '{user['nombre']}' dado de alta exitosamente.")
+    else:
         print(f"No se encontró ningún cliente con ID: {idCliente}.")
 
 def modificacionCliente():
@@ -168,32 +195,39 @@ def modificacionCliente():
     mostrarListaCliente()
     idCliente = utilidades.pedirEntero("Ingrese el ID del cliente a modificar: ")
 
-    for user in usuarios:
-        if user["id"] == idCliente:
-            dato = input("Ingrese un usuario (deje vacío para no modificar): ").strip()
-            if dato:
-                if usuarioExiste(dato) and dato.lower() != user["usuario"].lower():
-                    print("Ese nombre de usuario ya existe.")
-                    return
-                user["usuario"] = dato
+    i = 0
+    encontrado = False
+    while i < len(usuarios) and not encontrado:
+        if usuarios[i]["id"] == idCliente:
+            encontrado = True
+        else:
+            i += 1
 
-            dato = input("Ingrese un nombre completo (deje vacío para no modificar): ").strip()
-            if dato:
-                user["nombre"] = dato
+    if encontrado:
+        user = usuarios[i]
+        dato = input("Ingrese un usuario (deje vacío para no modificar): ").strip()
+        if dato:
+            if usuarioExiste(dato) and dato.lower() != user["usuario"].lower():
+                print("Ese nombre de usuario ya existe.")
+                return
+            user["usuario"] = dato
 
-            dato = input("Ingrese un email (deje vacío para no modificar): ").strip()
-            if dato:
-                user["email"] = dato
+        dato = input("Ingrese un nombre completo (deje vacío para no modificar): ").strip()
+        if dato:
+            user["nombre"] = dato
 
-            dato = input("Ingrese un teléfono (deje vacío para no modificar): ").strip()
-            if dato:
-                user["telefono"] = dato
+        dato = input("Ingrese un email (deje vacío para no modificar): ").strip()
+        if dato:
+            user["email"] = dato
 
-            guardar_usuarios(usuarios)
-            print(f"Cliente '{user['nombre']}' (ID: {idCliente}) modificado correctamente.")
-            return
+        dato = input("Ingrese un teléfono (deje vacío para no modificar): ").strip()
+        if dato:
+            user["telefono"] = dato
 
-    print("No se encontró el ID ingresado.")
+        guardar_usuarios(usuarios)
+        print(f"Cliente '{user['nombre']}' (ID: {idCliente}) modificado correctamente.")
+    else:
+        print("No se encontró el ID ingresado.")
 
 def cambiarEstadoCliente():
     """Activa o desactiva un cliente"""
@@ -201,72 +235,97 @@ def cambiarEstadoCliente():
     mostrarListaCliente()
     idCliente = utilidades.pedirEntero("\nIngrese el ID del cliente a modificar: ")
 
-    for user in usuarios:
-        if user["id"] == idCliente:
-            if user["activo"]:
-                confirmar = input(f"El cliente {user['nombre']} está activo. ¿Dar de baja? (si/no): ").strip().lower()
-                if confirmar == "si":
-                    user["activo"] = False
-                    guardar_usuarios(usuarios)
-                    print(f"Cliente {user['nombre']} dado de baja.")
-                else:
-                    print("No se realizaron cambios.")
-            else:
-                confirmar = input(f"El cliente {user['nombre']} está inactivo. ¿Dar de alta? (si/no): ").strip().lower()
-                if confirmar == "si":
-                    user["activo"] = True
-                    guardar_usuarios(usuarios)
-                    print(f"Cliente {user['nombre']} dado de alta.")
-                else:
-                    print("No se realizaron cambios.")
-            return
+    i = 0
+    encontrado = False
+    while i < len(usuarios) and not encontrado:
+        if usuarios[i]["id"] == idCliente:
+            encontrado = True
+        else:
+            i += 1
 
-    print("No se encontró el cliente con ese ID.")
+    if encontrado:
+        user = usuarios[i]
+        if user["activo"]:
+            confirmar = input(f"El cliente {user['nombre']} está activo. ¿Dar de baja? (si/no): ").strip().lower()
+            if confirmar == "si":
+                user["activo"] = False
+                guardar_usuarios(usuarios)
+                print(f"Cliente {user['nombre']} dado de baja.")
+            else:
+                print("No se realizaron cambios.")
+        else:
+            confirmar = input(f"El cliente {user['nombre']} está inactivo. ¿Dar de alta? (si/no): ").strip().lower()
+            if confirmar == "si":
+                user["activo"] = True
+                guardar_usuarios(usuarios)
+                print(f"Cliente {user['nombre']} dado de alta.")
+            else:
+                print("No se realizaron cambios.")
+    else:
+        print("No se encontró el cliente con ese ID.")
 
 def existeCliente(idCliente):
     """Verifica si existe un cliente con ese ID"""
-    for user in obtener_usuarios():
-        if user["id"] == idCliente:
-            return True
-    print("El cliente no existe.")
-    return False
+    usuarios = obtener_usuarios()
+    i = 0
+    encontrado = False
+    while i < len(usuarios) and not encontrado:
+        if usuarios[i]["id"] == idCliente:
+            encontrado = True
+        else:
+            i += 1
+    if not encontrado:
+        print("El cliente no existe.")
+    return encontrado
 
 def obtenerCliente(idCliente):
     """Devuelve los datos de un cliente con el ID indicado"""
-    for user in obtener_usuarios():
-        if user["id"] == idCliente:
-            return [user["id"], user["usuario"], user["nombre"], user["email"], user["telefono"], user["activo"], user["esAdmin"]]
-    return None 
+    usuarios = obtener_usuarios()
+    i = 0
+    encontrado = False
+    while i < len(usuarios) and not encontrado:
+        if usuarios[i]["id"] == idCliente:
+            encontrado = True
+        else:
+            i += 1
+    if encontrado:
+        user = usuarios[i]
+        return [user["id"], user["usuario"], user["nombre"], user["email"], user["telefono"], user["activo"], user["esAdmin"]]
+    return None
 
 def buscarVentasCliente():
     """Muestra el historial de compras de un cliente"""
     idCliente = utilidades.pedirEntero("Ingrese el ID del cliente: ")
+    usuarios = obtener_usuarios()
+
+    i = 0
     encontrado = False
-
-    for user in obtener_usuarios():
-        if user["id"] == idCliente:
+    while i < len(usuarios) and not encontrado:
+        if usuarios[i]["id"] == idCliente:
             encontrado = True
-            ventas = Venta.obtenerVentasPorCliente(idCliente)
-            if not ventas:
-                print(f"\nEl cliente {user['nombre']} no tiene compras registradas en el sistema.")
-            else:
-                for venta in ventas:
-                    tickets = Ticket.obtenerTickets(venta['id_ticket'])
-                    print("-"*65)
-                    print(f'{"ID_Venta:":<5} {venta["id_venta"]} {"ID_Ticket:":>48} {venta["id_ticket"]}')
-                    print("-"*65)
-                    print(f'{"Producto":<40}{"Cantidad":<15}{"Subtotal $":<10}')
-                    for prod in tickets:
-                        idTicket, idProducto, cantidad, subtotal, estadoTicket = prod
-                        producto = Producto.obtenerProducto(idProducto)
-                        print(f"{producto[1]:<43} {cantidad:<15} {subtotal:<10}")
-                    print("-"*65)
-                    print(f'Cliente: {user["id"]} - {user["nombre"]} {"Total:":>18} {venta["monto_total"]} - {venta["metodo_pago"]}')
-                    print("-"*65)
+        else:
+            i += 1
 
-            break
-
-    if not encontrado:
+    if encontrado:
+        user = usuarios[i]
+        ventas = Venta.obtenerVentasPorCliente(idCliente)
+        if not ventas:
+            print(f"\nEl cliente {user['nombre']} no tiene compras registradas en el sistema.")
+        else:
+            for venta in ventas:
+                tickets = Ticket.obtenerTickets(venta['id_ticket'])
+                print("-"*65)
+                print(f'{"ID_Venta:":<5} {venta["id_venta"]} {"ID_Ticket:":>48} {venta["id_ticket"]}')
+                print("-"*65)
+                print(f'{"Producto":<40}{"Cantidad":<15}{"Subtotal $":<10}')
+                for prod in tickets:
+                    idTicket, idProducto, cantidad, subtotal, estadoTicket = prod
+                    producto = Producto.obtenerProducto(idProducto)
+                    print(f"{producto[1]:<43} {cantidad:<15} {subtotal:<10}")
+                print("-"*65)
+                print(f'Cliente: {user["id"]} - {user["nombre"]} {"Total:":>18} {venta["monto_total"]} - {venta["metodo_pago"]}')
+                print("-"*65)
+    else:
         print("No se encontró el cliente indicado.")
 
 def agregarAlCarrito():
@@ -274,21 +333,25 @@ def agregarAlCarrito():
     carrito = []
     while True:
         id_buscar = utilidades.pedirEntero("Ingrese el ID del producto que desea comprar: ")
+
+        i = 0
         encontrado = False
-
-        for producto in Producto.matrizProductos:
-            if producto[0] == id_buscar:
+        while i < len(Producto.matrizProductos) and not encontrado:
+            if Producto.matrizProductos[i][0] == id_buscar:
                 encontrado = True
-                cantidad = utilidades.pedirEntero(f"¿Cuántos {producto[1]} desea agregar?: ")
-                if cantidad <= producto[3]:
-                    carrito.append([Ticket.obtenerUltimoIdTicket() + 1, producto[0], cantidad, (producto[2]*cantidad), True])
-                    producto[3] -= cantidad
-                    print(f"{cantidad} unidades de {producto[1]} agregadas al carrito.")
-                else:
-                    print(f"No hay suficiente stock. Disponible: {producto[3]} unidades.")
-                break
+            else:
+                i += 1
 
-        if not encontrado:
+        if encontrado:
+            producto = Producto.matrizProductos[i]
+            cantidad = utilidades.pedirEntero(f"¿Cuántos {producto[1]} desea agregar?: ")
+            if cantidad <= producto[3]:
+                carrito.append([Ticket.obtenerUltimoIdTicket() + 1, producto[0], cantidad, (producto[2]*cantidad), True])
+                producto[3] -= cantidad
+                print(f"{cantidad} unidades de {producto[1]} agregadas al carrito.")
+            else:
+                print(f"No hay suficiente stock. Disponible: {producto[3]} unidades.")
+        else:
             print("No se encontró ningún producto con ese ID.")
 
         seleccion = input("¿Desea seguir agregando? (si/no): ").strip().upper()
@@ -320,10 +383,15 @@ def vaciarCarrito(carrito):
         opcion = input("¿Seguro que quiere vaciar el carrito? (si/no): ").strip().lower()
     if opcion == "si":
         for item in carrito:
-            for producto in Producto.matrizProductos:
-                if producto[0] == item[1]:
-                    producto[3] += item[2]
-                    break
+            i = 0
+            encontrado = False
+            while i < len(Producto.matrizProductos) and not encontrado:
+                if Producto.matrizProductos[i][0] == item[1]:
+                    encontrado = True
+                else:
+                    i += 1
+            if encontrado:
+                Producto.matrizProductos[i][3] += item[2]
         carrito.clear()
         print("Carrito vaciado.")
     else:
