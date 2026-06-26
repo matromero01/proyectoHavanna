@@ -218,11 +218,23 @@ def modificacionCliente():
 
         dato = input("Ingrese un email (deje vacío para no modificar): ").strip()
         if dato:
-            user["email"] = dato
+            while not re.fullmatch(PATRON_MAIL, dato):
+                print("Correo electrónico no válido.")
+                dato = input("Ingrese un email (deje vacío para no modificar): ").strip()
+                if not dato:
+                    break
+            if dato:
+                user["email"] = dato
 
         dato = input("Ingrese un teléfono (deje vacío para no modificar): ").strip()
         if dato:
-            user["telefono"] = dato
+            while not re.fullmatch(PATRON_TELEFONO, dato):
+                print("Número de teléfono inválido.")
+                dato = input("Ingrese un teléfono (deje vacío para no modificar): ").strip()
+                if not dato:
+                    break
+            if dato:
+                user["telefono"] = dato
 
         guardar_usuarios(usuarios)
         print(f"Cliente '{user['nombre']}' (ID: {idCliente}) modificado correctamente.")
