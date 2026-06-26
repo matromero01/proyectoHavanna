@@ -77,13 +77,6 @@ def login(intentos=3):
     print(f"Usuario no encontrado. Intentos restantes: {intentos - 1}")
     login(intentos - 1)
 
-def mostrarClientes():
-    """Muestra los clientes"""
-    print("\nListado de clientes:")
-    for user in obtener_usuarios():
-        estado = "Activo" if user["activo"] else "Inactivo"
-        print(f"ID: {user['id']}, Usuario: {user['usuario']}, Nombre: {user['nombre']}, Email: {user['email']}, Teléfono: {user['telefono']}, Estado: {estado}")
-
 def mostrarListaCliente():
     """Muestra los clientes en formato tabla"""
     print(f"{'ID':<5} {'Usuario':<15} {'Nombre':<20} {'Email':<27} {'Telefono':<12} {'Activo':<8}")
@@ -240,55 +233,6 @@ def modificacionCliente():
         print(f"Cliente '{user['nombre']}' (ID: {idCliente}) modificado correctamente.")
     else:
         print("No se encontró el ID ingresado.")
-
-def cambiarEstadoCliente():
-    """Activa o desactiva un cliente"""
-    usuarios = obtener_usuarios()
-    mostrarListaCliente()
-    idCliente = utilidades.pedirEntero("\nIngrese el ID del cliente a modificar: ")
-
-    i = 0
-    encontrado = False
-    while i < len(usuarios) and not encontrado:
-        if usuarios[i]["id"] == idCliente:
-            encontrado = True
-        else:
-            i += 1
-
-    if encontrado:
-        user = usuarios[i]
-        if user["activo"]:
-            confirmar = input(f"El cliente {user['nombre']} está activo. ¿Dar de baja? (si/no): ").strip().lower()
-            if confirmar == "si":
-                user["activo"] = False
-                guardar_usuarios(usuarios)
-                print(f"Cliente {user['nombre']} dado de baja.")
-            else:
-                print("No se realizaron cambios.")
-        else:
-            confirmar = input(f"El cliente {user['nombre']} está inactivo. ¿Dar de alta? (si/no): ").strip().lower()
-            if confirmar == "si":
-                user["activo"] = True
-                guardar_usuarios(usuarios)
-                print(f"Cliente {user['nombre']} dado de alta.")
-            else:
-                print("No se realizaron cambios.")
-    else:
-        print("No se encontró el cliente con ese ID.")
-
-def existeCliente(idCliente):
-    """Verifica si existe un cliente con ese ID"""
-    usuarios = obtener_usuarios()
-    i = 0
-    encontrado = False
-    while i < len(usuarios) and not encontrado:
-        if usuarios[i]["id"] == idCliente:
-            encontrado = True
-        else:
-            i += 1
-    if not encontrado:
-        print("El cliente no existe.")
-    return encontrado
 
 def obtenerCliente(idCliente):
     """Devuelve los datos de un cliente con el ID indicado"""

@@ -29,33 +29,6 @@ def altaTicket(carrito):
     tickets.extend(carrito)
     guardar_tickets(tickets)
 
-def imprimir_ticket(cliente, carrito):
-    """Imprime el detalle del ticket y devuelve el total"""
-    total = 0
-
-    print("-"*55)
-    print(f"IdTicket --> {carrito[0][0]}")
-    print("-"*55)
-
-    print(f'{"PRODUCTO":<15}{"Cantidad":<16}{"Subtotal $":<10}')
-    print("-"*55)
-
-    for linea in carrito:
-        idTicket, idProducto, cantidad, subtotal, estadoTicket = linea
-        producto = Producto.obtenerProducto(idProducto)
-        print(f"{producto[1]:<25} {cantidad:<16} {subtotal:<10}")
-        total += subtotal
-
-    print("-"*55)
-    print(f"Total --> {total}")
-    print("-"*55)
-
-    idCliente, nombre, mail, telefono, estadoCliente, *resto = cliente
-    print(f"Cliente --> {nombre}")
-    print("-"*55)
-
-    return total
-
 def bajaTicket(id_ticket):
     """Da de baja todos los items de un ticket por ID"""
     tickets = obtener_tickets()
